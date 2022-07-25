@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+ name: {{ .Values.mfcomposite.mf_name }}
+spec:
+ #this defines which pod is going to be presented by this service
+ selector:
+  app: {{ .Values.mfcomposite.mf_name }}
+ ports:
+  - name: http
+    port: {{ .Values.mfcomposite.mf_http_port }}
+    nodePort: {{ .Values.mfcomposite.mf_http_port_ext }}
+ type: NodePort 

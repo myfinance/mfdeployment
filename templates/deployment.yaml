@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.mfcomposite.mf_name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mfcomposite.mf_name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mfcomposite.mf_name }}
+    spec:
+      containers:
+        - name: {{ .Values.mfcomposite.mf_name }}
+          image: "{{ .Values.image.repository }}mfcomposite:{{ .Values.image.version }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}      
+          tty: true
+          env:
+            - name: "SPRING_PROFILES_ACTIVE"
+              value: "k8n"
+            - name: "api.common.version"
+              value: "{{ .Values.image.version }}"
