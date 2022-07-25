@@ -15,5 +15,9 @@ mfcomposite:
   mf_http_port: 7005
   mf_name: mfcomposite
 
+mfframework:
+  image: 192.168.100.73:31003/repository/mydockerrepo/holgerfischer/myfinance-mfcomposite:1.0.0
+
+
 
   
