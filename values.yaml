@@ -4,20 +4,13 @@
 
 replicaCount: 1
 stage: dev
-
 image:
   repository: 192.168.100.73:31003/repository/mydockerrepo/holgerfischer/myfinance-
   pullPolicy: IfNotPresent
   version: 1.0.0
-
 mfcomposite:
   mf_http_port_ext: 30028
   mf_http_port: 7005
   mf_name: mfcomposite
-
 mfframework:
-  imageversion: 1.0.0
-
-
-
-  
+  imageversion: 0.21.0-alpha.f7f849ce8c514c888fb0924481304a46b11b9901
