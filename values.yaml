@@ -16,7 +16,7 @@ mfcomposite:
   mf_name: mfcomposite
 
 mfframework:
-  image: 192.168.100.73:31003/repository/mydockerrepo/holgerfischer/myfinance-mfcomposite:1.0.0
+  imageversion: 1.0.0
 
 
 
