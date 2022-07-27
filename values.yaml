@@ -13,4 +13,4 @@ mfcomposite:
   mf_http_port: 7005
   mf_name: mfcomposite
 mfframework:
-  imageversion: 0.21.0-alpha.f7f849ce8c514c888fb0924481304a46b11b9901
+  imageversion: 0.21.0-alpha.73fa1dadf293659a33df03ce35455274c70cc624
