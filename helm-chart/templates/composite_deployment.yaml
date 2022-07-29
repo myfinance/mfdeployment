@@ -21,4 +21,4 @@ spec:
             - name: "SPRING_PROFILES_ACTIVE"
               value: "k8n"
             - name: "api.common.version"
-              value: "{{ .Values.image.version }}"
+              value: "{{ .Values.mfframework.imageversion }}"

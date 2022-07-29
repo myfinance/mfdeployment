@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.mfmongo.db_name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mfmongo.db_name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mfmongo.db_name }}
+    spec:
+      containers:
+        - name: {{ .Values.mfmongo.db_name }}
+          image: "mongo:5.0"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: myfinancedata
+              mountPath: /data/db
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: root
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: "{{ .Values.mfmongo.db_pw }}"
+      volumes:
+        - name: myfinancedata
+          persistentVolumeClaim:
+            claimName: {{ .Values.stage }}-{{ .Values.mfmongo.pvc }}

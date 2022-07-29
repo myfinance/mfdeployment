@@ -1,2 +1,6 @@
+stage: prod
 mfcomposite:
   mf_http_port_ext: 30038
+mfmongo:
+  db_pw: vulkan
+  db_port_ext: 30039

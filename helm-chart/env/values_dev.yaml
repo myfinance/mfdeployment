@@ -1,2 +1,6 @@
+stage: dev
 mfcomposite:
   mf_http_port_ext: 30028
+mfmongo:
+  db_pw: vulkan
+  db_port_ext: 30029

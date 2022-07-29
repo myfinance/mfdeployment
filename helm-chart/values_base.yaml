@@ -3,10 +3,17 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
-stage: dev
 image:
   repository: 192.168.100.73:31003/repository/mydockerrepo/holgerfischer/myfinance-
   pullPolicy: IfNotPresent
 mfcomposite:
   mf_http_port: 7005
   mf_name: mfcomposite
+mfmongo:
+  db_name: mfmongo
+  db_port: 27017
+  db_url: mfdb
+  pvc: mfmongopvc
+  mongostoragesize: 5Gi
+pv:
+  localstorage: /opt/mf

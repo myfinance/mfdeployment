@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.stage }}-{{ .Values.mfmongo.pvc }}
+spec:
+  storageClassName: {{ .Values.stage }}-mfmongostorage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.mfmongo.mongostoragesize }}
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.stage }}-localmongostorage
+spec:
+  storageClassName: {{ .Values.stage }}-mfmongostorage
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: {{ .Values.mfmongo.mongostoragesize }}
+  hostPath:
+    path: {{ .Values.pv.localstorage }}/{{ .Values.stage }}mongo
+    type: Directory
