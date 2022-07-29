@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: {{ .Values.mfmongo.db_name }}
-          image: "mongo:5.0"
+          image: "{{ .Values.mfmongo.image }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
             - name: myfinancedata

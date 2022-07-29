@@ -1,4 +1,9 @@
-mfframework:
-  imageversion: 6293cb569dbd43fee43672b8a8b9ce1c5bde698d
 mfrabbitmq:
   image: rabbitmq:3.10.5-management
+mfmongo:
+  image: mongo:5.0
+mfframework:
+  imageversion: 6293cb569dbd43fee43672b8a8b9ce1c5bde698d
+mfinstruments:
+  imageversion: 1.0.0
+
