@@ -7,7 +7,6 @@ stage: dev
 image:
   repository: 192.168.100.73:31003/repository/mydockerrepo/holgerfischer/myfinance-
   pullPolicy: IfNotPresent
-  version: 1.0.0
 mfcomposite:
   mf_http_port_ext: 30028
   mf_http_port: 7005
