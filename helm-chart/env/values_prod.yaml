@@ -4,3 +4,8 @@ mfcomposite:
 mfmongo:
   db_pw: vulkan
   db_port_ext: 30039
+mfrabbitmq:
+  user: user
+  pw: vulkan
+  port_ext: 30031
+  adminport_ext: 30032

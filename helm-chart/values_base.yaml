@@ -15,5 +15,10 @@ mfmongo:
   db_url: mfdb
   pvc: mfmongopvc
   mongostoragesize: 5Gi
+mfrabbitmq:
+  name: mfrabbitmq
+  port: 5672
+  adminport: 15672
+  adminserviename: mfrabbitmqadmin
 pv:
   localstorage: /opt/mf

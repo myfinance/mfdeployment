@@ -1,2 +1,4 @@
 mfframework:
   imageversion: 0.21.0-alpha.856f8bd1c44636ef8190e6861a3734e2430e0c74
+mfrabbitmq:
+  image: rabbitmq:3.10.5-management

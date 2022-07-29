@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.mfrabbitmq.name }}
+spec:
+  #this defines which pod is going to be presented by this service
+  selector:
+    app: {{ .Values.mfrabbitmq.name }}
+  ports:
+    - name: {{ .Values.mfrabbitmq.name }}
+      port: {{ .Values.mfrabbitmq.port }}
+      nodePort: {{ .Values.mfrabbitmq.port_ext }}
+    - name: {{ .Values.mfrabbitmq.adminserviename }}
+      port: {{ .Values.mfrabbitmq.adminport }}
+      nodePort: {{ .Values.mfrabbitmq.adminport_ext }}
+  type: NodePort

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.mfrabbitmq.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mfrabbitmq.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mfrabbitmq.name }}
+    spec:
+      containers:
+        - name: {{ .Values.mfrabbitmq.name }}
+          image: "{{ .Values.mfrabbitmq.image }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              value: "{{ .Values.mfrabbitmq.user }}"
+            - name: RABBITMQ_DEFAULT_PASS
+              value: "{{ .Values.mfrabbitmq.pw }}"
