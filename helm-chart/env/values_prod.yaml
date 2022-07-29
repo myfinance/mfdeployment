@@ -9,3 +9,5 @@ mfrabbitmq:
   pw: vulkan
   port_ext: 30031
   adminport_ext: 30032
+mfinstruments:
+  mf_http_port_ext: 30034

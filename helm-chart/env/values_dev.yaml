@@ -10,3 +10,5 @@ mfrabbitmq:
   port_ext: 30021
   adminname: mfrabbitmqadmin
   adminport_ext: 30022
+mfinstruments:
+  mf_http_port_ext: 30024

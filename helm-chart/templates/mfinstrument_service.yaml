@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.mfinstruments.mf_name }}
+spec:
+  #this defines which pod is going to be presented by this service
+  selector:
+    app: {{ .Values.mfinstruments.mf_name }}
+  ports:
+    - name: http
+      port: {{ .Values.mfinstruments.mf_http_port }}
+      nodePort: {{ .Values.mfinstruments.mf_http_port_ext }}
+  type: NodePort
