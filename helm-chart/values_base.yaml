@@ -23,5 +23,13 @@ mfrabbitmq:
 mfinstruments:
   mf_http_port: 7001
   mf_name: mfinstruments
+mftransactions:
+  mf_http_port_ext: 30026
+  mf_http_port: 7003
+  mf_name: mftransactions
+mfvaluation:
+  mf_http_port_ext: 30025
+  mf_http_port: 7002
+  mf_name: mfvaluation
 pv:
   localstorage: /opt/mf

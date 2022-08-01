@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.mftransactions.mf_name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mftransactions.mf_name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mftransactions.mf_name }}
+    spec:
+      containers:
+        - name: {{ .Values.mftransactions.mf_name }}
+          image: "{{ .Values.image.repository }}mftransactions:{{ .Values.mftransactions.imageversion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          tty: true
