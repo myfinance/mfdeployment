@@ -3,6 +3,7 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
+k8_ip: 192.168.100.73
 image:
   repository: 192.168.100.73:31003/repository/mydockerrepo/holgerfischer/myfinance-
   pullPolicy: IfNotPresent
