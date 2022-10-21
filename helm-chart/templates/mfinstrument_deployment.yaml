@@ -24,3 +24,5 @@ spec:
               value: "{{ .Values.mfmongo.db_port_ext }}"
             - name: "api.common.version"
               value: "{{ .Values.mfinstruments.imageversion }}"
+            - name: "spring.rabbitmq.port"
+              value: "{{ .Values.mfrabbitmq.port_ext }}"
