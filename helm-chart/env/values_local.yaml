@@ -1,4 +1,4 @@
-stage: dev
+stage: local
 mfcomposite:
   mf_http_port_ext: 30018
 mfmongo:
