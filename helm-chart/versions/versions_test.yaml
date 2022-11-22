@@ -7,6 +7,6 @@ mfframework:
 mfinstruments:
   imageversion: 0.21.0-alpha.a413e83635fdd6114d13769aae9aa36dfd2c51d9
 mftransactions:
-  imageversion: 0
+  imageversion: 0.21.0-alpha.b1e81df8417a0d1706a73411d7dc1195b4f9b334
 mfvaluation:
   imageversion: 0
