@@ -1,18 +1,20 @@
 stage: dev
-mfcomposite:
-  mf_http_port_ext: 30028
-mfmongo:
-  db_pw: vulkan
-  db_port_ext: 30029
 mfrabbitmq:
   user: user
   pw: vulkan
   port_ext: 30021
   adminname: mfrabbitmqadmin
   adminport_ext: 30022
+mfmongo:
+  db_pw: vulkan
+  db_port_ext: 30023
 mfinstruments:
   mf_http_port_ext: 30024
 mftransactions:
+  mf_http_port_ext: 30025
+mfmarketdata:
   mf_http_port_ext: 30026
 mfvaluation:
-  mf_http_port_ext: 30025
+  mf_http_port_ext: 30027
+mfcomposite:
+  mf_http_port_ext: 30029

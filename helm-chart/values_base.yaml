@@ -7,9 +7,6 @@ k8_ip: 192.168.100.73
 image:
   repository: 192.168.100.73:31003/repository/mydockerrepo/holgerfischer/myfinance-
   pullPolicy: IfNotPresent
-mfcomposite:
-  mf_http_port: 7005
-  mf_name: mfcomposite
 mfmongo:
   db_name: mfmongo
   db_port: 27017
@@ -25,12 +22,16 @@ mfinstruments:
   mf_http_port: 7001
   mf_name: mfinstruments
 mftransactions:
-  mf_http_port_ext: 30026
-  mf_http_port: 7003
-  mf_name: mftransactions
-mfvaluation:
-  mf_http_port_ext: 30025
   mf_http_port: 7002
+  mf_name: mftransactions
+mfmarketdata:
+  mf_http_port: 7003
+  mf_name: mfmarketdata
+mfvaluation:
+  mf_http_port: 7004
   mf_name: mfvaluation
+mfcomposite:
+  mf_http_port: 7009
+  mf_name: mfcomposite
 pv:
   localstorage: /opt/mf

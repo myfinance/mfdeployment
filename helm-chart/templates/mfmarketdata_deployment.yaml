@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.mftransactions.mf_name }}
+  name: {{ .Values.mfmarketdata.mf_name }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Values.mftransactions.mf_name }}
+      app: {{ .Values.mfmarketdata.mf_name }}
   template:
     metadata:
       labels:
-        app: {{ .Values.mftransactions.mf_name }}
+        app: {{ .Values.mfmarketdata.mf_name }}
     spec:
       containers:
-        - name: {{ .Values.mftransactions.mf_name }}
-          image: "{{ .Values.image.repository }}mftransactions:{{ .Values.mftransactions.imageversion }}"
+        - name: {{ .Values.mfmarketdata.mf_name }}
+          image: "{{ .Values.image.repository }}mfmarketdata:{{ .Values.mfmarketdata.imageversion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           tty: true
           env:
@@ -23,6 +23,6 @@ spec:
             - name: "spring.data.mongodb.port"
               value: "{{ .Values.mfmongo.db_port_ext }}"
             - name: "api.common.version"
-              value: "{{ .Values.mftransactions.imageversion }}"
+              value: "{{ .Values.mfmarketdata.imageversion }}"
             - name: "spring.rabbitmq.port"
               value: "{{ .Values.mfrabbitmq.port_ext }}"
