@@ -5,7 +5,7 @@ mfmongo:
 mfframework:
   imageversion: 0.22.0-alpha.392fce470c978a77debe66f24f1d7ef5622a1a48
 mfinstruments:
-  imageversion: 0.22.0-alpha.8c5ff4ad3f2a759b951f47d9720e0cfe5298674e
+  imageversion: 0.22.0-alpha.6837be5a3473f2ab172db1c08b69da76c283d279
 mftransactions:
   imageversion: 0.22.0-alpha.e049ed53acc679cee634458fe3d2525ace2d08aa
 mfvaluation:
