@@ -3,10 +3,12 @@ mfrabbitmq:
 mfmongo:
   image: mongo:5.0
 mfframework:
-  imageversion: 0.21.0-alpha.c31258369af5dea52bcfb95be077ecda2f3f7358
+  imageversion: 0.22.0-alpha.f678dc784d161dc825b69e95885d4654d75f52b3
 mfinstruments:
-  imageversion: 0.21.0-alpha.a413e83635fdd6114d13769aae9aa36dfd2c51d9
+  imageversion: 0.22.0-alpha.871c3d2263f081855395bcf556d9698f69b080cc
 mftransactions:
-  imageversion: 0.21.0-alpha.b1e81df8417a0d1706a73411d7dc1195b4f9b334
+  imageversion: 0.22.0-alpha.77c6fc394219425c87c18b17d058a8d9ceca9d59
 mfvaluation:
-  imageversion: 0
+  imageversion: 0.22.0-alpha.2c17b3c5633632e5b718246e1daf29b550176fda
+mfmarketdata:
+  imageversion: 0.22.0-alpha.b0dceb9c8330f5c382ad1814fe3687b1ad7a4c85
