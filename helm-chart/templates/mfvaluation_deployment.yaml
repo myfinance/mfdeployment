@@ -18,7 +18,11 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           tty: true
           env:
-            - name: "SPRING_PROFILES_ACTIVE"
-              value: "k8n"
             - name: "api.common.version"
               value: "{{ .Chart.AppVersion }}"
+            - name: "spring.data.mongodb.host"
+              value: "{{ .Values.k8_ip }}"
+            - name: "spring.data.mongodb.port"
+              value: "{{ .Values.mfmongo.db_port_ext }}"
+            - name: "spring.rabbitmq.port"
+              value: "{{ .Values.mfrabbitmq.port_ext }}"
