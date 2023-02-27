@@ -20,6 +20,8 @@ spec:
           env:
             - name: "api.common.version"
               value: "{{ .Values.mfframework.imageversion }}"
+            - name: "spring.rabbitmq.port"
+              value: "{{ .Values.mfrabbitmq.port_ext }}"
             - name: "server.port"
               value: "{{ .Values.mfcomposite.mf_http_port }}"
             - name: "api.mfinstruments.host"
