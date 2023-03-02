@@ -3,7 +3,7 @@ mfrabbitmq:
 mfmongo:
   image: mongo:5.0
 mfframework:
-  imageversion: 0.22.0-alpha.7c2a842c58b76e6b6337f1e06961d292316fb522
+  imageversion: 0.22.0-alpha.62464872ee233caef5ea363097e747afac3fb6b9
 mfinstruments:
   imageversion: 0.22.0-alpha.c11ae5fc8f22452339c99467c57b3d471495db89
 mftransactions:
