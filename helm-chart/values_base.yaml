@@ -20,7 +20,7 @@ mfrabbitmq:
   adminserviename: mfrabbitmqadmin
 mfinstruments:
   mf_http_port: 7001
-  mf_name: 192.168.100.73
+  mf_name: mfinstruments
 mftransactions:
   mf_http_port: 7002
   mf_name: mftransactions
