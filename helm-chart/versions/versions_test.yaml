@@ -7,7 +7,7 @@ mfframework:
 mfinstruments:
   imageversion: 0.22.0-alpha.eb46be022ebe92710ca9a456ebd0bf6f5bb712d2
 mftransactions:
-  imageversion: 0.22.0-alpha.4a6fc1ca08949908254a176954fcad58f7cba992
+  imageversion: 0.22.0-alpha.ff624969e652c3d87a632d0330c77f115b042f14
 mfvaluation:
   imageversion: 0.22.0-alpha.a2d1f9b7ab705b9a8101595c79c5f4ba28108a70
 mfmarketdata:
