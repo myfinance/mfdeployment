@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: mfprocesstransactions
+  name: mfpriceimport
 spec:
   schedule: "{{ .Values.mfshell.priceimportschedule }}"
   jobTemplate:
@@ -15,5 +15,7 @@ spec:
               env:
                 - name: "spring.rabbitmq.port"
                   value: "{{ .Values.mfrabbitmq.port_ext }}"
+                - name: "job.name"
+                  value: "importMarketData"
           restartPolicy: OnFailure
       backoffLimit: 4

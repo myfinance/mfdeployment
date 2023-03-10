@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: mfpriceimport
+  name: mfprocesstransactions
 spec:
   schedule: "{{ .Values.mfshell.processtransactionschedule }}"
   jobTemplate:
@@ -11,10 +11,10 @@ spec:
           containers:
             - name: {{ .Values.mfshell.name }}
               image: "{{ .Values.image.repository }}mfshell:{{ .Values.mfshell.imageversion }}"
-              args: ["process-transactions"]
-              tty: true
               env:
                 - name: "spring.rabbitmq.port"
                   value: "{{ .Values.mfrabbitmq.port_ext }}"
+                - name: "job.name"
+                  value: "processTransactions"
           restartPolicy: OnFailure
       backoffLimit: 4
