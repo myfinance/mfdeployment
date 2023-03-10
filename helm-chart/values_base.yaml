@@ -46,5 +46,5 @@ mfshell:
                       # │ │ │ │ │
                       # │ │ │ │ │
                       # * * * * *  command to execute
-  priceimportschedule: "30 15 * * *"
-  processtransactionschedule: "35 15 * * *"
+  priceimportschedule: "50 14 * * *"
+  processtransactionschedule: "55 14 * * *"
