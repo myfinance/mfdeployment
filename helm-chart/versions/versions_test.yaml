@@ -12,3 +12,5 @@ mfvaluation:
   imageversion: 0.22.0-alpha.17b0835ef34788fe8054dabf0c778c9b6645d298
 mfmarketdata:
   imageversion: 0.22.0-alpha.3950b3579d98cb98c1f9c869bd7f5ce176b44d5a
+mfshell:
+  imageversion: 0.22.0-alpha.bd3d65cfb9b0e6d6e9fd2326c93a6ffe7cccf47f
