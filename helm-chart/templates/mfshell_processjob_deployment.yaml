@@ -12,6 +12,7 @@ spec:
             - name: {{ .Values.mfshell.name }}
               image: "{{ .Values.image.repository }}mfshell:{{ .Values.mfshell.imageversion }}"
               args: ["process-transactions"]
+              tty: true
               env:
                 - name: "spring.rabbitmq.port"
                   value: "{{ .Values.mfrabbitmq.port_ext }}"
