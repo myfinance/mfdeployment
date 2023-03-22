@@ -1,3 +1,4 @@
+{{ if eq .Values.deployment "full" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -40,3 +41,4 @@ spec:
               value: "{{ .Values.k8_ip }}"
             - name: "app.mfvaluation.port"
               value: "{{ .Values.mfvaluation.mf_http_port_ext }}"
+{{ end }}

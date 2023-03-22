@@ -1,3 +1,4 @@
+{{ if eq .Values.deployment "full" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -26,3 +27,4 @@ spec:
               value: "{{ .Values.mfinstruments.imageversion }}"
             - name: "spring.rabbitmq.port"
               value: "{{ .Values.mfrabbitmq.port_ext }}"
+{{ end }}

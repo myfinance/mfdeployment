@@ -1,3 +1,4 @@
+{{ if eq .Values.deployment "full" }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -10,4 +11,5 @@ spec:
   - name: http
     port: {{ .Values.mfcomposite.mf_http_port }}
     nodePort: {{ .Values.mfcomposite.mf_http_port_ext }}
- type: NodePort 
+ type: NodePort
+{{ end }}
