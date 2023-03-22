@@ -1,3 +1,4 @@
+{{ if eq .Values.deployment "full" }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -20,3 +21,4 @@ spec:
                   value: "processTransactions"
           restartPolicy: OnFailure
       backoffLimit: 4
+{{ end }}
