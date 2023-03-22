@@ -4,6 +4,8 @@ metadata:
   name: mfprocesstransactions
 spec:
   schedule: "{{ .Values.mfshell.processtransactionschedule }}"
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
       template:

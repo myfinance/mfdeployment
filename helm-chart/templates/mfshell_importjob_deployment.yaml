@@ -4,6 +4,8 @@ metadata:
   name: mfpriceimport
 spec:
   schedule: "{{ .Values.mfshell.priceimportschedule }}"
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
       template:
