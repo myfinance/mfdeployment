@@ -10,3 +10,5 @@ mftransactions:
   imageversion: 0
 mfvaluation:
   imageversion: 0
+mffrontend:
+  imageversion: 0
