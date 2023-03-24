@@ -16,6 +16,8 @@ mfmarketdata:
   mf_http_port_ext: 30046
 mfvaluation:
   mf_http_port_ext: 30047
+mffrontend:
+  mf_http_port_ext: 30048
 mfcomposite:
   mf_http_port_ext: 30049
 mfshell:

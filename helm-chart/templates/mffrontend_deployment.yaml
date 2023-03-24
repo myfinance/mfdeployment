@@ -1,0 +1,20 @@
+{{ if eq .Values.deployment "full" }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.mffrontend.mf_name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mffrontend.mf_name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mffrontend.mf_name }}
+    spec:
+      containers:
+        - name: {{ .Values.mffrontend.mf_name }}
+          image: "{{ .Values.image.repository }}mffrontend:{{ .Values.mffrontend.imageversion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+  {{ end }}

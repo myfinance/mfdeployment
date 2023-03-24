@@ -33,6 +33,9 @@ mfvaluation:
 mfcomposite:
   mf_http_port: 7009
   mf_name: mfcomposite
+mffrontend:
+  mf_http_port: 80
+  mf_name: mffrontend
 pv:
   localstorage: /opt/mf
 mfshell:
