@@ -23,5 +23,5 @@ spec:
       volumes:
         - name: mffrontendconfig
           persistentVolumeClaim:
-              claimName: {{ .Values.stage }}-{{ .Values.pv.configpvc }}
+              claimName: {{ .Values.stage }}-{{ .Values.mffrontend.pvc }}
   {{ end }}
