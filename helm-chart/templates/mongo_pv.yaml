@@ -23,5 +23,5 @@ spec:
   capacity:
     storage: {{ .Values.mfmongo.mongostoragesize }}
   hostPath:
-    path: {{ .Values.pv.localstorage }}/{{ .Values.stage }}mongo
+    path: {{ .Values.pv.localstorage }}/{{ .Values.stage }}fe
     type: Directory

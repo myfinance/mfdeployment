@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.stage }}-{{ .Values.mfmffrontend.pvc }}
+spec:
+  storageClassName: {{ .Values.stage }}-mffrontendstorage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.mfmffrontend.configstoragesize }}
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.stage }}-mffrontendstorage
+spec:
+  storageClassName: {{ .Values.stage }}-mffrontendstorage
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: {{ .Values.mfmffrontend.configstoragesize }}
+  hostPath:
+    path: {{ .Values.pv.nasstorage }}/{{ .Values.stage }}_mffe_config
+    type: Directory

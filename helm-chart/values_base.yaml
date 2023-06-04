@@ -36,7 +36,10 @@ mfcomposite:
 mffrontend:
   mf_http_port: 80
   mf_name: mffrontend
+  pvc: mffeconfigpvc
+  configstoragesize: 50Mi
 pv:
   localstorage: /opt/mf
+  nasstorage: /mnt/data/mf
 mfshell:
   name: mfshell

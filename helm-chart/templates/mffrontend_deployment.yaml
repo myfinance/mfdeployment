@@ -17,4 +17,11 @@ spec:
         - name: {{ .Values.mffrontend.mf_name }}
           image: "{{ .Values.image.repository }}mffrontend:{{ .Values.mffrontend.imageversion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+           - name: mffrontendconfig
+             mountPath: /usr/share/nginx/html/assets/config
+      volumes:
+        - name: mffrontendconfig
+          persistentVolumeClaim:
+              claimName: {{ .Values.stage }}-{{ .Values.pv.configpvc }}
   {{ end }}
