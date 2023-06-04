@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Values.stage }}-{{ .Values.mfmongo.pvc }}
+  name: {{ .Values.stage }}-{{ .Values.mfmongo.pvc }}test
 spec:
-  storageClassName: {{ .Values.stage }}-mfmongostorage
+  storageClassName: {{ .Values.stage }}-mfmongostoragetest
   accessModes:
     - ReadWriteOnce
   resources:
@@ -15,13 +15,13 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ .Values.stage }}-localmongostorage
+  name: {{ .Values.stage }}-localmongostoragetest
 spec:
-  storageClassName: {{ .Values.stage }}-mfmongostorage
+  storageClassName: {{ .Values.stage }}-mfmongostoragetest
   accessModes:
     - ReadWriteOnce
   capacity:
     storage: {{ .Values.mfmongo.mongostoragesize }}
   hostPath:
-    path: {{ .Values.pv.localstorage }}/{{ .Values.stage }}
+    path: {{ .Values.pv.localstorage }}/{{ .Values.stage }}test
     type: Directory
