@@ -18,6 +18,11 @@ mfrabbitmq:
   port: 5672
   adminport: 15672
   adminserviename: mfrabbitmqadmin
+keycloak:
+  name: keycloak
+  pvc: keycloakpvc
+  port: 8080
+  keycloakstoragesize: 1Gi
 mfinstruments:
   mf_http_port: 7001
   mf_name: mfinstruments

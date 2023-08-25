@@ -3,24 +3,27 @@ deployment: full
 mfrabbitmq:
   user: user
   pw: vulkan
-  port_ext: 30031
+  port_ext: 30121
   adminname: mfrabbitmqadmin
-  adminport_ext: 30032
+  adminport_ext: 30122
 mfmongo:
   db_pw: vulkan
-  db_port_ext: 30033
-mfinstruments:
-  mf_http_port_ext: 30034
-mftransactions:
-  mf_http_port_ext: 30035
-mfmarketdata:
-  mf_http_port_ext: 30036
-mfvaluation:
-  mf_http_port_ext: 30037
-mffrontend:
-  mf_http_port_ext: 30038
+  db_port_ext: 30123
+keycloak:
+  pw: vulkan
+  port_ext: 30124
 mfcomposite:
-  mf_http_port_ext: 30039
+  mf_http_port_ext: 30130
+mfinstruments:
+  mf_http_port_ext: 30131
+mftransactions:
+  mf_http_port_ext: 30132
+mfmarketdata:
+  mf_http_port_ext: 30133
+mfvaluation:
+  mf_http_port_ext: 30134
+mffrontend:
+  mf_http_port_ext: 30135
 mfshell:
     # ┌───────────── minute (0 - 59)
     # │ ┌───────────── hour (0 - 23)

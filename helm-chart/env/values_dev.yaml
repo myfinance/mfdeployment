@@ -9,13 +9,16 @@ mfrabbitmq:
 mfmongo:
   db_pw: vulkan
   db_port_ext: 30023
-mfinstruments:
-  mf_http_port_ext: 30024
-mftransactions:
-  mf_http_port_ext: 30025
-mfmarketdata:
-  mf_http_port_ext: 30026
-mfvaluation:
-  mf_http_port_ext: 30027
+keycloak:
+  pw: vulkan
+  port_ext: 30024
 mfcomposite:
-  mf_http_port_ext: 30029
+  mf_http_port_ext: 30030
+mfinstruments:
+  mf_http_port_ext: 30031
+mftransactions:
+  mf_http_port_ext: 30032
+mfmarketdata:
+  mf_http_port_ext: 30033
+mfvaluation:
+  mf_http_port_ext: 30034

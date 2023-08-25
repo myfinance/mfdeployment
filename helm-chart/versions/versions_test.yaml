@@ -2,6 +2,8 @@ mfrabbitmq:
   image: rabbitmq:3.10.5-management
 mfmongo:
   image: mongo:5.0
+keycloak:
+  image: quay.io/keycloak/keycloak:21.1.2
 mfframework:
   imageversion: 0.23.0-alpha.a86a9bb1b11a4369d48b4fe00e36d7c2fa62c59e
 mfinstruments:
