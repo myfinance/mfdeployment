@@ -23,5 +23,5 @@ spec:
   capacity:
     storage: {{ .Values.keycloak.keycloakstoragesize }}
   hostPath:
-    path: {{ .Values.pv.nasstorage }}/{{ .Values.stage }}
+    path: {{ .Values.pv.nasstorage }}/{{ .Values.stage }}_keycloak
     type: Directory
