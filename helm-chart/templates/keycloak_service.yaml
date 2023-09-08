@@ -11,18 +11,3 @@ spec:
       port: {{ .Values.keycloak.port }}
       nodePort: {{ .Values.keycloak.port_ext }}
   type: NodePort
-
-
-  apiVersion: v1
-  kind: Service
-  metadata:
-    name: keycloak
-  spec:
-    #this defines which pod is going to be presented by this service
-    selector:
-      app: keycloak
-    ports:
-      - name: keycloak
-        port: 8080
-        nodePort: 30024
-    type: NodePort
