@@ -19,7 +19,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           tty: true
           env:
-            - name: "spring.data.mongodb.host"
+            - name: "server.host"
               value: "{{ .Values.k8_ip }}"
             - name: "spring.data.mongodb.port"
               value: "{{ .Values.mfmongo.db_port_ext }}"
