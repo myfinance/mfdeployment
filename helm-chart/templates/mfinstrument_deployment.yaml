@@ -22,7 +22,7 @@ spec:
             - name: "server.host"
               value: "{{ .Values.k8_ip }}"
             - name: "server.port"
-              value: "{{ .Values.mfinstruments.mf_http_port_ext }}"
+              value: "{{ .Values.mfinstruments.mf_http_port }}"
             - name: "spring.data.mongodb.port"
               value: "{{ .Values.mfmongo.db_port_ext }}"
             - name: "api.common.version"
