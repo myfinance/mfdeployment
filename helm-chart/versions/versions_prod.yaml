@@ -18,3 +18,5 @@ mfshell:
   imageversion: 0.22.073c35565adbbeb93ca40fa3388c8b49d279d2427
 mffrontend:
   imageversion: 0
+mflogstream:
+  imageversion: 0

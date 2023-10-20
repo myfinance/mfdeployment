@@ -24,6 +24,8 @@ mfvaluation:
   mf_http_port_ext: 30134
 mffrontend:
   mf_http_port_ext: 30135
+mflogstream:
+  mf_http_port_ext: 30136
 mfshell:
     # ┌───────────── minute (0 - 59)
     # │ ┌───────────── hour (0 - 23)

@@ -22,3 +22,7 @@ mfmarketdata:
   mf_http_port_ext: 30033
 mfvaluation:
   mf_http_port_ext: 30034
+mffrontend:
+  mf_http_port_ext: 30135
+mflogstream:
+  mf_http_port_ext: 30036
