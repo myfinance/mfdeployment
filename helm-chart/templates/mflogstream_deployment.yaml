@@ -1,0 +1,28 @@
+{{ if eq .Values.deployment "full" }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.mflogstream.mf_name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mflogstream.mf_name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mflogstream.mf_name }}
+    spec:
+      containers:
+        - name: {{ .Values.mflogstream.mf_name }}
+          image: "{{ .Values.image.repository }}mflogstream:{{ .Values.mflogstream.imageversion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          tty: true
+          env:
+            - name: "env.host"
+              value: "{{ .Values.k8_ip }}"
+            - name: "server.port"
+              value: "{{ .Values.mflogstream.mf_http_port }}"
+            - name: "spring.rabbitmq.port"
+              value: "{{ .Values.mfrabbitmq.port_ext }}"
+  {{ end }}

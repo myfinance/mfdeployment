@@ -43,6 +43,9 @@ mffrontend:
   mf_name: mffrontend
   pvc: mffeconfigpvc
   configstoragesize: 50Mi
+mflogstream:
+  mf_http_port: 30036
+  mf_name: mflogstream
 pv:
   localstorage: /opt/mf
   nasstorage: /mnt/data/mf
