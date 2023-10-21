@@ -1,0 +1,31 @@
+{{ if eq .Values.minecraftdeployment "true" }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.minecraft.pvc }}
+spec:
+  storageClassName: minecraftstorage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.minecraft.storagesize }}
+  {{ end }}
+
+---
+
+{{ if eq .Values.minecraftdeployment "true" }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: minecraftstorage
+spec:
+  storageClassName: minecraftstorage
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: {{ .Values.minecraft.storagesize }}
+  hostPath:
+    path: {{ .Values.minecraft.storagepath }}
+    type: Directory
+  {{ end }}

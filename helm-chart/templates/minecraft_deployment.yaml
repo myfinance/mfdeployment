@@ -1,0 +1,31 @@
+{{ if eq .Values.minecraftdeployment "true" }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.minecraft.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.minecraft.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.minecraft.name }}
+    spec:
+      containers:
+        - name: {{ .Values.minecraft.name }}
+          image: "{{ .Values.minecraft.image }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          tty: true
+          volumeMounts:
+            - name: minecraftdata
+              mountPath: /data
+          env:
+            - name: "EULA"
+              value: "TRUE"
+      volumes:
+        - name: minecraftdata
+          persistentVolumeClaim:
+            claimName: {{ .Values.minecraft.pvc }}
+  {{ end }}

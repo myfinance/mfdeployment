@@ -1,0 +1,15 @@
+{{ if eq .Values.minecraftdeployment "true" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.minecraft.name }}
+spec:
+  #this defines which pod is going to be presented by this service
+  selector:
+    app: {{ .Values.minecraft.name }}
+  ports:
+    - name: http
+      port: {{ .Values.minecraft.http_port }}
+      nodePort: {{ .Values.minecraft.http_port_ext }}
+  type: NodePort
+  {{ end }}
