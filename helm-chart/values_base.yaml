@@ -56,6 +56,6 @@ minecraft:
   image: itzg/minecraft-server
   pvc: minecraftpvc
   http_port: 25565
-  http_port_ext: 25565
+  http_port_ext: 30299
   storagesize: 1Gi
   storagepath: /mnt/data/minecraft
