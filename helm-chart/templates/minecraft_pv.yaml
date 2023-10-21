@@ -10,11 +10,9 @@ spec:
   resources:
     requests:
       storage: {{ .Values.minecraft.storagesize }}
-  {{ end }}
 
 ---
 
-{{ if eq .Values.minecraftdeployment "true" }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
