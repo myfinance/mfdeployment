@@ -1,4 +1,4 @@
-{{ if eq .Values.minecraftdeployment "install" }}
+{{ if eq .Values.minecraftdeployment "true" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -28,4 +28,4 @@ spec:
         - name: minecraftdata
           persistentVolumeClaim:
             claimName: {{ .Values.minecraft.pvc }}
-  {{ end }}
+{{ end }}

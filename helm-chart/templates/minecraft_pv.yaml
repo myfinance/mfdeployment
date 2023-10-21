@@ -1,4 +1,4 @@
-{{ if eq .Values.minecraftdeployment "install" }}
+{{ if eq .Values.minecraftdeployment "true" }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -26,4 +26,4 @@ spec:
   hostPath:
     path: {{ .Values.minecraft.storagepath }}
     type: Directory
-  {{ end }}
+{{ end }}
