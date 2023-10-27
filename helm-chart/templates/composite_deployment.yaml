@@ -21,6 +21,8 @@ spec:
           env:
             - name: "server.host"
               value: "{{ .Values.k8_ip }}"
+            - name: "env.host"
+              value: "{{ .Values.k8_ip }}"
             - name: "server.port"
               value: "{{ .Values.mfcomposite.mf_http_port }}"
             - name: "api.common.version"
