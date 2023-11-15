@@ -1,5 +1,6 @@
 stage: prod
-deployment: full_include_minecraft
+deployment: full
+deployMinecraft: true
 mfrabbitmq:
   user: user
   pw: vulkan
