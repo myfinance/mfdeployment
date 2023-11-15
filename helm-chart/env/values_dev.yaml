@@ -1,6 +1,6 @@
 stage: dev
 deployment: min
-minecraftdeployment: false
+additionaldeployment: no
 mfrabbitmq:
   user: user
   pw: vulkan
