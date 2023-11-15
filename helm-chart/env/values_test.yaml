@@ -1,6 +1,6 @@
 stage: test
 deployment: full
-additionaldeployment: minecraft
+additionaldeployment: no
 mfrabbitmq:
   user: user
   pw: vulkan
