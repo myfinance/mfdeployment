@@ -53,7 +53,7 @@ mfshell:
   name: mfshell
 minecraft:
   name: minecraft
-  image: itzg/minecraft-server:java17-graalvm
+  image: itzg/minecraft-server:java11
   pvc: minecraftpvc
   http_port: 25565
   http_port_ext: 30299
