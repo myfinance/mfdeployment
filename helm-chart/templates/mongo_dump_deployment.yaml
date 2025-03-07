@@ -24,9 +24,9 @@ spec:
                 - name: backup-volume
                   mountPath: /backup
           restartPolicy: OnFailure
-        volumes:
-        - name: backup-volume
-          persistentVolumeClaim:
-            claimName: {{ .Values.stage }}-{{ .Values.mfmongo.backup_pvc }}
+          volumes:
+          - name: backup-volume
+            persistentVolumeClaim:
+              claimName: {{ .Values.stage }}-{{ .Values.mfmongo.backup_pvc }}
       backoffLimit: 4
 
