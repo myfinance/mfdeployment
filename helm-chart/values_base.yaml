@@ -12,6 +12,7 @@ mfmongo:
   db_port: 27017
   db_url: mfdb
   pvc: mfmongopvc
+  backup_pvc: mfmongobackuppvc
   mongostoragesize: 5Gi
 mfrabbitmq:
   name: mfrabbitmq

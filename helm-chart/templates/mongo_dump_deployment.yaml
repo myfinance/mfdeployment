@@ -1,0 +1,27 @@
+{{ if eq .Values.deployment "full" }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mfdump
+spec:
+  schedule: "{{ .Values.mfmongo.dumpschedule }}"
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: {{ .Values.mfmongo.db_name }}-dump
+              image: "{{ .Values.mfmongo.image }}"
+              command: ["mongodump", "--uri", "mongodb://root:{{ .Values.mfmongo.db_pw }}@{{ .Values.k8_ip }}:{{ .Values.mfmongo.db_port_ext }}/?authSource=admin", "--out", "/backup"]
+              volumeMounts:
+                - name: backup-volume
+                  mountPath: /backup
+          restartPolicy: OnFailure
+        volumes:
+        - name: backup-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.stage }}-{{ .Values.mfmongo.backup_pvc }}
+      backoffLimit: 4
+{{ end }}
