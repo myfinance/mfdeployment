@@ -19,6 +19,8 @@ spec:
           volumeMounts:
             - name: myfinancedata
               mountPath: /data/db
+            - name: backup-volume
+              mountPath: /backup
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
               value: root
@@ -28,3 +30,6 @@ spec:
         - name: myfinancedata
           persistentVolumeClaim:
             claimName: {{ .Values.stage }}-{{ .Values.mfmongo.pvc }}
+        - name: backup-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.stage }}-{{ .Values.mfmongo.backup_pvc }}            
