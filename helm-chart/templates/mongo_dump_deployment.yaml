@@ -29,6 +29,3 @@ spec:
             persistentVolumeClaim:
               claimName: {{ .Values.stage }}-{{ .Values.mfmongo.backup_pvc }}
       backoffLimit: 4
-
-
-Failed: open /mongodump/mfinstruments_2025-03-07_13-28-17: no such file or directory
