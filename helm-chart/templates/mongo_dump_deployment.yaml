@@ -14,7 +14,12 @@ spec:
           containers:
             - name: {{ .Values.mfmongo.db_name }}-dump
               image: "{{ .Values.mfmongo.image }}"
-              command: ["mongodump", "--host", "mongodb", "--out", "/backup"]
+              command:
+                - "/bin/sh"
+                - "-c"
+                - >
+                  TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S);
+                  mongodump --uri mongodb://root:{{ .Values.mfmongo.db_pw }}@{{ .Values.k8_ip }}:{{ .Values.mfmongo.db_port_ext }} --gzip --archive=/mongodump/mfinstruments_$TIMESTAMP --username=root --password={{ .Values.mfmongo.db_pw }} --authenticationDatabase=admin;
               volumeMounts:
                 - name: backup-volume
                   mountPath: /backup
