@@ -19,7 +19,7 @@ spec:
                 - "-c"
                 - >
                   TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S);
-                  mongodump --uri mongodb://root:{{ .Values.mfmongo.db_pw }}@{{ .Values.k8_ip }}:{{ .Values.mfmongo.db_port_ext }} --gzip --archive=/mongodump/mfinstruments_$TIMESTAMP --username=root --password={{ .Values.mfmongo.db_pw }} --authenticationDatabase=admin;
+                  mongodump --uri mongodb://root:{{ .Values.mfmongo.db_pw }}@{{ .Values.k8_ip }}:{{ .Values.mfmongo.db_port_ext }} --gzip --archive=/backup/mfinstruments_$TIMESTAMP --username=root --password={{ .Values.mfmongo.db_pw }} --authenticationDatabase=admin;
               volumeMounts:
                 - name: backup-volume
                   mountPath: /backup
@@ -30,3 +30,5 @@ spec:
               claimName: {{ .Values.stage }}-{{ .Values.mfmongo.backup_pvc }}
       backoffLimit: 4
 
+
+Failed: open /mongodump/mfinstruments_2025-03-07_13-28-17: no such file or directory
