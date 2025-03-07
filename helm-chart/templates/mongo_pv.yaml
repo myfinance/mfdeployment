@@ -26,32 +26,3 @@ spec:
     path: {{ .Values.pv.localstorage }}/{{ .Values.stage }}mongo
     type: Directory
 
----
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: {{ .Values.stage }}-{{ .Values.mfmongo.backup_pvc }}
-spec:
-  storageClassName: {{ .Values.stage }}-mfmongobackupstorage
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: {{ .Values.mfmongo.mongostoragesize }}
-
----
-
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: {{ .Values.stage }}-mongobackupstorage
-spec:
-  storageClassName: {{ .Values.stage }}-mfmongobackupstorage
-  accessModes:
-    - ReadWriteOnce
-  capacity:
-    storage: {{ .Values.mfmongo.mongostoragesize }}
-  hostPath:
-    path: {{ .Values.pv.nasstorage }}/{{ .Values.stage }}mongobackup
-    type: Directory
