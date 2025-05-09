@@ -5,18 +5,18 @@ mfmongo:
 keycloak:
   image: quay.io/keycloak/keycloak:21.1.2
 mfframework:
-  imageversion: 0.24.0-alpha-7a2b3c369e58402b8df2e3eb9aabe2f1c1d1b3c6
+  imageversion: 0.24.0-alpha-62e29db60f9dd3fd9f2c65badf2fb7cb9e63a800
 mfinstruments:
   imageversion: 0.24.0-alpha-ffd76000ab0879b6c3a86dbca981dad707c38d06
 mftransactions:
-  imageversion: 0.24.0-alpha-84a1915b2725a88ba00feec125a5caf25edfb3bb
+  imageversion: 0.24.0-alpha-d659072b4c3032a2429c024d10804fa9fbf5251b
 mfvaluation:
-  imageversion: 0.24.0-alpha-ae531b2b338d2c6b805c4b56d0c520cba8e8bd28
+  imageversion: 0.24.0-alpha-84fa8d8a88eabbe092f8e30e553c9e1fc83b7659
 mfmarketdata:
   imageversion: 0.24.0-alpha-4bdd41fb8880800e338d9719534fdf0953136d0f
 mfshell:
   imageversion: 0.24.0-alpha-c070f46f2165295bbc29ff7e9964ab1059e862ab
 mffrontend:
-  imageversion: 0.24.0-alpha-d7aaab504ecfed667f60436d4c6355ac9c950776
+  imageversion: 0.24.0-alpha-ca292b08a40fb74bb687717b5ce5534cd4c0aec5
 mflogstream:
   imageversion: 0.24.0-alpha-0ee29bf7d2a0d5f5a3f9a6b2cbfa6ebe8c59f9cf
