@@ -17,7 +17,7 @@ spec:
           image: "{{ .Values.mfrabbitmq.image }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           resources:
-            request:
+            requests:
               memory: 1Gi
             limits: 
               memory: 2Gi
