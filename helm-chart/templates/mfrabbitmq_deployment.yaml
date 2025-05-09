@@ -4,11 +4,6 @@ metadata:
   name: {{ .Values.mfrabbitmq.name }}
 spec:
   replicas: {{ .Values.replicaCount }}
-  resources:
-    request:
-      memory: 1Gi
-    limits: 
-      memory: 2Gi
   selector:
     matchLabels:
       app: {{ .Values.mfrabbitmq.name }}
@@ -21,6 +16,11 @@ spec:
         - name: {{ .Values.mfrabbitmq.name }}
           image: "{{ .Values.mfrabbitmq.image }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            request:
+              memory: 1Gi
+            limits: 
+              memory: 2Gi
           env:
             - name: RABBITMQ_DEFAULT_USER
               value: "{{ .Values.mfrabbitmq.user }}"
