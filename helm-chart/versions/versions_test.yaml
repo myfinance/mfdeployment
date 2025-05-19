@@ -7,7 +7,7 @@ keycloak:
 mfframework:
   imageversion: 0.24.0-alpha-cb572e8acc28a3d406fe1705ad11d54eedac0f01
 mfinstruments:
-  imageversion: 0.24.0-alpha-bade9b7a509f1cb0f56bc2b7146fa965f24790a4
+  imageversion: 0.24.0-alpha-99a01e7ebbe16c08f96b69dac1ebe92215d1a1ae
 mftransactions:
   imageversion: 0.24.0-alpha-442e4940236c4af57c4be2689403ae2e51e06b6c
 mfvaluation:
