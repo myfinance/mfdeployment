@@ -15,3 +15,4 @@ just copy the versions_dev.yaml to the versions_prod.yaml and commit
 
 kubectl exec -it <mongo-podname> -n <namespace> -- /bin/sh
 mongorestore --username=root --password=<pw> --authenticationDatabase=admin --drop --gzip --archive=/backup/mfbackup_<timestamp>.gz
+
