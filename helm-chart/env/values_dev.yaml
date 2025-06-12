@@ -19,8 +19,8 @@ mfmongo:
     # │ │ │ │ │
     # │ │ │ │ │
   # * * * * *  command to execute
-  #dumpschedule: "1 22 * 12 0" 
-  dumpschedule: "54 * * * *"  
+  dumpschedule: "1 22 * 12 0" 
+  #dumpschedule: "54 * * * *"  
 keycloak:
   pw: vulkan
   port_ext: 30024
