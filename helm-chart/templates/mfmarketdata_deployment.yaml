@@ -27,4 +27,10 @@ spec:
               value: "{{ .Values.mfmarketdata.imageversion }}"
             - name: "spring.rabbitmq.port"
               value: "{{ .Values.mfrabbitmq.port_ext }}"
+            - name: "server.host"
+              value: "{{ .Values.k8_ip }}"
+            - name: "env.host"
+              value: "{{ .Values.k8_ip }}"
+            - name: "server.port"
+              value: "{{ .Values.mfmarketdata.mf_http_port }}"              
 {{ end }}

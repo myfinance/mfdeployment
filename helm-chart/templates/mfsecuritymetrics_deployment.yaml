@@ -21,8 +21,10 @@ spec:
           env:
             - name: "server.host"
               value: "{{ .Values.k8_ip }}"
+            - name: "env.host"
+              value: "{{ .Values.k8_ip }}"
             - name: "server.port"
-              value: "{{ .Values.mfsecuritymetrics.mf_http_port }}"
+              value: "{{ .Values.mfsecuritymetrics.mf_http_port }}"   
             - name: "spring.data.mongodb.port"
               value: "{{ .Values.mfmongo.db_port_ext }}"
             - name: "api.common.version"
