@@ -1,0 +1,32 @@
+{{ if eq .Values.deployment "full" }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.mfsecuritymetrics.mf_name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mfsecuritymetrics.mf_name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mfsecuritymetrics.mf_name }}
+    spec:
+      containers:
+        - name: {{ .Values.mfsecuritymetrics.mf_name }}
+          image: "{{ .Values.image.repository }}mfsecuritymetrics:{{ .Values.mfsecuritymetrics.imageversion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          tty: true
+          env:
+            - name: "server.host"
+              value: "{{ .Values.k8_ip }}"
+            - name: "server.port"
+              value: "{{ .Values.mfsecuritymetrics.mf_http_port }}"
+            - name: "spring.data.mongodb.port"
+              value: "{{ .Values.mfmongo.db_port_ext }}"
+            - name: "api.common.version"
+              value: "{{ .Values.mfsecuritymetrics.imageversion }}"
+            - name: "spring.rabbitmq.port"
+              value: "{{ .Values.mfrabbitmq.port_ext }}"
+{{ end }}

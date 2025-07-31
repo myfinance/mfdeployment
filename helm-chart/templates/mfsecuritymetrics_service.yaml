@@ -1,0 +1,15 @@
+{{ if eq .Values.deployment "full" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.mfsecuritymetrics.mf_name }}
+spec:
+  #this defines which pod is going to be presented by this service
+  selector:
+    app: {{ .Values.mfsecuritymetrics.mf_name }}
+  ports:
+    - name: http
+      port: {{ .Values.mfsecuritymetrics.mf_http_port }}
+      nodePort: {{ .Values.mfsecuritymetrics.mf_http_port_ext }}
+  type: NodePort
+{{ end }}

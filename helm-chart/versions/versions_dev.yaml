@@ -16,3 +16,9 @@ mffrontend:
   imageversion: 0
 mflogstream:
   imageversion: 0
+mfsecuritymetrics:
+  imageversion: 0
+mfmarketdata:
+  imageversion: 0
+mfcomposite:
+  imageversion: 0
