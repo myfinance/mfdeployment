@@ -37,6 +37,8 @@ spec:
               value: "{{ .Values.mfmarketdata.mf_http_port_ext }}"
             - name: "app.mfvaluation.port"
               value: "{{ .Values.mfvaluation.mf_http_port_ext }}"
+            - name: "app.mfvaluation.port"
+              value: "{{ .Values.mfsecuritymetrics.mf_http_port_ext }}"
             - name: "openid.port"
               value: "{{ .Values.keycloak.port_ext }}"
 {{ end }}
