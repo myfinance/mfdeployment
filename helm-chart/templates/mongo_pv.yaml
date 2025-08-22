@@ -53,5 +53,6 @@ spec:
   capacity:
     storage: {{ .Values.mfmongo.mongostoragesize }}
   hostPath:
-    path: {{ .Values.pv.nasstorage }}/{{ .Values.stage }}_dumps/
+    #path: {{ .Values.pv.nasstorage }}/{{ .Values.stage }}_dumps/
+    path: /opt/mf/backup/{{ .Values.stage }}_dumps/
     type: Directory
