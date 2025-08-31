@@ -17,7 +17,7 @@ mfmarketdata:
 mfshell:
   imageversion: 0.24.0-alpha-1af78d1ab72e735e98389bf95659e28d9c4e4c59
 mffrontend:
-  imageversion: 0.24.0-alpha-20f286d5d66a45069052611ca5d5dc9d0218b380
+  imageversion: 0.24.0-alpha-bd1b5fa9ade8c67d9ba5b1fbdab8ced6c9b5b22c
 mflogstream:
   imageversion: 0.24.0-alpha-0bfbca50b247af6e109308f6ea5b423b8863690e
 mfsecuritymetrics:
