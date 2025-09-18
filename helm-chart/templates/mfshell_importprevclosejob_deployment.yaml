@@ -4,7 +4,7 @@ kind: CronJob
 metadata:
   name: mfpriceimport
 spec:
-  schedule: "{{ .Values.mfshell.priceimportschedule }}"
+  schedule: "{{ .Values.mfshell.importprevcloseschedule }}"
   failedJobsHistoryLimit: 1
   successfulJobsHistoryLimit: 1
   jobTemplate:
@@ -14,12 +14,12 @@ spec:
           containers:
             - name: {{ .Values.mfshell.name }}
               image: "{{ .Values.image.repository }}mfshell:{{ .Values.mfshell.imageversion }}"
-              args: ["import-market-data"]
+              args: ["importPrevClose"]
               env:
                 - name: "spring.rabbitmq.port"
                   value: "{{ .Values.mfrabbitmq.port_ext }}"
                 - name: "job.name"
-                  value: "importMarketData"
+                  value: "importPrevClose"
           restartPolicy: OnFailure
       backoffLimit: 4
 {{ end }}

@@ -46,5 +46,5 @@ mfshell:
   # │ │ │ │ │
   # │ │ │ │ │
   # * * * * *  command to execute
-  priceimportschedule: "0 10 * * *"
+  importTimeseriesWeeklyschedule: "0 10 * * *"
   processtransactionschedule: "5 10 * * *"

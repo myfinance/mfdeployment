@@ -1,0 +1,25 @@
+{{ if eq .Values.deployment "full" }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mfpriceimport
+spec:
+  schedule: "{{ .Values.mfshell.importsecuritymetricsschedule }}"
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: {{ .Values.mfshell.name }}
+              image: "{{ .Values.image.repository }}mfshell:{{ .Values.mfshell.imageversion }}"
+              args: ["importSecurityMetrics"]
+              env:
+                - name: "spring.rabbitmq.port"
+                  value: "{{ .Values.mfrabbitmq.port_ext }}"
+                - name: "job.name"
+                  value: "importSecurityMetrics"
+          restartPolicy: OnFailure
+      backoffLimit: 4
+{{ end }}
