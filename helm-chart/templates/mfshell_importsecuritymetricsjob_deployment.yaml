@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: mfpriceimport
+  name: mfmetricsimport
 spec:
   schedule: "{{ .Values.mfshell.importsecuritymetricsschedule }}"
   failedJobsHistoryLimit: 1
