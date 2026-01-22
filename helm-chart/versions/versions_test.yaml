@@ -5,7 +5,7 @@ mfmongo:
 keycloak:
   image: quay.io/keycloak/keycloak:21.1.2
 mfframework:
-  imageversion: 0.24.0-alpha-2ea5920c0a43719269661d1558741e8174dcd042
+  imageversion: 0.24.0-alpha-1d884df9ba9239f2baa83536391fd8dece6814e2
 mfinstruments:
   imageversion: 0.24.0-alpha-9192ae713049bc3f8e7798724db4e5995162bd6d
 mftransactions:
