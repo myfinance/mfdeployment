@@ -11,6 +11,10 @@ this files will never be stages but have to changed directly
 
 just copy the versions_dev.yaml to the versions_prod.yaml and commit
 
+## backup
+
+process automaticly. You can change the schedule in the evironment properties dumpschedule
+
 ## data restore
 
 kubectl exec -it <mongo-podname> -n <namespace> -- /bin/sh
