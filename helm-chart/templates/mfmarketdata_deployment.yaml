@@ -19,7 +19,9 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           tty: true
           env:
-            - name: "spring.data.mongodb.host"
+            - name: "server.host"
+              value: "{{ .Values.k8_ip }}"
+            - name: "env.host"
               value: "{{ .Values.k8_ip }}"
             - name: "spring.data.mongodb.port"
               value: "{{ .Values.mfmongo.db_port_ext }}"
@@ -27,10 +29,6 @@ spec:
               value: "{{ .Values.mfmarketdata.imageversion }}"
             - name: "spring.rabbitmq.port"
               value: "{{ .Values.mfrabbitmq.port_ext }}"
-            - name: "server.host"
-              value: "{{ .Values.k8_ip }}"
-            - name: "env.host"
-              value: "{{ .Values.k8_ip }}"
             - name: "server.port"
               value: "{{ .Values.mfmarketdata.mf_http_port }}"              
 {{ end }}
