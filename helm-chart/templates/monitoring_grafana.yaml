@@ -1,4 +1,4 @@
-{{ if .Values.mfbasedeployment_non_cluster }}
+{{ if .Values.mfbasedeployment_cluster }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -86,7 +86,7 @@ data:
                 "uid": "Prometheus"
               },
               "expr": "100 - (avg by(node) (irate(node_cpu_seconds_total{mode=\"idle\", node=~\"$node\"}[5m])) * 100)",
-              "legendFormat": "{{node}}",
+              "legendFormat": "{{ "{{" }}node{{ "}}" }}",
               "refId": "A"
             }
           ],
@@ -120,7 +120,7 @@ data:
                 "uid": "Prometheus"
               },
               "expr": "100 * (1 - (node_memory_MemAvailable_bytes{node=~\"$node\"} / node_memory_MemTotal_bytes{node=~\"$node\"}))",
-              "legendFormat": "{{node}}",
+              "legendFormat": "{{ "{{" }}node{{ "}}" }}",
               "refId": "A"
             }
           ],
@@ -154,7 +154,7 @@ data:
                 "uid": "Prometheus"
               },
               "expr": "100 * (1 - (node_filesystem_free_bytes{mountpoint=\"/\", node=~\"$node\"} / node_filesystem_size_bytes{mountpoint=\"/\", node=~\"$node\"}))",
-              "legendFormat": "{{node}} - /",
+              "legendFormat": "{{ "{{" }}node{{ "}}" }} - /",
               "refId": "A"
             }
           ],
@@ -188,7 +188,7 @@ data:
                 "uid": "Prometheus"
               },
               "expr": "sum by (node) (irate(node_network_receive_bytes_total{device!~\"lo|docker.*|calico.*\", node=~\"$node\"}[5m]))",
-              "legendFormat": "{{node}} - Rx",
+              "legendFormat": "{{ "{{" }}node{{ "}}" }} - Rx",
               "refId": "A"
             },
             {
@@ -197,7 +197,7 @@ data:
                 "uid": "Prometheus"
               },
               "expr": "-sum by (node) (irate(node_network_transmit_bytes_total{device!~\"lo|docker.*|calico.*\", node=~\"$node\"}[5m]))",
-              "legendFormat": "{{node}} - Tx",
+              "legendFormat": "{{ "{{" }}node{{ "}}" }} - Tx",
               "refId": "B"
             }
           ],

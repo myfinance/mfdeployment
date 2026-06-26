@@ -1,4 +1,4 @@
-{{ if .Values.mfbasedeployment_non_cluster }}
+{{ if .Values.mfbasedeployment_cluster }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
