@@ -1,4 +1,4 @@
-
+{{ if eq .Values.mfbasedeployment "true" }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -29,3 +29,4 @@ spec:
             persistentVolumeClaim:
               claimName: {{ .Values.stage }}-{{ .Values.mfmongo.backup_pvc }}
       backoffLimit: 4
+{{ end }}

@@ -1,3 +1,5 @@
+{{ if eq .Values.mfbasedeployment "true" }}
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -33,3 +35,5 @@ spec:
         - name: backup-volume
           persistentVolumeClaim:
             claimName: {{ .Values.stage }}-{{ .Values.mfmongo.backup_pvc }}            
+
+{{ end }}

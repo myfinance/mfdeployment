@@ -1,6 +1,7 @@
 stage: dev
-deployment: min
-additionaldeployment: nothing
+mfbasedeployment: true
+mffulldeployment: false
+minecraftdeployment: false
 mfrabbitmq:
   user: user
   pw: vulkan
@@ -23,6 +24,7 @@ mfmongo:
 keycloak:
   pw: vulkan
   port_ext: 30024
+  storageclass: "{{ .Values.stage }}-keycloakstorage"
 mfcomposite:
   mf_http_port_ext: 30030
 mfinstruments:

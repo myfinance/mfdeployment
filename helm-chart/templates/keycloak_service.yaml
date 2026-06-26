@@ -1,3 +1,5 @@
+{{ if eq .Values.mfbasedeployment "true" }}
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -11,3 +13,5 @@ spec:
       port: {{ .Values.keycloak.port }}
       nodePort: {{ .Values.keycloak.port_ext }}
   type: NodePort
+
+{{ end }}

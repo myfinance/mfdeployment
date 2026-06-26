@@ -1,3 +1,4 @@
+{{ if eq .Values.mffulldeployment "true" }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -25,3 +26,5 @@ spec:
   hostPath:
     path: {{ .Values.pv.nasstorage }}/{{ .Values.stage }}_mffe_config
     type: Directory
+
+  {{ end }}

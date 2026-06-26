@@ -1,6 +1,6 @@
 stage: test
-mfbasedeployment: true
-mffulldeployment: true
+mfbasedeployment: false
+mffulldeployment: false
 minecraftdeployment: false
 mfrabbitmq:
   user: user

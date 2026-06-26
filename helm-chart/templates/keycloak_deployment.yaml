@@ -1,3 +1,4 @@
+{{ if eq .Values.mfbasedeployment "true" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -30,3 +31,4 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Values.stage }}-{{ .Values.keycloak.pvc }}
 
+  {{ end }}

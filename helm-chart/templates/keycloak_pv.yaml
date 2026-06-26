@@ -1,9 +1,11 @@
+{{ if eq .Values.mfbasedeployment "true" }}
+
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ .Values.stage }}-{{ .Values.keycloak.pvc }}
 spec:
-  storageClassName: {{ .Values.stage }}-keycloakstorage
+  storageClassName: {{ .Values.keycloak.storageclass }}
   accessModes:
     - ReadWriteOnce
   resources:
@@ -17,7 +19,7 @@ kind: PersistentVolume
 metadata:
   name: {{ .Values.stage }}-keycloakstorage
 spec:
-  storageClassName: {{ .Values.stage }}-keycloakstorage
+  storageClassName: {{ .Values.keycloak.storageclass }}
   accessModes:
     - ReadWriteOnce
   capacity:
@@ -25,3 +27,5 @@ spec:
   hostPath:
     path: {{ .Values.pv.nasstorage }}/{{ .Values.stage }}_keycloak
     type: Directory
+
+{{ end }}
