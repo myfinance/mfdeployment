@@ -25,7 +25,6 @@ mfmongo:
 keycloak:
   pw: vulkan
   port_ext: 30124
-  storageclass: "{{ .Values.stage }}-keycloakstorage"
 mfcomposite:
   mf_http_port_ext: 30130
 mfinstruments:

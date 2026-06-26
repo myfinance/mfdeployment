@@ -5,7 +5,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ .Values.stage }}-{{ .Values.keycloak.pvc }}
 spec:
-  storageClassName: {{ .Values.keycloak.storageclass }}
+  storageClassName: {{ .Values.stage }}-keycloakstorage
   accessModes:
     - ReadWriteOnce
   resources:
@@ -19,7 +19,7 @@ kind: PersistentVolume
 metadata:
   name: {{ .Values.stage }}-keycloakstorage
 spec:
-  storageClassName: {{ .Values.keycloak.storageclass }}
+  storageClassName: {{ .Values.stage }}-keycloakstorage
   accessModes:
     - ReadWriteOnce
   capacity:
