@@ -59,3 +59,10 @@ mfshell:
   importsecuritymetricsschedule: "1 22 * * 6,0"
   importprevcloseschedule: "1 10 * * *"
   processtransactionschedule: "1 23 * * *"
+
+monitoring:
+  enabled: true
+  persistence:
+    storageClassName: longhorn-ssd
+  grafana:
+    pw: vulkan

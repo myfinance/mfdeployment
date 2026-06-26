@@ -63,3 +63,20 @@ minecraft:
   http_port_ext: 30299
   storagesize: 1Gi
   storagepath: /mnt/data/minecraft
+
+monitoring:
+  enabled: false
+  persistence:
+    enabled: true
+    storageClassName: ""
+    prometheusSize: 5Gi
+    grafanaSize: 2Gi
+  prometheus:
+    name: prometheus
+    pvc: prometheus-pvc
+    retention: 24h
+  grafana:
+    name: grafana
+    pvc: grafana-pvc
+    pw: admin
+
