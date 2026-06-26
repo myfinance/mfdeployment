@@ -1,4 +1,4 @@
-{{ if .Values.mfbasedeployment }}
+{{ if .Values.mfbasedeployment_non_cluster }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:

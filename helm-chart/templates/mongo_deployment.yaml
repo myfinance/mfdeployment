@@ -1,4 +1,4 @@
-{{ if .Values.mfbasedeployment  }}
+{{ if .Values.mfbasedeployment_non_cluster  }}
 
 apiVersion: apps/v1
 kind: Deployment

@@ -1,4 +1,4 @@
-{{ if .Values.mfbasedeployment }}
+{{ if .Values.mfbasedeployment_non_cluster }}
 
 apiVersion: v1
 kind: Service
@@ -17,4 +17,47 @@ spec:
       nodePort: {{ .Values.mfrabbitmq.adminport_ext }}
   type: NodePort
   
+{{ end }}
+
+{{ if .Values.mfbasedeployment_cluster }}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.mfrabbitmq.name }}
+spec:
+  #this defines which pod is going to be presented by this service
+  selector:
+    app: {{ .Values.mfrabbitmq.name }}
+  ports:
+    - name: {{ .Values.mfrabbitmq.name }}
+      port: {{ .Values.mfrabbitmq.port }}
+      targetPort: {{ .Values.mfrabbitmq.port_ext }}
+    - name: {{ .Values.mfrabbitmq.adminserviename }}
+      port: {{ .Values.mfrabbitmq.adminport }}
+      targetPort: {{ .Values.mfrabbitmq.adminport_ext }}
+  type: ClusterIP
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mfrabbitmq
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: "mfrabbitmq.{{ .Values.master_ip }}.nip.io"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mfrabbitmq
+                port:
+                  number: {{ .Values.mfrabbitmq.adminport_ext}}     
+
 {{ end }}
