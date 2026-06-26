@@ -1,5 +1,4 @@
 {{ if eq .Values.mfbasedeployment "true" }}
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -13,5 +12,4 @@ spec:
       port: {{ .Values.mfmongo.db_port }}
       nodePort: {{ .Values.mfmongo.db_port_ext }}
   type: NodePort
-
 {{ end }}
