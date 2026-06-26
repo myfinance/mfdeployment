@@ -1,0 +1,15 @@
+mfbasedeployment: false
+mffulldeployment: false
+minecraftdeployment: false
+mfbasedeployment_non_cluster: false
+mfbasedeployment_cluster: false
+nextclouddeployment: true
+
+nextcloud:
+  enabled: true
+  persistence:
+    storageClassName: longhorn-ssd
+  db:
+    pw: vulkan
+  app:
+    adminPw: vulkan

@@ -5,6 +5,7 @@ mffulldeployment: false
 minecraftdeployment: false
 mfbasedeployment_non_cluster: false
 mfbasedeployment_cluster: true
+nextclouddeployment: false
 mfrabbitmq:
   user: user
   pw: vulkan
@@ -66,3 +67,4 @@ monitoring:
     storageClassName: longhorn-ssd
   grafana:
     pw: vulkan
+

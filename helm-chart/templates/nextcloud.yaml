@@ -1,0 +1,191 @@
+{{ if .Values.nextclouddeployment }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.nextcloud.db.pvc }}
+  labels:
+    app: {{ .Values.nextcloud.db.name }}
+spec:
+  storageClassName: {{ .Values.nextcloud.persistence.storageClassName }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.nextcloud.persistence.dbSize }}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.nextcloud.db.name }}
+  labels:
+    app: {{ .Values.nextcloud.db.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.nextcloud.db.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.nextcloud.db.name }}
+    spec:
+      securityContext:
+        fsGroup: 999
+      containers:
+        - name: postgres
+          image: postgres:16
+          env:
+            - name: POSTGRES_DB
+              value: "{{ .Values.nextcloud.db.database }}"
+            - name: POSTGRES_USER
+              value: "{{ .Values.nextcloud.db.user }}"
+            - name: POSTGRES_PASSWORD
+              value: "{{ .Values.nextcloud.db.pw }}"
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          ports:
+            - containerPort: 5432
+              name: dbport
+          resources:
+            limits:
+              cpu: 300m
+              memory: 500Mi
+            requests:
+              cpu: 50m
+              memory: 100Mi
+          volumeMounts:
+            - name: db-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.nextcloud.db.pvc }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.nextcloud.db.name }}
+  labels:
+    app: {{ .Values.nextcloud.db.name }}
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: {{ .Values.nextcloud.db.name }}
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.nextcloud.app.pvc }}
+  labels:
+    app: {{ .Values.nextcloud.app.name }}
+spec:
+  storageClassName: {{ .Values.nextcloud.persistence.storageClassName }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.nextcloud.persistence.nextcloudSize }}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.nextcloud.app.name }}
+  labels:
+    app: {{ .Values.nextcloud.app.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.nextcloud.app.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.nextcloud.app.name }}
+    spec:
+      securityContext:
+        fsGroup: 33
+      containers:
+        - name: nextcloud
+          image: nextcloud:29
+          env:
+            - name: POSTGRES_HOST
+              value: "{{ .Values.nextcloud.db.name }}"
+            - name: POSTGRES_DB
+              value: "{{ .Values.nextcloud.db.database }}"
+            - name: POSTGRES_USER
+              value: "{{ .Values.nextcloud.db.user }}"
+            - name: POSTGRES_PASSWORD
+              value: "{{ .Values.nextcloud.db.pw }}"
+            - name: NEXTCLOUD_ADMIN_USER
+              value: "{{ .Values.nextcloud.app.adminUser }}"
+            - name: NEXTCLOUD_ADMIN_PASSWORD
+              value: "{{ .Values.nextcloud.app.adminPw }}"
+            - name: NEXTCLOUD_TRUSTED_DOMAINS
+              value: "nextcloud.{{ .Values.master_ip }}.nip.io"
+          ports:
+            - containerPort: 80
+              name: http
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          volumeMounts:
+            - name: nextcloud-data
+              mountPath: /var/www/html
+      volumes:
+        - name: nextcloud-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.nextcloud.app.pvc }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.nextcloud.app.name }}
+  labels:
+    app: {{ .Values.nextcloud.app.name }}
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: {{ .Values.nextcloud.app.name }}
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.nextcloud.app.name }}
+  labels:
+    app: {{ .Values.nextcloud.app.name }}
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: "nextcloud.{{ .Values.master_ip }}.nip.io"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.nextcloud.app.name }}
+                port:
+                  number: 80
+{{ end }}

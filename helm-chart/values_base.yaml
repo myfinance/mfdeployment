@@ -80,3 +80,19 @@ monitoring:
     pvc: grafana-pvc
     pw: admin
 
+nextcloud:
+  enabled: false
+  persistence:
+    nextcloudSize: 10Gi
+    dbSize: 5Gi
+  db:
+    name: nextcloud-db
+    pvc: nextcloud-db-pvc
+    user: nextcloud
+    database: nextcloud
+  app:
+    name: nextcloud
+    pvc: nextcloud-pvc
+    adminUser: admin
+
+
