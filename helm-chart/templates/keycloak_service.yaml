@@ -28,7 +28,7 @@ spec:
   ports:
     - name: {{ .Values.keycloak.name }}
       port: {{ .Values.keycloak.port }}
-      targetPort: {{ .Values.keycloak.port_ext }}
+      targetPort: {{ .Values.keycloak.port }}
   type: ClusterIP
 
 ---

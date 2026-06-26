@@ -32,10 +32,10 @@ spec:
   ports:
     - name: {{ .Values.mfrabbitmq.name }}
       port: {{ .Values.mfrabbitmq.port }}
-      targetPort: {{ .Values.mfrabbitmq.port_ext }}
+      targetPort: {{ .Values.mfrabbitmq.port }}
     - name: {{ .Values.mfrabbitmq.adminserviename }}
       port: {{ .Values.mfrabbitmq.adminport }}
-      targetPort: {{ .Values.mfrabbitmq.adminport_ext }}
+      targetPort: {{ .Values.mfrabbitmq.adminport }}
   type: ClusterIP
 
 ---
