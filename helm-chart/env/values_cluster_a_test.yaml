@@ -1,6 +1,6 @@
 stage: test
 master_ip: 192.168.100.81
-mfbasedeployment: false
+mfbasedeployment: true
 mffulldeployment: false
 minecraftdeployment: false
 mfbasedeployment_non_cluster: false
