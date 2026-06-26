@@ -3,6 +3,7 @@ mfbasedeployment: true
 mffulldeployment: true
 minecraftdeployment: true
 mfbasedeployment_non_cluster: true
+mfbasedeployment_cluster: false
 mfrabbitmq:
   user: user
   pw: vulkan

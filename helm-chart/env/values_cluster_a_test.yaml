@@ -1,8 +1,10 @@
 stage: test
+master_ip: 192.168.100.81
 mfbasedeployment: false
 mffulldeployment: false
 minecraftdeployment: false
 mfbasedeployment_non_cluster: false
+mfbasedeployment_cluster: true
 mfrabbitmq:
   user: user
   pw: vulkan
