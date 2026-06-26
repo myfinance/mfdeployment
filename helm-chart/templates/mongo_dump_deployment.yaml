@@ -1,4 +1,4 @@
-{{ if eq .Values.mfbasedeployment "true" }}
+{{ if .Values.mfbasedeployment }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:

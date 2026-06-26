@@ -1,4 +1,4 @@
-{{ if eq .Values.mffulldeployment "true" }}
+{{ if .Values.mffulldeployment }}
 apiVersion: v1
 kind: Service
 metadata:

@@ -1,4 +1,4 @@
-{{ if eq .Values.mfbasedeployment "true" }}
+{{ if .Values.mfbasedeployment }}
 
 apiVersion: v1
 kind: Service
