@@ -58,6 +58,6 @@ spec:
               service:
                 name: mfrabbitmq
                 port:
-                  number: {{ .Values.mfrabbitmq.adminport_ext}}     
+                  number: {{ .Values.mfrabbitmq.adminport}}     
 
 {{ end }}

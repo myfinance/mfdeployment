@@ -51,6 +51,6 @@ spec:
               service:
                 name: keycloak
                 port:
-                  number: {{ .Values.keycloak.port_ext }}     
+                  number: {{ .Values.keycloak.port }}     
 
 {{ end }}
