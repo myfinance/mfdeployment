@@ -35,7 +35,7 @@ spec:
         fsGroup: 999
       containers:
         - name: postgres
-          image: postgres:16
+          image: {{ .Values.nextcloud.pgimage }}
           env:
             - name: POSTGRES_DB
               value: "{{ .Values.nextcloud.db.database }}"
@@ -116,7 +116,7 @@ spec:
         fsGroup: 33
       containers:
         - name: nextcloud
-          image: nextcloud:29
+          image: {{ .Values.nextcloud.image }}
           env:
             - name: POSTGRES_HOST
               value: "{{ .Values.nextcloud.db.name }}"
