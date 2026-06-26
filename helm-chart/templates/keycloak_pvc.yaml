@@ -1,0 +1,15 @@
+{{ if .Values.mfbasedeployment }}
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.stage }}-{{ .Values.keycloak.pvc }}
+spec:
+  storageClassName: {{ .Values.keycloak.storageClassName }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.keycloak.keycloakstoragesize }}
+
+{{ end }}

@@ -1,25 +1,11 @@
-{{ if .Values.mfbasedeployment }}
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: {{ .Values.stage }}-{{ .Values.keycloak.pvc }}
-spec:
-  storageClassName: {{ .Values.stage }}-keycloakstorage
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: {{ .Values.keycloak.keycloakstoragesize }}
-
----
+{{ if .Values.mfbasedeployment_non_cluster }}
 
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ .Values.stage }}-keycloakstorage
+  name: {{ .Values.keycloak.storageClassName }}
 spec:
-  storageClassName: {{ .Values.stage }}-keycloakstorage
+  storageClassName: {{ .Values.keycloak.storageClassName }}
   accessModes:
     - ReadWriteOnce
   capacity:

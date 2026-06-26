@@ -2,6 +2,7 @@ stage: test
 mfbasedeployment: true
 mffulldeployment: true
 minecraftdeployment: false
+mfbasedeployment_non_cluster: true
 mfrabbitmq:
   user: user
   pw: vulkan
@@ -25,6 +26,7 @@ mfmongo:
 keycloak:
   pw: vulkan
   port_ext: 30124
+  storageClassName: test-keycloakstorage
 mfcomposite:
   mf_http_port_ext: 30130
 mfinstruments:

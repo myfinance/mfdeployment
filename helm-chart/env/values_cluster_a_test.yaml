@@ -2,6 +2,7 @@ stage: test
 mfbasedeployment: false
 mffulldeployment: false
 minecraftdeployment: false
+mfbasedeployment_non_cluster: false
 mfrabbitmq:
   user: user
   pw: vulkan
@@ -25,7 +26,7 @@ mfmongo:
 keycloak:
   pw: vulkan
   port_ext: 30124
-  storageclass: "{{ .Values.stage }}-keycloakstorage"
+  storageClassName: longhorn-ssd
 mfcomposite:
   mf_http_port_ext: 30130
 mfinstruments:
