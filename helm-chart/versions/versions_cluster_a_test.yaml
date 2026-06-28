@@ -3,7 +3,7 @@ mfrabbitmq:
 mfmongo:
   image: mongo:5.0
 keycloak:
-  image: quay.io/keycloak/keycloak:21.1.2
+  image: quay.io/keycloak/keycloak:26.6.32
 mfframework:
   imageversion: 0.24.0-alpha-b2fd83be9e378e9763965d6c762782d57d609217
 mfinstruments:
