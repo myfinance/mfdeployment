@@ -1,4 +1,4 @@
-{{ if .Values.mfbasedeployment }}
+{{ if .Values.mfbasedeployment_non_cluster }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,6 +18,41 @@ spec:
           image: "{{ .Values.keycloak.image }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args: ["start-dev --import-realm"]
+          volumeMounts:
+            - name: keycloakdata
+              mountPath: /opt/keycloak/data/import
+          env:
+            - name: KEYCLOAK_ADMIN
+              value: admin
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              value: "{{ .Values.keycloak.pw }}"
+      volumes:
+        - name: keycloakdata
+          persistentVolumeClaim:
+            claimName: {{ .Values.stage }}-{{ .Values.keycloak.pvc }}
+
+  {{ end }}
+
+{{ if .Values.mfbasedeployment_cluster }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.keycloak.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.keycloak.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.keycloak.name }}
+    spec:
+      containers:
+        - name: {{ .Values.keycloak.name }}
+          image: "{{ .Values.keycloak.image }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ["start-dev"]
           volumeMounts:
             - name: keycloakdata
               mountPath: /opt/keycloak/data/import
