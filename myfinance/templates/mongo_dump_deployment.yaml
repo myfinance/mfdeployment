@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mfdump
+spec:
+  schedule: "{{ .Values.mfmongo.dumpschedule }}"
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: {{ .Values.mfmongo.db_name }}-dump
+              image: "{{ .Values.mfmongo.image }}"
+              command:
+                - "/bin/sh"
+                - "-c"
+                - >
+                  TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S);
+                  mongodump --uri mongodb://root:{{ .Values.mfmongo.db_pw }}@{{ .Values.k8_ip }}:{{ .Values.mfmongo.db_port_ext }} --gzip --archive=/backup/mfbackup_$TIMESTAMP.gz --username=root --password={{ .Values.mfmongo.db_pw }} --authenticationDatabase=admin;
+              volumeMounts:
+                - name: backup-volume
+                  mountPath: /backup
+          restartPolicy: OnFailure
+          volumes:
+          - name: backup-volume
+            persistentVolumeClaim:
+              claimName: {{ .Values.stage }}-{{ .Values.mfmongo.backup_pvc }}
+      backoffLimit: 4

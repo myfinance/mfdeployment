@@ -11,5 +11,13 @@ mfrabbitmq:
   storagesize: 1Gi
   storageClassName: ""
 
-
+mfmongo:
+  db_name: mfmongo
+  db_port: 27017
+  db_url: mfdb
+  pvc: mfmongopvc
+  backup_pvc: mfmongobackuppvc
+  mongostoragesize: 5Gi
+  storageClassName: ""
+  backupStorageClassName: ""
 
