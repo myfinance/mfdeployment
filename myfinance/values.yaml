@@ -1,3 +1,12 @@
 replicaCount: 1
 
+mfrabbitmq:
+  name: mfrabbitmq
+  port: 5672
+  adminport: 15672
+  adminserviename: mfrabbitmqadmin
+  user: user
+  pw: guest
+
+
 

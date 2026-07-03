@@ -33,6 +33,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: mfrabbitmq
+                name: {{ .Values.mfrabbitmq.name }}
                 port:
-                  number: {{ .Values.mfrabbitmq.adminport}}     
+                  number: {{ .Values.mfrabbitmq.adminport }}     
