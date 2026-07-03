@@ -1,4 +1,3 @@
-{{ if .Values.nextclouddeployment }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -188,4 +187,4 @@ spec:
                 name: {{ .Values.nextcloud.app.name }}
                 port:
                   number: 80
-{{ end }}
+

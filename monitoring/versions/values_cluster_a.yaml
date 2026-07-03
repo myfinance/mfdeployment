@@ -1,0 +1,7 @@
+monitoring:
+  grafana:
+    image: grafana/grafana:11.0.0
+  nodeexporter:
+    image: prom/node-exporter:v1.8.1
+  prometheus:
+    image: prom/prometheus:v2.52.0

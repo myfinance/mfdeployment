@@ -1,4 +1,3 @@
-{{ if .Values.mfbasedeployment_cluster }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -260,7 +259,7 @@ data:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Values.stage }}-{{ .Values.monitoring.grafana.pvc }}
+  name: {{ .Values.monitoring.grafana.pvc }}
   labels:
     app: grafana
 spec:
@@ -293,7 +292,7 @@ spec:
         fsGroup: 472
       containers:
         - name: grafana
-          image: grafana/grafana:11.0.0
+          image: {{ .Values.monitoring.grafana.image }}
           env:
             - name: GF_SECURITY_ADMIN_USER
               value: admin
@@ -321,7 +320,7 @@ spec:
       volumes:
         - name: storage-volume
           persistentVolumeClaim:
-            claimName: {{ .Values.stage }}-{{ .Values.monitoring.grafana.pvc }}
+            claimName: {{ .Values.monitoring.grafana.pvc }}
         - name: datasources-volume
           configMap:
             name: grafana-datasources
@@ -370,4 +369,3 @@ spec:
                 name: grafana
                 port:
                   number: 80
-{{ end }}

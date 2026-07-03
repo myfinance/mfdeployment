@@ -1,0 +1,18 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+nextcloud:
+  persistence:
+    nextcloudSize: 10Gi
+    dbSize: 5Gi
+  db:
+    name: nextcloud-db
+    pvc: nextcloud-db-pvc
+    user: nextcloud
+    database: nextcloud
+  app:
+    name: nextcloud
+    pvc: nextcloud-pvc
+    adminUser: admin
+
+
