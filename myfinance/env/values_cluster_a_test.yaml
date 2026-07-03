@@ -6,6 +6,7 @@ mfrabbitmq:
   port_ext: 30121
   adminname: mfrabbitmqadmin
   adminport_ext: 30122
+  storageClassName: longhorn-ssd
 
 mfshell:
     # ┌───────────── minute (0 - 59)

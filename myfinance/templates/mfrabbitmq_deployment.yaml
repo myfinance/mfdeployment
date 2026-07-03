@@ -43,3 +43,11 @@ spec:
               value: "{{ .Values.mfrabbitmq.user }}"
             - name: RABBITMQ_DEFAULT_PASS
               value: "{{ .Values.mfrabbitmq.pw }}"
+          volumeMounts:
+            - name: mfrabbitmqdata
+              mountPath: /var/lib/rabbitmq
+      volumes:
+        - name: mfrabbitmqdata
+          persistentVolumeClaim:
+            claimName: {{ .Values.mfrabbitmq.pvc }}
+

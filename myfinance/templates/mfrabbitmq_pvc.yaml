@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.mfrabbitmq.pvc }}
+spec:
+  storageClassName: {{ .Values.mfrabbitmq.storageClassName | quote }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.mfrabbitmq.storagesize }}

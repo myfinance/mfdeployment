@@ -7,6 +7,9 @@ mfrabbitmq:
   adminserviename: mfrabbitmqadmin
   user: user
   pw: guest
+  pvc: mfrabbitmqpvc
+  storagesize: 1Gi
+  storageClassName: ""
 
 
 
