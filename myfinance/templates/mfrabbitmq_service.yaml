@@ -20,13 +20,13 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: mfrabbitmq
+  name: mfrabbitmq{{ .Values.stage }}
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
   ingressClassName: traefik
   rules:
-    - host: "mfrabbitmq.{{ .Values.master_ip }}.nip.io"
+    - host: "mfrabbitmq{{ .Values.stage }}.{{ .Values.master_ip }}.nip.io"
       http:
         paths:
           - path: /

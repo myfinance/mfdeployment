@@ -17,13 +17,13 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: mfmongo_{{ .Values.stage }}
+  name: mfmongo{{ .Values.stage }}
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
   ingressClassName: traefik
   rules:
-    - host: "mfmongo_{{ .Values.stage }}.{{ .Values.master_ip }}.nip.io"
+    - host: "mfmongo{{ .Values.stage }}.{{ .Values.master_ip }}.nip.io"
       http:
         paths:
           - path: /
