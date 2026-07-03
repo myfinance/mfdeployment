@@ -30,6 +30,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ .Values.mfmongo.name }}
+                name: {{ .Values.mfmongo.db_name }}
                 port:
-                  number: {{ .Values.mfmongo.adminport }}  
+                  number: {{ .Values.mfmongo.db_port }}  
