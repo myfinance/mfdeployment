@@ -15,21 +15,16 @@ spec:
 ---
 
 apiVersion: networking.k8s.io/v1
-kind: Ingress
+kind: IngressRouteTCP
 metadata:
   name: mfmongo{{ .Values.stage }}
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
-  ingressClassName: traefik
-  rules:
-    - host: "mfmongo{{ .Values.stage }}.{{ .Values.master_ip }}.nip.io"
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ .Values.mfmongo.db_name }}
-                port:
-                  number: {{ .Values.mfmongo.db_port }}  
+  entryPoints:
+    - mongo
+    routes:
+    - match: HostSNI(`*`)
+      services:
+        - name: {{ .Values.mfmongo.db_name }}
+          port: {{ .Values.mfmongo.db_port }}
+
+
