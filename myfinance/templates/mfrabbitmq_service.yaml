@@ -1,5 +1,3 @@
-{{ if .Values.mfbasedeployment_cluster }}
-
 apiVersion: v1
 kind: Service
 metadata:
