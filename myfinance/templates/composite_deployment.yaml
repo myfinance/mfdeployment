@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.mfcomposite.mf_name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mfcomposite.mf_name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mfcomposite.mf_name }}
+    spec:
+      containers:
+        - name: {{ .Values.mfcomposite.mf_name }}
+          image: "{{ .Values.image.repository }}mfcomposite:{{ .Values.mfframework.imageversion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}      
+          tty: true
+          env:
+            - name: "server.host"
+              value: "{{ .Values.k8_ip }}"
+            - name: "env.host"
+              value: "{{ .Values.k8_ip }}"
+            - name: "server.port"
+              value: "{{ .Values.mfcomposite.mf_http_port }}"
+            - name: "api.common.version"
+              value: "{{ .Values.mfframework.imageversion }}"
+            - name: "spring.rabbitmq.port"
+              value: "{{ .Values.mfrabbitmq.port_ext }}"
+            - name: "app.mfinstruments.port"
+              value: "{{ .Values.mfinstruments.mf_http_port_ext }}"
+            - name: "app.mftransactions.port"
+              value: "{{ .Values.mftransactions.mf_http_port_ext }}"
+            - name: "app.mfmarketdata.port"
+              value: "{{ .Values.mfmarketdata.mf_http_port_ext }}"
+            - name: "app.mfvaluation.port"
+              value: "{{ .Values.mfvaluation.mf_http_port_ext }}"
+            - name: "app.mfsecuritymetrics.port"
+              value: "{{ .Values.mfsecuritymetrics.mf_http_port_ext }}"
+            - name: "openid.port"
+              value: "{{ .Values.keycloak.port_ext }}"
