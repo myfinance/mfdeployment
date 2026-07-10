@@ -11,18 +11,3 @@ spec:
       port: {{ .Values.mfmongo.db_port }}
       targetPort: {{ .Values.mfmongo.db_port }}
   type: LoadBalancer
-
----
-
-apiVersion: traefik.io/v1alpha1
-kind: IngressRouteTCP
-metadata:
-  name: mfmongo{{ .Values.stage }}
-spec:
-  entryPoints:
-    - mongo-tcp # This must match the entrypoint name you defined in Traefik's global config
-  routes:
-    - match: HostSNI(`*`) # TCP doesn't have hostnames unless using TLS, so * is used for raw TCP
-      services:
-        - name: {{ .Values.mfmongo.db_name }}
-          port: {{ .Values.mfmongo.db_port }}
