@@ -9,5 +9,4 @@ spec:
   ports:
     - name: http
       port: {{ .Values.mffrontend.mf_http_port }}
-      nodePort: {{ .Values.mffrontend.mf_http_port_ext }}
-  type: NodePort
+  type: ClusterIP

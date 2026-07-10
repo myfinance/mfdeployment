@@ -9,6 +9,5 @@ spec:
  ports:
   - name: http
     port: {{ .Values.mfcomposite.mf_http_port }}
-    nodePort: {{ .Values.mfcomposite.mf_http_port_ext }}
- type: NodePort
+ type: ClusterIP
 

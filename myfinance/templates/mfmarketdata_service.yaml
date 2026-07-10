@@ -1,4 +1,3 @@
-{{ if .Values.mffulldeployment  }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -10,6 +9,4 @@ spec:
   ports:
     - name: http
       port: {{ .Values.mfmarketdata.mf_http_port }}
-      nodePort: {{ .Values.mfmarketdata.mf_http_port_ext }}
-  type: NodePort
-{{ end }}
+  type: ClusterIP
