@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.mfinstruments.mf_name }}
+  name: {{ .Values.mfsecuritymetrics.mf_name }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Values.mfinstruments.mf_name }}
+      app: {{ .Values.mfsecuritymetrics.mf_name }}
   template:
     metadata:
       labels:
-        app: {{ .Values.mfinstruments.mf_name }}
+        app: {{ .Values.mfsecuritymetrics.mf_name }}
     spec:
       containers:
-        - name: {{ .Values.mfinstruments.mf_name }}
-          image: "{{ .Values.image.repository }}mfinstruments:{{ .Values.mfinstruments.imageversion }}"
+        - name: {{ .Values.mfsecuritymetrics.mf_name }}
+          image: "{{ .Values.image.repository }}mfsecuritymetrics:{{ .Values.mfsecuritymetrics.imageversion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           tty: true
           env:
@@ -23,10 +23,10 @@ spec:
             - name: "env.host"
               value: "{{ .Values.k8_ip }}"
             - name: "server.port"
-              value: "{{ .Values.mfinstruments.mf_http_port }}"
+              value: "{{ .Values.mfsecuritymetrics.mf_http_port }}"   
             - name: "spring.data.mongodb.port"
               value: "{{ .Values.mfmongo.db_port_ext }}"
             - name: "api.common.version"
-              value: "{{ .Values.mfinstruments.imageversion }}"
+              value: "{{ .Values.mfsecuritymetrics.imageversion }}"
             - name: "spring.rabbitmq.port"
               value: "{{ .Values.mfrabbitmq.port_ext }}"

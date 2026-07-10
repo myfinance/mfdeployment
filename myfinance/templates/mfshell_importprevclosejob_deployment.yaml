@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mfprevcloseimport
+spec:
+  schedule: "{{ .Values.mfshell.importprevcloseschedule }}"
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: {{ .Values.mfshell.name }}
+              image: "{{ .Values.image.repository }}mfshell:{{ .Values.mfshell.imageversion }}"
+              args: ["importPrevClose"]
+              env:
+                - name: "spring.rabbitmq.port"
+                  value: "{{ .Values.mfrabbitmq.port_ext }}"
+                - name: "job.name"
+                  value: "importPrevClose"
+          restartPolicy: OnFailure
+      backoffLimit: 4

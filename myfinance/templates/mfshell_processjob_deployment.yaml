@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mfprocesstransactions
+spec:
+  schedule: "{{ .Values.mfshell.processtransactionschedule }}"
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: {{ .Values.mfshell.name }}
+              image: "{{ .Values.image.repository }}mfshell:{{ .Values.mfshell.imageversion }}"
+              env:
+                - name: "spring.rabbitmq.port"
+                  value: "{{ .Values.mfrabbitmq.port_ext }}"
+                - name: "job.name"
+                  value: "processTransactions"
+          restartPolicy: OnFailure
+      backoffLimit: 4
+

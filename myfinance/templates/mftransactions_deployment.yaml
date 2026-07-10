@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.mftransactions.mf_name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mftransactions.mf_name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mftransactions.mf_name }}
+    spec:
+      containers:
+        - name: {{ .Values.mftransactions.mf_name }}
+          image: "{{ .Values.image.repository }}mftransactions:{{ .Values.mftransactions.imageversion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          tty: true
+          env:
+            - name: "spring.data.mongodb.host"
+              value: "{{ .Values.k8_ip }}"
+            - name: "spring.data.mongodb.port"
+              value: "{{ .Values.mfmongo.db_port_ext }}"
+            - name: "api.common.version"
+              value: "{{ .Values.mftransactions.imageversion }}"
+            - name: "spring.rabbitmq.port"
+              value: "{{ .Values.mfrabbitmq.port_ext }}"
+            - name: "server.host"
+              value: "{{ .Values.k8_ip }}"
+            - name: "env.host"
+              value: "{{ .Values.k8_ip }}"
+            - name: "server.port"
+              value: "{{ .Values.mftransactions.mf_http_port }}"   

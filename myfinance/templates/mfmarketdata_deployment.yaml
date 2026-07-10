@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.mfinstruments.mf_name }}
+  name: {{ .Values.mfmarketdata.mf_name }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Values.mfinstruments.mf_name }}
+      app: {{ .Values.mfmarketdata.mf_name }}
   template:
     metadata:
       labels:
-        app: {{ .Values.mfinstruments.mf_name }}
+        app: {{ .Values.mfmarketdata.mf_name }}
     spec:
       containers:
-        - name: {{ .Values.mfinstruments.mf_name }}
-          image: "{{ .Values.image.repository }}mfinstruments:{{ .Values.mfinstruments.imageversion }}"
+        - name: {{ .Values.mfmarketdata.mf_name }}
+          image: "{{ .Values.image.repository }}mfmarketdata:{{ .Values.mfmarketdata.imageversion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           tty: true
           env:
@@ -22,11 +22,11 @@ spec:
               value: "{{ .Values.k8_ip }}"
             - name: "env.host"
               value: "{{ .Values.k8_ip }}"
-            - name: "server.port"
-              value: "{{ .Values.mfinstruments.mf_http_port }}"
             - name: "spring.data.mongodb.port"
               value: "{{ .Values.mfmongo.db_port_ext }}"
             - name: "api.common.version"
-              value: "{{ .Values.mfinstruments.imageversion }}"
+              value: "{{ .Values.mfmarketdata.imageversion }}"
             - name: "spring.rabbitmq.port"
               value: "{{ .Values.mfrabbitmq.port_ext }}"
+            - name: "server.port"
+              value: "{{ .Values.mfmarketdata.mf_http_port }}"              
