@@ -1,0 +1,10 @@
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: {{ .Values.metallbConfig.l2AdvertisementName | default "default-l2-adv" }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  ipAddressPools:
+    - {{ .Values.metallbConfig.poolName | default "default-pool" }}
