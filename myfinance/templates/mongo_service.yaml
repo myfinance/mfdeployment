@@ -10,7 +10,7 @@ spec:
     - name: {{ .Values.mfmongo.db_name }}
       port: {{ .Values.mfmongo.db_port }}
       targetPort: {{ .Values.mfmongo.db_port }}
-  type: ClusterIP
+  type: LoadBalancer
 
 ---
 
