@@ -1,7 +1,6 @@
 master_ip: 192.168.100.81
 image:
-  #repository: nexus.192.168.100.81.nip.io/repository/mydockerrepo/
-  repository: repository/mydockerrepo/
+  repository: nexus.192.168.100.81.nip.io:31003/repository/mydockerrepo/
 stage: test
 mfrabbitmq:
   user: user
