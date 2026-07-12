@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: {{ .Values.mfcomposite.mf_name }}
-          image: "{{ .Values.image.repository }}mfcomposite:{{ .Values.mfframework.imageversion }}"
+          image: "{{ .Values.image.repository }}mfframework:{{ .Values.mfframework.imageversion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}      
           tty: true
           env:
