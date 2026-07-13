@@ -18,7 +18,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
            - name: mffrontendconfig
-             mountPath: /usr/share/nginx/html/assets/config
+             mountPath: /usr/share/nginx/html/config
       volumes:
         - name: mffrontendconfig
           configMap:
