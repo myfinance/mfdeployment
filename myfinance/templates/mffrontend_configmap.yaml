@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.mffrontend.mf_name }}-config
+data:
+  config.json: |
+{{ .Values.mffrontend.config | indent 4 }}

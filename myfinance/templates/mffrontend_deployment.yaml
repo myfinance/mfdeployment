@@ -21,5 +21,5 @@ spec:
              mountPath: /usr/share/nginx/html/assets/config
       volumes:
         - name: mffrontendconfig
-          persistentVolumeClaim:
-              claimName: {{ .Values.stage }}-{{ .Values.mffrontend.pvc }}
+          configMap:
+            name: {{ .Values.mffrontend.mf_name }}-config

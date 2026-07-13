@@ -44,9 +44,33 @@ mfcomposite:
 mffrontend:
   mf_http_port: 80
   mf_name: mffrontend
-  pvc: mffeconfigpvc
-  configstoragesize: 50Mi
-  storageClassName: "longhorn-ssd"
+  config: |
+    {
+      "zones": [
+        {
+          "name": "Localhost",
+          "identifier": "local",
+          "backendurl": "http://localhost:30030",
+          "openidurl": "http://localhost:30024",
+          "logstreamurl": "ws://localhost:30036/ws/logs"
+        },
+        {
+          "name": "Dev",
+          "identifier": "dev",
+          "backendurl": "http://localhost:30030",
+          "openidurl": "http://192.168.100.73:30024",
+          "logstreamurl": "ws://localhost:30036/ws/logs"
+        },
+        {
+          "name": "Mock",
+          "identifier": "mock",
+          "backendurl": "na",
+          "openidurl": "na",
+          "logstreamurl": "na"
+        }
+      ],
+      "defaultZone": "local"
+    }
 mflogstream:
   mf_http_port: 30036
   mf_name: mflogstream
