@@ -46,9 +46,9 @@ mffrontend:
         {
           "name": "Test",
           "identifier": "test",
-          "backendurl": "http://192.168.100.73:30130",
-          "openidurl": "http://192.168.100.73:30124",
-          "logstreamurl": "ws://192.168.100.73:30136/ws/logs"
+          "backendurl": "http://mfcompositetest.192.168.100.81.nip.io",
+          "openidurl": "http://keycloak.192.168.100.81.nip.io",
+          "logstreamurl": "ws://mflogstreamtest.192.168.100.81.nip.io/ws/logs"
         }
       ],
       "defaultZone": "test"

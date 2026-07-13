@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.mfcomposite.mf_name }}{{ .Values.stage }}
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: "{{ .Values.mfcomposite.mf_name }}{{ .Values.stage }}.{{ .Values.master_ip }}.nip.io"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.mfcomposite.mf_name }}
+                port:
+                  number: {{ .Values.mfcomposite.mf_http_port }}
