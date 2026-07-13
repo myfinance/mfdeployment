@@ -22,5 +22,7 @@ spec:
               value: "{{ .Values.k8_ip }}"
             - name: "server.port"
               value: "{{ .Values.mflogstream.mf_http_port }}"
+            - name: "spring.rabbitmq.host"
+              value: "{{ .Values.mfrabbitmq.name }}"
             - name: "spring.rabbitmq.port"
               value: "{{ .Values.mfrabbitmq.port }}"

@@ -14,6 +14,8 @@ spec:
             - name: {{ .Values.mfshell.name }}
               image: "{{ .Values.image.repository }}mfshell:{{ .Values.mfshell.imageversion }}"
               env:
+                - name: "spring.rabbitmq.host"
+                  value: "{{ .Values.mfrabbitmq.name }}"
                 - name: "spring.rabbitmq.port"
                   value: "{{ .Values.mfrabbitmq.port }}"
                 - name: "job.name"
