@@ -5,9 +5,7 @@ stage: test
 mfrabbitmq:
   user: user
   pw: vulkan
-  port_ext: 30121
   adminname: mfrabbitmqadmin
-  adminport_ext: 30122
   storageClassName: longhorn-ssd
 
 mfshell:
@@ -27,7 +25,6 @@ mfshell:
 
 mfmongo:
   db_pw: vulkan
-  db_port_ext: 30123
   storageClassName: longhorn-ssd
   backupStorageClassName: longhorn-ssd
     # ┌───────────── minute (0 - 59)

@@ -16,7 +16,7 @@ spec:
               args: ["importSecurityMetrics"]
               env:
                 - name: "spring.rabbitmq.port"
-                  value: "{{ .Values.mfrabbitmq.port_ext }}"
+                  value: "{{ .Values.mfrabbitmq.port }}"
                 - name: "job.name"
                   value: "importSecurityMetrics"
           restartPolicy: OnFailure

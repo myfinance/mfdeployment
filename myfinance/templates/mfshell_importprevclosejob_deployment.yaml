@@ -16,7 +16,7 @@ spec:
               args: ["importPrevClose"]
               env:
                 - name: "spring.rabbitmq.port"
-                  value: "{{ .Values.mfrabbitmq.port_ext }}"
+                  value: "{{ .Values.mfrabbitmq.port }}"
                 - name: "job.name"
                   value: "importPrevClose"
           restartPolicy: OnFailure

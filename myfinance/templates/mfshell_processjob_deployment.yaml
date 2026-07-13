@@ -15,7 +15,7 @@ spec:
               image: "{{ .Values.image.repository }}mfshell:{{ .Values.mfshell.imageversion }}"
               env:
                 - name: "spring.rabbitmq.port"
-                  value: "{{ .Values.mfrabbitmq.port_ext }}"
+                  value: "{{ .Values.mfrabbitmq.port }}"
                 - name: "job.name"
                   value: "processTransactions"
           restartPolicy: OnFailure

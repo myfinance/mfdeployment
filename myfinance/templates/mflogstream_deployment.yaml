@@ -23,4 +23,4 @@ spec:
             - name: "server.port"
               value: "{{ .Values.mflogstream.mf_http_port }}"
             - name: "spring.rabbitmq.port"
-              value: "{{ .Values.mfrabbitmq.port_ext }}"
+              value: "{{ .Values.mfrabbitmq.port }}"
