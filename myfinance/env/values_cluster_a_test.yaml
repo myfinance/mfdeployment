@@ -36,7 +36,7 @@ mfmongo:
     # │ │ │ │ │
     # │ │ │ │ │
   #dumpschedule: "1 22 * * 0"
-  dumpschedule: "38 * * * *"
+  dumpschedule: "41 * * * *"
   nextcloud:
     url: "http://nextcloud.nextcloud.svc.cluster.local"
     user: "admin"
