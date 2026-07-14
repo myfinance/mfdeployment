@@ -35,7 +35,8 @@ mfmongo:
     # │ │ │ │ │                                       7 is also Sunday on some systems)
     # │ │ │ │ │
     # │ │ │ │ │
-  dumpschedule: "1 22 * * 0"
+  #dumpschedule: "1 22 * * 0"
+  dumpschedule: "38 * * * *"
   nextcloud:
     url: "http://nextcloud.nextcloud.svc.cluster.local"
     user: "admin"
