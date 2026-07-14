@@ -10,16 +10,3 @@ spec:
     requests:
       storage: {{ .Values.mfmongo.mongostoragesize }}
 
----
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: {{ .Values.stage }}-{{ .Values.mfmongo.backup_pvc }}
-spec:
-  storageClassName: {{ .Values.mfmongo.backupStorageClassName | quote }}
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: {{ .Values.mfmongo.mongostoragesize }}
