@@ -22,6 +22,8 @@ mfmongo:
   mongostoragesize: 5Gi
   storageClassName: ""
   backupStorageClassName: ""
+  backupenabled: false
+  backuptarget: ""
   nextcloud:
     url: "http://nextcloud.nextcloud.svc.cluster.local"
     user: "admin"
