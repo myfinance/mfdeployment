@@ -22,6 +22,10 @@ mfmongo:
   mongostoragesize: 5Gi
   storageClassName: ""
   backupStorageClassName: ""
+  nextcloud:
+    url: "http://nextcloud.nextcloud.svc.cluster.local"
+    user: "admin"
+    password: "adminpassword"
 
 mfinstruments:
   mf_http_port: 7001
