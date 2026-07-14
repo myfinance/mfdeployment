@@ -25,6 +25,8 @@ mfshell:
 
 mfmongo:
   db_pw: vulkan
+  backupenabled: true
+  backuptarget: testclustera
   storageClassName: longhorn-ssd
   backupStorageClassName: longhorn-ssd
     # ┌───────────── minute (0 - 59)
@@ -35,8 +37,7 @@ mfmongo:
     # │ │ │ │ │                                       7 is also Sunday on some systems)
     # │ │ │ │ │
     # │ │ │ │ │
-  #dumpschedule: "1 22 * * 0"
-  dumpschedule: "4 * * * *"
+  dumpschedule: "1 22 * * 0"
   nextcloud:
     url: "http://nextcloud.nextcloud.svc.cluster.local"
     user: "admin"
