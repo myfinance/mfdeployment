@@ -21,6 +21,8 @@ metadata:
   labels:
     app: {{ .Values.nextcloud.db.name }}
 spec:
+  strategy:
+    type: Recreate
   replicas: 1
   selector:
     matchLabels:
@@ -102,6 +104,8 @@ metadata:
   labels:
     app: {{ .Values.nextcloud.app.name }}
 spec:
+  strategy:
+    type: Recreate
   replicas: 1
   selector:
     matchLabels:
