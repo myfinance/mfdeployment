@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.nextcloud.app.name }}-setup-script
+  labels:
+    app: {{ .Values.nextcloud.app.name }}
+data:
+  setup-nextcloud.sh: |
+    #!/bin/sh
+    echo "Starting Nextcloud automatic configuration hook..."
+
+    # 1. Install/enable user_oidc app if not installed
+    if ! php /var/www/html/occ app:list | grep -q "user_oidc:"; then
+      echo "Installing user_oidc app..."
+      php /var/www/html/occ app:install user_oidc
+    fi
+
+    # 2. Install/enable groupfolders app if not installed
+    if ! php /var/www/html/occ app:list | grep -q "groupfolders:"; then
+      echo "Installing groupfolders app..."
+      php /var/www/html/occ app:install groupfolders
+    fi
+
+    # 3. Register OIDC provider if not registered
+    if ! php /var/www/html/occ user_oidc:provider | grep -q "keycloak"; then
+      echo "Registering OIDC provider keycloak..."
+      php /var/www/html/occ user_oidc:provider keycloak \
+        --clientid="nextcloud" \
+        --clientsecret="vulkan" \
+        --discoveryuri="http://keycloak.keycloak.svc.cluster.local:8080/realms/home/.well-known/openid-configuration" \
+        --groups-claim="groups"
+    fi
+
+    # 4. Create Group Folders and assign groups/permissions
+    get_or_create_folder() {
+      local name="$1"
+      local folder_id=$(php /var/www/html/occ groupfolders:list | grep -w "$name" | awk -F'|' '{print $2}' | tr -d ' ')
+      if [ -z "$folder_id" ]; then
+        echo "Creating group folder: $name"
+        local output=$(php /var/www/html/occ groupfolders:create "$name")
+        folder_id=$(echo "$output" | tr -dc '0-9')
+      fi
+      echo "$folder_id"
+    }
+
+    # Folder 1: Doerte
+    doerte_id=$(get_or_create_folder "Doerte")
+    php /var/www/html/occ groupfolders:group "$doerte_id" "nextcloud-doerte" || true
+    php /var/www/html/occ groupfolders:group "$doerte_id" "nextcloud-doerte" write share delete || true
+
+    # Folder 2: Jonas
+    jonas_id=$(get_or_create_folder "Jonas")
+    php /var/www/html/occ groupfolders:group "$jonas_id" "nextcloud-jonas" || true
+    php /var/www/html/occ groupfolders:group "$jonas_id" "nextcloud-jonas" write share delete || true
+
+    # Folder 3: Paul
+    paul_id=$(get_or_create_folder "Paul")
+    php /var/www/html/occ groupfolders:group "$paul_id" "nextcloud-paul" || true
+    php /var/www/html/occ groupfolders:group "$paul_id" "nextcloud-paul" write share delete || true
+
+    # Folder 4: Holger
+    holger_id=$(get_or_create_folder "Holger")
+    php /var/www/html/occ groupfolders:group "$holger_id" "nextcloud-holger" || true
+    php /var/www/html/occ groupfolders:group "$holger_id" "nextcloud-holger" write share delete || true
+
+    # Folder 5: Common
+    common_id=$(get_or_create_folder "Common")
+    php /var/www/html/occ groupfolders:group "$common_id" "nextcloud-users" || true
+    php /var/www/html/occ groupfolders:group "$common_id" "nextcloud-admins" || true
+    php /var/www/html/occ groupfolders:group "$common_id" "nextcloud-admins" write share delete || true
+
+    echo "Nextcloud automatic configuration hook completed successfully!"

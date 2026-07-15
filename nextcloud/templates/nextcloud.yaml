@@ -144,10 +144,17 @@ spec:
           volumeMounts:
             - name: nextcloud-data
               mountPath: /var/www/html
+            - name: setup-script
+              mountPath: /docker-entrypoint-hooks.d/before-starting/setup-nextcloud.sh
+              subPath: setup-nextcloud.sh
       volumes:
         - name: nextcloud-data
           persistentVolumeClaim:
             claimName: {{ .Values.nextcloud.app.pvc }}
+        - name: setup-script
+          configMap:
+            name: {{ .Values.nextcloud.app.name }}-setup-script
+            defaultMode: 0755
 
 ---
 
