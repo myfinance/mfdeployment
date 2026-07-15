@@ -35,8 +35,8 @@ data:
     create_group_if_not_exists() {
       local name="$1"
       if ! php /var/www/html/occ group:list | grep -q "  - $name:"; then
-        echo "Creating Nextcloud group: $name"
-        php /var/www/html/occ group:create "$name" || true
+        echo "Creating Nextcloud group: $name" >&2
+        php /var/www/html/occ group:add "$name" || true
       fi
     }
 
@@ -52,7 +52,7 @@ data:
       local name="$1"
       local folder_id=$(php /var/www/html/occ groupfolders:list | grep -w "$name" | awk -F'|' '{print $2}' | tr -d ' ')
       if [ -z "$folder_id" ]; then
-        echo "Creating group folder: $name"
+        echo "Creating group folder: $name" >&2
         local output=$(php /var/www/html/occ groupfolders:create "$name")
         folder_id=$(echo "$output" | tr -dc '0-9')
       fi
