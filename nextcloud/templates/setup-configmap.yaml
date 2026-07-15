@@ -28,8 +28,24 @@ data:
         --clientid="nextcloud" \
         --clientsecret="vulkan" \
         --discoveryuri="http://keycloak.keycloak.svc.cluster.local:8080/realms/home/.well-known/openid-configuration" \
-        --groups-claim="groups"
+        --mapping-groups="groups"
     fi
+
+    # Pre-create Nextcloud groups so they can be assigned to group folders
+    create_group_if_not_exists() {
+      local name="$1"
+      if ! php /var/www/html/occ group:list | grep -q "  - $name:"; then
+        echo "Creating Nextcloud group: $name"
+        php /var/www/html/occ group:create "$name" || true
+      fi
+    }
+
+    create_group_if_not_exists "nextcloud-users"
+    create_group_if_not_exists "nextcloud-admins"
+    create_group_if_not_exists "nextcloud-doerte"
+    create_group_if_not_exists "nextcloud-jonas"
+    create_group_if_not_exists "nextcloud-paul"
+    create_group_if_not_exists "nextcloud-holger"
 
     # 4. Create Group Folders and assign groups/permissions
     get_or_create_folder() {
