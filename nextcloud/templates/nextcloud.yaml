@@ -230,3 +230,4 @@ spec:
   tls:
     - hosts:
         - nextcloud.hfischer.org
+      secretName: {{ .Values.nextcloud.app.name }}-hfischer-org-tls
