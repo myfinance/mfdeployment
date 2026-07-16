@@ -134,7 +134,9 @@ spec:
             - name: NEXTCLOUD_ADMIN_PASSWORD
               value: "{{ .Values.nextcloud.app.adminPw }}"
             - name: NEXTCLOUD_TRUSTED_DOMAINS
-              value: "nextcloud.{{ .Values.master_ip }}.nip.io nextcloud.nextcloud.svc.cluster.local"
+              value: "nextcloud.{{ .Values.master_ip }}.nip.io nextcloud.nextcloud.svc.cluster.local nextcloud.hfischer.org"
+            - name: TRUSTED_PROXIES
+              value: "10.42.0.0/16 192.168.100.0/24 10.43.0.0/16"
           ports:
             - containerPort: 80
               name: http
@@ -198,4 +200,35 @@ spec:
                 name: {{ .Values.nextcloud.app.name }}
                 port:
                   number: 80
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.nextcloud.app.name }}-secure
+  labels:
+    app: {{ .Values.nextcloud.app.name }}
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.tls.certresolver: default
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: "nextcloud.hfischer.org"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.nextcloud.app.name }}
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - "nextcloud.hfischer.org"
+      secretName: nextcloud-hfischer-org-tls
+
 
