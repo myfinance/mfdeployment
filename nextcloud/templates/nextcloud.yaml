@@ -229,7 +229,4 @@ spec:
                   number: 80
   tls:
     - hosts:
-        - "nextcloud.hfischer.org"
-      secretName: nextcloud-hfischer-org-tls
-
-
+        - nextcloud.hfischer.org
