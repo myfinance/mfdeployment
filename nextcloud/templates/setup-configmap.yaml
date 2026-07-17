@@ -21,14 +21,19 @@ data:
       php /var/www/html/occ app:install groupfolders
     fi
 
-    # 3. Register OIDC provider if not registered
+    # 3. Register OIDC provider if not registered, or update it
     if ! php /var/www/html/occ user_oidc:provider | grep -q "keycloak"; then
       echo "Registering OIDC provider keycloak..."
       php /var/www/html/occ user_oidc:provider keycloak \
         --clientid="nextcloud" \
         --clientsecret="vulkan" \
         --discoveryuri="http://keycloak.keycloak.svc.cluster.local:8080/realms/home/.well-known/openid-configuration" \
-        --mapping-groups="groups"
+        --mapping-groups="groups" \
+        --group-provisioning=1
+    else
+      echo "Updating OIDC provider keycloak configuration..."
+      php /var/www/html/occ user_oidc:provider keycloak \
+        --group-provisioning=1
     fi
 
     # Pre-create Nextcloud groups so they can be assigned to group folders
@@ -84,5 +89,13 @@ data:
     php /var/www/html/occ groupfolders:group "$common_id" "nextcloud-users" || true
     php /var/www/html/occ groupfolders:group "$common_id" "nextcloud-admins" || true
     php /var/www/html/occ groupfolders:group "$common_id" "nextcloud-admins" write share delete || true
+
+    # Folder 6: data
+    data_id=$(get_or_create_folder "data")
+    php /var/www/html/occ groupfolders:group "$data_id" "nextcloud-users" || true
+    php /var/www/html/occ groupfolders:group "$data_id" "nextcloud-admins" || true
+    php /var/www/html/occ groupfolders:group "$data_id" "nextcloud-admins" write share delete || true
+    php /var/www/html/occ groupfolders:group "$data_id" "admin" || true
+    php /var/www/html/occ groupfolders:group "$data_id" "admin" write share delete || true
 
     echo "Nextcloud automatic configuration hook completed successfully!"
