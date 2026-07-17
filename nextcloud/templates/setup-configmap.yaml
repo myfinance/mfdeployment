@@ -52,7 +52,7 @@ data:
     create_group_if_not_exists "nextcloud-paul"
     create_group_if_not_exists "nextcloud-holger"
 
-    # 4. Create Group Folders and assign groups/permissions
+    # 4. function to Create Group Folders and assign groups/permissions used below
     get_or_create_folder() {
       local name="$1"
       local folder_id=$(php /var/www/html/occ groupfolders:list | grep -w "$name" | awk -F'|' '{print $2}' | tr -d ' ')
