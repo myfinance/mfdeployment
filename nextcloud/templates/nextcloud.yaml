@@ -227,8 +227,5 @@ spec:
                 name: {{ .Values.nextcloud.app.name }}
                 port:
                   number: 80
-  tls:
-    - hosts:
-        - nextcloud.hfischer.org
-      secretName: {{ .Values.nextcloud.app.name }}-hfischer-org-tls
+
 
