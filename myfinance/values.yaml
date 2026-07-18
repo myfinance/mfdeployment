@@ -15,6 +15,7 @@ mfrabbitmq:
 
 mfmongo:
   db_name: mfmongo
+  db_pw: vulkan
   db_port: 27017
   db_url: mfdb
   pvc: mfmongopvc
