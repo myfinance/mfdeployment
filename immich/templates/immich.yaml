@@ -32,6 +32,7 @@ spec:
       labels:
         app: {{ .Values.immich.app.name }}
     spec:
+      enableServiceLinks: false
       containers:
         - name: server
           image: {{ .Values.immich.image }}
