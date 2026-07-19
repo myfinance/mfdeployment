@@ -21,7 +21,23 @@ data:
       php /var/www/html/occ app:install groupfolders
     fi
 
-    # 3. Register OIDC provider if not registered, or update it
+    # 3. Install/enable richdocuments (Collabora Online) app if not installed
+    if ! php /var/www/html/occ app:list | grep -q "richdocuments:"; then
+      echo "Installing richdocuments app..."
+      php /var/www/html/occ app:install richdocuments
+    fi
+
+    # Configure Collabora Online wopi_url
+    echo "Configuring richdocuments wopi_url..."
+    php /var/www/html/occ config:app:set richdocuments wopi_url --value="https://office.hfischer.org"
+
+    # 4. Install/enable keeweb app if not installed
+    if ! php /var/www/html/occ app:list | grep -q "keeweb:"; then
+      echo "Installing keeweb app..."
+      php /var/www/html/occ app:install keeweb
+    fi
+
+    # 5. Register OIDC provider if not registered, or update it
     if ! php /var/www/html/occ user_oidc:provider | grep -q "keycloak"; then
       echo "Registering OIDC provider keycloak..."
       php /var/www/html/occ user_oidc:provider keycloak \
@@ -49,7 +65,7 @@ data:
 
     create_group_if_not_exists "nextcloud-users"
 
-    # 4. function to Create Group Folders and assign groups/permissions used below
+    # 6. function to Create Group Folders and assign groups/permissions used below
     get_or_create_folder() {
       local name="$1"
       local folder_id=$(php /var/www/html/occ groupfolders:list | awk -F'|' -v name="$name" '{gsub(/[ \t]+/, "", $2); gsub(/[ \t]+/, "", $3); if ($3 == name) print $2}')
