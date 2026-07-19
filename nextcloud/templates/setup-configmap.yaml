@@ -31,6 +31,10 @@ data:
     echo "Configuring richdocuments wopi_url..."
     php /var/www/html/occ config:app:set richdocuments wopi_url --value="https://office.hfischer.org"
 
+    # Activate Collabora Online configuration and fetch discovery XML
+    echo "Activating richdocuments configuration..."
+    php /var/www/html/occ richdocuments:activate-config || true
+
     # 4. Install/enable keeweb app if not installed
     if ! php /var/www/html/occ app:list | grep -q "keeweb:"; then
       echo "Installing keeweb app..."
