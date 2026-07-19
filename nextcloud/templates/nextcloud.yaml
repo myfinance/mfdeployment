@@ -255,8 +255,6 @@ spec:
               value: "https://nextcloud.{{ .Values.master_ip }}.nip.io:443"
             - name: extra_params
               value: "--o:ssl.enable=false --o:ssl.termination=true"
-            - name: DONT_GEN_SSL_CERT
-              value: "true"
           ports:
             - containerPort: 9980
               name: codeport
