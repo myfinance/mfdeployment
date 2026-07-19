@@ -248,13 +248,14 @@ spec:
       containers:
         - name: code
           image: {{ .Values.nextcloud.collaboraImage | default "collabora/code:latest" }}
+          args:
+            - "--o:ssl.enable=false"
+            - "--o:ssl.termination=true"
           env:
             - name: aliasgroup1
               value: "https://nextcloud.hfischer.org:443"
             - name: aliasgroup2
               value: "https://nextcloud.{{ .Values.master_ip }}.nip.io:443"
-            - name: extra_params
-              value: "--o:ssl.enable=false --o:ssl.termination=true"
           ports:
             - containerPort: 9980
               name: codeport
