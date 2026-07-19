@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.immich.db.pvc }}
+  labels:
+    app: {{ .Values.immich.db.name }}
+spec:
+  storageClassName: {{ .Values.immich.persistence.storageClassName }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.immich.persistence.dbSize }}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.immich.db.name }}
+  labels:
+    app: {{ .Values.immich.db.name }}
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.immich.db.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.immich.db.name }}
+    spec:
+      securityContext:
+        fsGroup: 999
+      containers:
+        - name: postgres
+          image: {{ .Values.immich.pgimage }}
+          env:
+            - name: POSTGRES_DB
+              value: "{{ .Values.immich.db.database }}"
+            - name: POSTGRES_USER
+              value: "{{ .Values.immich.db.user }}"
+            - name: POSTGRES_PASSWORD
+              value: "{{ .Values.immich.db.pw }}"
+            - name: POSTGRES_INITDB_ARGS
+              value: "--data-checksums"
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          ports:
+            - containerPort: 5432
+              name: dbport
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          volumeMounts:
+            - name: db-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.immich.db.pvc }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.immich.db.name }}
+  labels:
+    app: {{ .Values.immich.db.name }}
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: {{ .Values.immich.db.name }}

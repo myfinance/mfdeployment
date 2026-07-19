@@ -1,0 +1,6 @@
+apiVersion: v2
+name: immich
+description: A Helm chart for my immich deployment
+type: application
+version: 1.0.0
+appVersion: 1.0.0

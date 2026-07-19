@@ -1,0 +1,5 @@
+immich:
+  image: ghcr.io/immich-app/immich-server:release
+  mlimage: ghcr.io/immich-app/immich-machine-learning:release
+  pgimage: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0
+  redisImage: docker.io/valkey/valkey:9

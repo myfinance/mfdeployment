@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.immich.redis.name }}
+  labels:
+    app: {{ .Values.immich.redis.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.immich.redis.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.immich.redis.name }}
+    spec:
+      containers:
+        - name: valkey
+          image: {{ .Values.immich.redisImage }}
+          ports:
+            - containerPort: 6379
+              name: redisport
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.immich.redis.name }}
+  labels:
+    app: {{ .Values.immich.redis.name }}
+spec:
+  ports:
+    - port: 6379
+      targetPort: 6379
+  selector:
+    app: {{ .Values.immich.redis.name }}

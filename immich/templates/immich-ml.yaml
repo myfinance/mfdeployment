@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.immich.ml.name }}
+  labels:
+    app: {{ .Values.immich.ml.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.immich.ml.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.immich.ml.name }}
+    spec:
+      volumes:
+        - name: cache
+          emptyDir: {}
+      containers:
+        - name: machine-learning
+          image: {{ .Values.immich.mlimage }}
+          env:
+            - name: TZ
+              value: Europe/Berlin
+          ports:
+            - containerPort: 3003
+              name: mlport
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+          volumeMounts:
+            - name: cache
+              mountPath: /cache
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.immich.ml.name }}
+  labels:
+    app: {{ .Values.immich.ml.name }}
+spec:
+  ports:
+    - port: 3003
+      targetPort: 3003
+  selector:
+    app: {{ .Values.immich.ml.name }}
