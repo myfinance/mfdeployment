@@ -39,23 +39,19 @@ metadata:
 data:
   01-auto-superuser.sh: |
     #!/bin/bash
-    cat << "EOF" > /usr/src/paperless/src/paperless/auto_superuser_signal.py
-    from django.db.models.signals import post_save
-    from django.dispatch import receiver
-    from django.contrib.auth.models import User
-
-    @receiver(post_save, sender=User)
-    def make_user_superuser(sender, instance, created, **kwargs):
-        if created and instance.username not in ["consumer", "AnonymousUser"]:
-            User.objects.filter(pk=instance.pk).update(is_superuser=True, is_staff=True)
-    EOF
-
-    grep -q "auto_superuser_signal" /usr/src/paperless/src/paperless/settings.py || echo "import paperless.auto_superuser_signal" >> /usr/src/paperless/src/paperless/settings.py
+    python3 -c '
+    try:
+        content = open("/usr/src/paperless/src/paperless/settings.py").read()
+        if "auto_superuser_signal" in content:
+            open("/usr/src/paperless/src/paperless/settings.py", "w").write("\n".join([line for line in content.splitlines() if "auto_superuser_signal" not in line]))
+    except Exception:
+        pass
+    '
 
     python3 /usr/src/paperless/src/manage.py shell -c "
     from django.contrib.auth.models import User
     User.objects.filter(is_superuser=False).exclude(username__in=['consumer', 'AnonymousUser']).update(is_superuser=True, is_staff=True)
-    "
+    " || true
 
 ---
 
