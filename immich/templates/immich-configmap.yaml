@@ -9,7 +9,7 @@ data:
     {
       "oauth": {
         "enabled": true,
-        "issuerUrl": "http://keycloak.{{ .Values.master_ip }}.nip.io/realms/home",
+        "issuerUrl": "https://keycloak.hfischer.org/realms/home",
         "clientId": "immich",
         "clientSecret": "{{ .Values.immich.oauth.clientSecret | default "vulkan" }}",
         "autoRegister": true,

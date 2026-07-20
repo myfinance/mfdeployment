@@ -32,4 +32,25 @@ spec:
               service:
                 name: keycloak
                 port:
-                  number: {{ .Values.keycloak.port }}     
+                  number: {{ .Values.keycloak.port }}
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: keycloak-secure
+  labels:
+    app: {{ .Values.keycloak.name }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`keycloak.hfischer.org`) && PathPrefix(`/`)
+      kind: Rule
+      services:
+        - name: {{ .Values.keycloak.name }}
+          port: {{ .Values.keycloak.port }}
+  tls:
+    certResolver: default
+     
