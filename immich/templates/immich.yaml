@@ -49,6 +49,8 @@ spec:
               value: "{{ .Values.immich.redis.name }}"
             - name: IMMICH_MACHINE_LEARNING_URL
               value: "http://{{ .Values.immich.ml.name }}:3003"
+            - name: IMMICH_CONFIG_FILE
+              value: "/etc/immich/immich.json"
             - name: TZ
               value: Europe/Berlin
           ports:
@@ -64,10 +66,16 @@ spec:
           volumeMounts:
             - name: library
               mountPath: /data
+            - name: config
+              mountPath: /etc/immich/immich.json
+              subPath: immich.json
       volumes:
         - name: library
           persistentVolumeClaim:
             claimName: {{ .Values.immich.app.pvc }}
+        - name: config
+          configMap:
+            name: {{ .Values.immich.app.name }}-config
 
 ---
 

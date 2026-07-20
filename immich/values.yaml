@@ -17,3 +17,5 @@ immich:
   app:
     name: immich
     pvc: immich-pvc
+  oauth:
+    clientSecret: vulkan
