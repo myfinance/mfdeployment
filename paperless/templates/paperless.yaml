@@ -30,6 +30,35 @@ spec:
 
 ---
 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.paperless.app.name }}-custom-init
+  labels:
+    app: {{ .Values.paperless.app.name }}
+data:
+  01-auto-superuser.sh: |
+    #!/bin/bash
+    cat << "EOF" > /usr/src/paperless/src/paperless/auto_superuser_signal.py
+    from django.db.models.signals import post_save
+    from django.dispatch import receiver
+    from django.contrib.auth.models import User
+
+    @receiver(post_save, sender=User)
+    def make_user_superuser(sender, instance, created, **kwargs):
+        if created and instance.username not in ["consumer", "AnonymousUser"]:
+            User.objects.filter(pk=instance.pk).update(is_superuser=True, is_staff=True)
+    EOF
+
+    grep -q "auto_superuser_signal" /usr/src/paperless/src/paperless/settings.py || echo "import paperless.auto_superuser_signal" >> /usr/src/paperless/src/paperless/settings.py
+
+    python3 /usr/src/paperless/src/manage.py shell -c "
+    from django.contrib.auth.models import User
+    User.objects.filter(is_superuser=False).exclude(username__in=['consumer', 'AnonymousUser']).update(is_superuser=True, is_staff=True)
+    "
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -87,6 +116,10 @@ spec:
               value: '{"openid_connect": {"APPS": [{"provider_id": "keycloak", "name": "Keycloak", "client_id": "paperless", "secret": "{{ .Values.paperless.oauth.clientSecret }}", "settings": {"server_url": "https://keycloak.hfischer.org/realms/home/.well-known/openid-configuration"}}]}}'
             - name: PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS
               value: "true"
+            - name: PAPERLESS_SOCIAL_AUTO_SIGNUP
+              value: "true"
+            - name: PAPERLESS_ACCOUNT_ALLOW_SIGNUPS
+              value: "true"
             - name: PAPERLESS_REDIRECT_HEADER
               value: "HTTP_X_FORWARDED_PROTO"
             - name: PAPERLESS_TIME_ZONE
@@ -108,6 +141,9 @@ spec:
               mountPath: /usr/src/paperless/data
             - name: media
               mountPath: /usr/src/paperless/media
+            - name: custom-init
+              mountPath: /custom-cont-init.d/01-auto-superuser.sh
+              subPath: 01-auto-superuser.sh
       volumes:
         - name: data
           persistentVolumeClaim:
@@ -115,6 +151,10 @@ spec:
         - name: media
           persistentVolumeClaim:
             claimName: {{ .Values.paperless.app.mediaPvc }}
+        - name: custom-init
+          configMap:
+            name: {{ .Values.paperless.app.name }}-custom-init
+            defaultMode: 0755
 
 ---
 
