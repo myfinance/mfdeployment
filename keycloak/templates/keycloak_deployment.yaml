@@ -21,6 +21,8 @@ spec:
             - name: keycloakdata
               mountPath: /opt/keycloak/data/import
           env:
+            - name: KC_PROXY_HEADERS
+              value: "xforwarded"
             - name: KEYCLOAK_ADMIN
               value: admin
             - name: KEYCLOAK_ADMIN_PASSWORD
