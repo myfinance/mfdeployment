@@ -4,7 +4,7 @@ paperless:
   persistence:
     storageClassName: longhorn-ssd
     dataSize: 5Gi
-    mediaSize: 20Gi
+    mediaSize: 5Gi
     dbSize: 5Gi
   db:
     pw: vulkan
