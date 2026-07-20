@@ -1,0 +1,176 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.paperless.app.dataPvc }}
+  labels:
+    app: {{ .Values.paperless.app.name }}
+spec:
+  storageClassName: {{ .Values.paperless.persistence.storageClassName }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.paperless.persistence.dataSize }}
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.paperless.app.mediaPvc }}
+  labels:
+    app: {{ .Values.paperless.app.name }}
+spec:
+  storageClassName: {{ .Values.paperless.persistence.storageClassName }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.paperless.persistence.mediaSize }}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.paperless.app.name }}
+  labels:
+    app: {{ .Values.paperless.app.name }}
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.paperless.app.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.paperless.app.name }}
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: server
+          image: {{ .Values.paperless.image }}
+          env:
+            - name: PAPERLESS_REDIS
+              value: "redis://{{ .Values.paperless.redis.name }}:6379"
+            - name: PAPERLESS_DBENGINE
+              value: "postgresql"
+            - name: PAPERLESS_DBHOST
+              value: "{{ .Values.paperless.db.name }}"
+            - name: PAPERLESS_DBPORT
+              value: "5432"
+            - name: PAPERLESS_DBNAME
+              value: "{{ .Values.paperless.db.database }}"
+            - name: PAPERLESS_DBUSER
+              value: "{{ .Values.paperless.db.user }}"
+            - name: PAPERLESS_DBPASS
+              value: "{{ .Values.paperless.db.pw }}"
+            - name: PAPERLESS_URL
+              value: "https://dms.hfischer.org"
+            - name: PAPERLESS_ALLOWED_HOSTS
+              value: "dms.hfischer.org,dms.{{ .Values.master_ip }}.nip.io,localhost,127.0.0.1,*"
+            - name: PAPERLESS_CORS_ALLOWED_ORIGINS
+              value: "https://dms.hfischer.org,http://dms.{{ .Values.master_ip }}.nip.io"
+            - name: PAPERLESS_CSRF_TRUSTED_ORIGINS
+              value: "https://dms.hfischer.org,http://dms.{{ .Values.master_ip }}.nip.io"
+            - name: PAPERLESS_ADMIN_USER
+              value: "{{ .Values.paperless.admin.user }}"
+            - name: PAPERLESS_ADMIN_PASSWORD
+              value: "{{ .Values.paperless.admin.pw }}"
+            - name: PAPERLESS_ADMIN_MAIL
+              value: "{{ .Values.paperless.admin.mail }}"
+            - name: PAPERLESS_APPS
+              value: "allauth.socialaccount.providers.openid_connect"
+            - name: PAPERLESS_SOCIALACCOUNT_PROVIDERS
+              value: '{"openid_connect": {"APPS": [{"provider_id": "keycloak", "name": "Keycloak", "client_id": "paperless", "secret": "{{ .Values.paperless.oauth.clientSecret }}", "settings": {"server_url": "https://keycloak.hfischer.org/realms/home/.well-known/openid-configuration"}}]}}'
+            - name: PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS
+              value: "true"
+            - name: PAPERLESS_REDIRECT_HEADER
+              value: "HTTP_X_FORWARDED_PROTO"
+            - name: PAPERLESS_TIME_ZONE
+              value: "Europe/Berlin"
+            - name: PAPERLESS_WEBSERVER_WORKERS
+              value: "2"
+          ports:
+            - containerPort: 8000
+              name: httpport
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+          volumeMounts:
+            - name: data
+              mountPath: /usr/src/paperless/data
+            - name: media
+              mountPath: /usr/src/paperless/media
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.paperless.app.dataPvc }}
+        - name: media
+          persistentVolumeClaim:
+            claimName: {{ .Values.paperless.app.mediaPvc }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.paperless.app.name }}
+  labels:
+    app: {{ .Values.paperless.app.name }}
+spec:
+  ports:
+    - port: 8000
+      targetPort: 8000
+  selector:
+    app: {{ .Values.paperless.app.name }}
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.paperless.app.name }}
+  labels:
+    app: {{ .Values.paperless.app.name }}
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: "dms.{{ .Values.master_ip }}.nip.io"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.paperless.app.name }}
+                port:
+                  number: 8000
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ .Values.paperless.app.name }}-secure
+  labels:
+    app: {{ .Values.paperless.app.name }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`dms.hfischer.org`) && PathPrefix(`/`)
+      kind: Rule
+      services:
+        - name: {{ .Values.paperless.app.name }}
+          port: 8000
+  tls:
+    certResolver: default

@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.paperless.db.pvc }}
+  labels:
+    app: {{ .Values.paperless.db.name }}
+spec:
+  storageClassName: {{ .Values.paperless.persistence.storageClassName }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.paperless.persistence.dbSize }}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.paperless.db.name }}
+  labels:
+    app: {{ .Values.paperless.db.name }}
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.paperless.db.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.paperless.db.name }}
+    spec:
+      securityContext:
+        fsGroup: 999
+      containers:
+        - name: postgres
+          image: {{ .Values.paperless.pgimage }}
+          env:
+            - name: POSTGRES_DB
+              value: "{{ .Values.paperless.db.database }}"
+            - name: POSTGRES_USER
+              value: "{{ .Values.paperless.db.user }}"
+            - name: POSTGRES_PASSWORD
+              value: "{{ .Values.paperless.db.pw }}"
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          ports:
+            - containerPort: 5432
+              name: dbport
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          volumeMounts:
+            - name: db-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.paperless.db.pvc }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.paperless.db.name }}
+  labels:
+    app: {{ .Values.paperless.db.name }}
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: {{ .Values.paperless.db.name }}

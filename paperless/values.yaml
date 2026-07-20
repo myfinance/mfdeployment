@@ -1,0 +1,24 @@
+# Default values for paperless chart.
+paperless:
+  persistence:
+    dataSize: 5Gi
+    mediaSize: 20Gi
+    dbSize: 5Gi
+  db:
+    name: paperless-db
+    pvc: paperless-db-pvc
+    user: paperless
+    database: paperless
+    pw: vulkan
+  redis:
+    name: paperless-redis
+  app:
+    name: paperless
+    dataPvc: paperless-data-pvc
+    mediaPvc: paperless-media-pvc
+  admin:
+    user: admin
+    pw: vulkan
+    mail: holger@hfischer.org
+  oauth:
+    clientSecret: vulkan
