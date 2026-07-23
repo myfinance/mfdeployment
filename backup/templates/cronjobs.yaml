@@ -16,9 +16,23 @@ spec:
     spec:
       template:
         spec:
+          # podAffinity ensures each backup pod dynamically schedules onto the SAME node where
+          # its target application pod is running. This allows local mounting of Longhorn ReadWriteOnce (RWO)
+          # PVCs without triggering Multi-Attach errors across cluster nodes.
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - {{ $target.appLabel | default $key }}
+                topologyKey: "kubernetes.io/hostname"
           containers:
           - name: sync
             image: {{ $.Values.backup.image }}
+            # SYS_ADMIN capability is required to execute 'mount -t cifs' inside the container to mount the Samba share over SMB
             securityContext:
               capabilities:
                 add:
