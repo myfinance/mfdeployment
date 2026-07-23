@@ -1,0 +1,24 @@
+# Centralized Backup Configuration for External USB Drive
+backup:
+  enabled: true
+  schedule: "0 3 * * *"
+  nodeName: rasby2
+  mountPath: /mnt/external-backup
+  image: alpine:latest
+
+  targets:
+    nextcloud:
+      enabled: true
+      namespace: nextcloud
+      pvc: nextcloud-pvc
+      targetDir: nextcloud
+    immich:
+      enabled: true
+      namespace: immich
+      pvc: immich-library-pvc
+      targetDir: immich
+    paperless:
+      enabled: true
+      namespace: paperless
+      pvc: paperless-media-pvc
+      targetDir: paperless

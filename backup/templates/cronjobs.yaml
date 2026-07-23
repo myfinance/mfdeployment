@@ -1,0 +1,50 @@
+{{- if .Values.backup.enabled }}
+{{- range $key, $target := .Values.backup.targets }}
+{{- if $target.enabled }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: usb-backup-{{ $key }}
+  namespace: {{ $target.namespace }}
+  labels:
+    app: usb-backup
+    target: {{ $key }}
+spec:
+  schedule: {{ $.Values.backup.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          nodeSelector:
+            kubernetes.io/hostname: {{ $.Values.backup.nodeName | quote }}
+          containers:
+          - name: sync
+            image: {{ $.Values.backup.image }}
+            command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache rsync
+              echo "Starting sync for {{ $key }} to /usb/{{ $target.targetDir }}..."
+              mkdir -p "/usb/{{ $target.targetDir }}"
+              rsync -av --update /source/ "/usb/{{ $target.targetDir }}/"
+              echo "Sync for {{ $key }} completed successfully."
+            volumeMounts:
+            - name: usb-drive
+              mountPath: /usb
+            - name: source-data
+              mountPath: /source
+              readOnly: true
+          volumes:
+          - name: usb-drive
+            hostPath:
+              path: {{ $.Values.backup.mountPath }}
+              type: Directory
+          - name: source-data
+            persistentVolumeClaim:
+              claimName: {{ $target.pvc }}
+          restartPolicy: OnFailure
+{{- end }}
+{{- end }}
+{{- end }}
