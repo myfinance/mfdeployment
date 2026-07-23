@@ -1,7 +1,7 @@
 # Centralized Backup Configuration for External USB Drive via Samba
 backup:
   enabled: true
-  schedule: "25 * * * *"
+  schedule: "17 * * * *"
   useSamba: true
   sambaServer: "192.168.100.81"
   sambaShare: "external-backup"
