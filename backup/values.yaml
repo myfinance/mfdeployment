@@ -2,7 +2,8 @@
 backup:
   enabled: true
   schedule: "10 * * * *"
-  nodeName: rasby2
+  useNfs: true
+  nfsServer: "192.168.100.81"
   mountPath: /mnt/external-backup
   image: alpine:latest
 
@@ -11,14 +12,31 @@ backup:
       enabled: true
       namespace: nextcloud
       pvc: nextcloud-pvc
+      sourceSubPath: "data"
+      exclude:
+        - "appdata_*"
+        - "*.log"
+        - "nextcloud.log"
+        - "*.ocdata"
+        - ".htaccess"
+        - "index.html"
       targetDir: nextcloud
     immich:
       enabled: true
       namespace: immich
-      pvc: immich-library-pvc
+      pvc: immich-pvc
+      sourceSubPath: ""
+      exclude:
+        - "thumbs/"
+        - "encoded-video/"
+        - "lost+found/"
       targetDir: immich
     paperless:
       enabled: true
       namespace: paperless
       pvc: paperless-media-pvc
+      sourceSubPath: ""
+      exclude:
+        - "documents/thumbnails/"
+        - "lost+found/"
       targetDir: paperless

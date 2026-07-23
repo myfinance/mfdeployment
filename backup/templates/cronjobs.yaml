@@ -16,8 +16,6 @@ spec:
     spec:
       template:
         spec:
-          nodeSelector:
-            kubernetes.io/hostname: {{ $.Values.backup.nodeName | quote }}
           containers:
           - name: sync
             image: {{ $.Values.backup.image }}
@@ -28,7 +26,7 @@ spec:
               apk add --no-cache rsync
               echo "Starting sync for {{ $key }} to /usb/{{ $target.targetDir }}..."
               mkdir -p "/usb/{{ $target.targetDir }}"
-              rsync -av --update /source/ "/usb/{{ $target.targetDir }}/"
+              rsync -av --update {{ range $target.exclude }}--exclude={{ . | quote }} {{ end }}/source/{{ if $target.sourceSubPath }}{{ $target.sourceSubPath }}/{{ end }} "/usb/{{ $target.targetDir }}/"
               echo "Sync for {{ $key }} completed successfully."
             volumeMounts:
             - name: usb-drive
@@ -38,9 +36,15 @@ spec:
               readOnly: true
           volumes:
           - name: usb-drive
+            {{- if $.Values.backup.useNfs }}
+            nfs:
+              server: {{ $.Values.backup.nfsServer | quote }}
+              path: {{ $.Values.backup.mountPath | quote }}
+            {{- else }}
             hostPath:
               path: {{ $.Values.backup.mountPath }}
               type: Directory
+            {{- end }}
           - name: source-data
             persistentVolumeClaim:
               claimName: {{ $target.pvc }}
