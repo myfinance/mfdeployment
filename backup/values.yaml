@@ -1,7 +1,7 @@
 # Centralized Backup Configuration for External USB Drive
 backup:
   enabled: true
-  schedule: "0 3 * * *"
+  schedule: "10 * * * *"
   nodeName: rasby2
   mountPath: /mnt/external-backup
   image: alpine:latest
