@@ -1,7 +1,7 @@
 # Centralized Backup Configuration for External USB Drive
 backup:
   enabled: true
-  schedule: "10 * * * *"
+  schedule: "25 * * * *"
   useNfs: true
   nfsServer: "192.168.100.81"
   mountPath: /mnt/external-backup
