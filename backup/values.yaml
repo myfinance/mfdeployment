@@ -1,10 +1,10 @@
-# Centralized Backup Configuration for External USB Drive
+# Centralized Backup Configuration for External USB Drive via Samba
 backup:
   enabled: true
   schedule: "25 * * * *"
-  useNfs: true
-  nfsServer: "192.168.100.81"
-  mountPath: /mnt/external-backup
+  useSamba: true
+  sambaServer: "192.168.100.81"
+  sambaShare: "external-backup"
   image: alpine:latest
 
   targets:

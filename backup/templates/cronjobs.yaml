@@ -19,32 +19,29 @@ spec:
           containers:
           - name: sync
             image: {{ $.Values.backup.image }}
+            securityContext:
+              capabilities:
+                add:
+                - SYS_ADMIN
+                - DAC_READ_SEARCH
             command:
             - sh
             - -c
             - |
-              apk add --no-cache rsync
+              apk add --no-cache rsync cifs-utils
+              mkdir -p /usb
+              echo "Mounting Samba share //{{ $.Values.backup.sambaServer }}/{{ $.Values.backup.sambaShare }} to /usb..."
+              mount -t cifs "//{{ $.Values.backup.sambaServer }}/{{ $.Values.backup.sambaShare }}" /usb -o guest,uid=0,gid=0,vers=3.0,iocharset=utf8
               echo "Starting sync for {{ $key }} to /usb/{{ $target.targetDir }}..."
               mkdir -p "/usb/{{ $target.targetDir }}"
               rsync -av --update {{ range $target.exclude }}--exclude={{ . | quote }} {{ end }}/source/{{ if $target.sourceSubPath }}{{ $target.sourceSubPath }}/{{ end }} "/usb/{{ $target.targetDir }}/"
               echo "Sync for {{ $key }} completed successfully."
+              umount /usb
             volumeMounts:
-            - name: usb-drive
-              mountPath: /usb
             - name: source-data
               mountPath: /source
               readOnly: true
           volumes:
-          - name: usb-drive
-            {{- if $.Values.backup.useNfs }}
-            nfs:
-              server: {{ $.Values.backup.nfsServer | quote }}
-              path: {{ $.Values.backup.mountPath | quote }}
-            {{- else }}
-            hostPath:
-              path: {{ $.Values.backup.mountPath }}
-              type: Directory
-            {{- end }}
           - name: source-data
             persistentVolumeClaim:
               claimName: {{ $target.pvc }}
