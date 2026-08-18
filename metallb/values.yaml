@@ -4,4 +4,4 @@
 metallbConfig:
   poolName: default-pool
   l2AdvertisementName: default-l2-adv
-  ipRange: 192.168.100.30-192.168.100.40
+  ipRange: 192.168.100.30-192.168.100.35
