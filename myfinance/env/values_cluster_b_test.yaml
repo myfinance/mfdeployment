@@ -1,0 +1,41 @@
+master_ip: 192.168.100.85
+image:
+  repository: nexus.192.168.100.85.nip.io:31003/repository/mydockerrepo/
+stage: test
+mfrabbitmq:
+  user: user
+  pw: vulkan
+  adminname: mfrabbitmqadmin
+  storageClassName: longhorn-ssd
+
+mfshell:
+  importtimeseriesweeklyschedule: "1 22 * * 1,2,3,4,5"
+  importsecuritymetricsschedule: "1 22 * * 6,0"
+  importprevcloseschedule: "1 10 * * *"
+  processtransactionschedule: "1 23 * * *"
+
+mfmongo:
+  db_pw: vulkan
+  backupenabled: true
+  backuptarget: data/testclusterb
+  storageClassName: longhorn-ssd
+  backupStorageClassName: longhorn-ssd
+  dumpschedule: "1 22 * * 0"
+  nextcloud:
+    url: "http://nextcloud.nextcloud.svc.cluster.local"
+    user: "admin"
+    password: "vulkan" 
+mffrontend:
+  config: |
+    {
+      "zones": [
+        {
+          "name": "Test",
+          "identifier": "test",
+          "backendurl": "http://mfcompositetest.192.168.100.85.nip.io",
+          "openidurl": "http://keycloak.192.168.100.85.nip.io",
+          "logstreamurl": "ws://mflogstreamtest.192.168.100.85.nip.io/ws/logs"
+        }
+      ],
+      "defaultZone": "test"
+    }

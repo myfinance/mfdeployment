@@ -1,0 +1,4 @@
+paperless:
+  image: ghcr.io/paperless-ngx/paperless-ngx:latest
+  pgimage: postgres:16
+  redisImage: docker.io/valkey/valkey:9

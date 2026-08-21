@@ -1,0 +1,7 @@
+master_ip: 192.168.100.85
+monitoring:
+  enabled: true
+  persistence:
+    storageClassName: longhorn-ssd
+  grafana:
+    pw: vulkan

@@ -1,0 +1,3 @@
+master_ip: 192.168.100.85
+metallbConfig:
+  ipRange: 192.168.100.34-192.168.100.39
