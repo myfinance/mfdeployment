@@ -78,6 +78,8 @@ spec:
         - name: server
           image: {{ .Values.paperless.image }}
           env:
+            - name: PAPERLESS_SECRET_KEY
+              value: "{{ .Values.paperless.secretKey | default 'paperless_secure_secret_key_homelab_cluster' }}"
             - name: PAPERLESS_REDIS
               value: "redis://{{ .Values.paperless.redis.name }}:6379"
             - name: PAPERLESS_DBENGINE
