@@ -17,6 +17,6 @@ mfshell:
 mffrontend:
   imageversion: 0.24.0-alpha-beb3a7bd923b24748558a5dfdd02f72d4e68666c
 mflogstream:
-  imageversion: 0.24.0-alpha--2d8c0964b65a1b934a6f7b24b97c702764778ef2
+  imageversion: 0.24.0-alpha--1f227a80e06323e2469fe273e6879f8828470a22
 mfsecuritymetrics:
   imageversion: 0.24.0-alpha--63a2d1983a65165f2fc0d18c80e5f8caa18ca9cc
