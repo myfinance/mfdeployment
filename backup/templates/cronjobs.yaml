@@ -48,7 +48,7 @@ spec:
               mount -t cifs "//{{ $.Values.backup.sambaServer }}/{{ $.Values.backup.sambaShare }}" /usb -o guest,uid=0,gid=0,vers=3.0,iocharset=utf8
               echo "Starting sync for {{ $key }} to /usb/{{ $target.targetDir }}..."
               mkdir -p "/usb/{{ $target.targetDir }}"
-              rsync -av -m --update {{ range $target.exclude }}--exclude={{ . | quote }} {{ end }}{{ range $target.include }}--include={{ . | quote }} {{ end }}{{ range $target.excludeLast }}--exclude={{ . | quote }} {{ end }}/source/{{ if $target.sourceSubPath }}{{ $target.sourceSubPath }}/{{ end }} "/usb/{{ $target.targetDir }}/"
+              rsync -av -m --delete --delete-excluded {{ range $target.exclude }}--exclude={{ . | quote }} {{ end }}{{ range $target.include }}--include={{ . | quote }} {{ end }}{{ range $target.excludeLast }}--exclude={{ . | quote }} {{ end }}/source/{{ if $target.sourceSubPath }}{{ $target.sourceSubPath }}/{{ end }} "/usb/{{ $target.targetDir }}/"
               echo "Sync for {{ $key }} completed successfully."
               umount /usb
             volumeMounts:
