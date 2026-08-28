@@ -2,7 +2,7 @@
 backup:
   enabled: true
   #schedule: "10 1 * * *"
-  schedule: "53 * * * *"
+  schedule: "33 * * * *"
   useSamba: true
   sambaServer: "192.168.100.81"
   sambaShare: "external-backup"
@@ -14,12 +14,22 @@ backup:
       namespace: nextcloud
       pvc: nextcloud-pvc
       sourceSubPath: "data"
+      exclude:
+        - "appdata_*"
+        - "*/cache/***"
+        - "*/files_trashbin/***"
+        - "*/files_versions/***"
+        - "*/uploads/***"
+        - "*.log"
+        - "nextcloud.log"
+        - "*.ocdata"
+        - ".htaccess"
+        - "index.html"
       include:
         - "__groupfolders/***"
         - "*/files/***"
         - "*/"
-      exclude:
-        - "appdata_*"
+      excludeLast:
         - "*"
       targetDir: nextcloud
     immich:
