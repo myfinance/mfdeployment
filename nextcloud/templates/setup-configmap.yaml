@@ -47,13 +47,17 @@ data:
       php /var/www/html/occ user_oidc:provider keycloak \
         --clientid="nextcloud" \
         --clientsecret="vulkan" \
-        --discoveryuri="http://keycloak.keycloak.svc.cluster.local:8080/realms/home/.well-known/openid-configuration" \
+        --discoveryuri="https://keycloak.hfischer.org/realms/home/.well-known/openid-configuration" \
         --mapping-groups="groups" \
         --group-provisioning=1 \
         --group-whitelist-regex="^(?!admin$).+$"
     else
       echo "Updating OIDC provider keycloak configuration..."
       php /var/www/html/occ user_oidc:provider keycloak \
+        --clientid="nextcloud" \
+        --clientsecret="vulkan" \
+        --discoveryuri="https://keycloak.hfischer.org/realms/home/.well-known/openid-configuration" \
+        --mapping-groups="groups" \
         --group-provisioning=1 \
         --group-whitelist-regex="^(?!admin$).+$"
     fi
