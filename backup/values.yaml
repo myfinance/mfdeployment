@@ -1,7 +1,8 @@
 # Centralized Backup Configuration for External USB Drive via Samba
 backup:
   enabled: true
-  schedule: "10 1 * * *"
+  #schedule: "10 1 * * *"
+  schedule: "45 * * * *"
   useSamba: true
   sambaServer: "192.168.100.81"
   sambaShare: "external-backup"
@@ -13,13 +14,13 @@ backup:
       namespace: nextcloud
       pvc: nextcloud-pvc
       sourceSubPath: "data"
+      include:
+        - "__groupfolders/***"
+        - "*/files/***"
+        - "*/"
       exclude:
         - "appdata_*"
-        - "*.log"
-        - "nextcloud.log"
-        - "*.ocdata"
-        - ".htaccess"
-        - "index.html"
+        - "*"
       targetDir: nextcloud
     immich:
       enabled: true
