@@ -9,6 +9,9 @@ data:
     #!/bin/sh
     echo "Starting Nextcloud automatic configuration hook..."
 
+    # Allow Nextcloud to make backend requests to local network hosts (e.g. keycloak.hfischer.org)
+    php /var/www/html/occ config:system:set allow_local_remote_servers --value=true --type=boolean
+
     # 1. Install/enable user_oidc app if not installed
     if ! php /var/www/html/occ app:list | grep -q "user_oidc:"; then
       echo "Installing user_oidc app..."
