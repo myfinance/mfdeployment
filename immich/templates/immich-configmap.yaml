@@ -7,6 +7,10 @@ metadata:
 data:
   immich.json: |
     {
+      "storageTemplate": {
+        "enabled": {{ .Values.immich.storageTemplate.enabled | default true }},
+        "template": {{ .Values.immich.storageTemplate.template | default "{{y}}/{{MM}}/{{dd}}/{{filename}}" | quote }}
+      },
       "oauth": {
         "enabled": true,
         "issuerUrl": "https://keycloak.hfischer.org/realms/home",

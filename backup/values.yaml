@@ -36,10 +36,8 @@ backup:
       enabled: true
       namespace: immich
       pvc: immich-pvc
-      sourceSubPath: ""
+      sourceSubPath: "library"
       exclude:
-        - "thumbs/"
-        - "encoded-video/"
         - "lost+found/"
       targetDir: immich
     paperless:

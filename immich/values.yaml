@@ -19,3 +19,6 @@ immich:
     pvc: immich-pvc
   oauth:
     clientSecret: vulkan
+  storageTemplate:
+    enabled: true
+    template: "{{y}}/{{MM}}/{{dd}}/{{filename}}"
