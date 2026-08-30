@@ -32,6 +32,13 @@ spec:
       labels:
         app: {{ .Values.immich.app.name }}
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: DoesNotExist
       enableServiceLinks: false
       containers:
         - name: server
