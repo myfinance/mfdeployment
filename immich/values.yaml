@@ -3,7 +3,7 @@
 
 immich:
   persistence:
-    librarySize: 100Gi
+    librarySize: 500Gi
     dbSize: 10Gi
   db:
     name: immich-db
