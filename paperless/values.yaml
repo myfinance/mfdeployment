@@ -22,4 +22,4 @@ paperless:
     pw: vulkan
     mail: admin@home.local
   oauth:
-    clientSecret: vulkan
+    clientSecret: ""
