@@ -20,6 +20,6 @@ paperless:
   admin:
     user: admin
     pw: vulkan
-    mail: holger@hfischer.org
+    mail: admin@home.local
   oauth:
     clientSecret: vulkan
