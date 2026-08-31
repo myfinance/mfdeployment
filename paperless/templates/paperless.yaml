@@ -33,25 +33,115 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.paperless.app.name }}-custom-init
+  name: {{ .Values.paperless.app.name }}-auth-sync
   labels:
     app: {{ .Values.paperless.app.name }}
 data:
-  01-auto-superuser.sh: |
-    #!/bin/bash
-    python3 -c '
-    try:
-        content = open("/usr/src/paperless/src/paperless/settings.py").read()
-        if "auto_superuser_signal" in content:
-            open("/usr/src/paperless/src/paperless/settings.py", "w").write("\n".join([line for line in content.splitlines() if "auto_superuser_signal" not in line]))
-    except Exception:
-        pass
-    '
+  __init__.py: ""
+  apps.py: |
+    import logging
+    from django.apps import AppConfig
+    from django.db.models.signals import m2m_changed, post_save
 
-    python3 /usr/src/paperless/src/manage.py shell -c "
-    from django.contrib.auth.models import User
-    User.objects.filter(is_superuser=False).exclude(username__in=['consumer', 'AnonymousUser']).update(is_superuser=True, is_staff=True)
-    " || true
+    logger = logging.getLogger("paperless.auth_sync")
+
+    def setup_groups_and_permissions():
+        from django.contrib.auth.models import Group, Permission
+        try:
+            # 1. Ensure paperless_user group exists with read + upload permissions
+            user_group, _ = Group.objects.get_or_create(name="paperless_user")
+            user_perm_codenames = [
+                "view_document", "add_document",
+                "view_correspondent", "view_documenttype", "view_tag",
+                "view_storagepath", "view_savedview", "add_savedview",
+                "change_savedview", "delete_savedview",
+                "view_uisettings", "add_uisettings", "change_uisettings",
+                "view_paperlesstask", "view_customfield", "view_customfieldinstance",
+                "view_note", "add_note"
+            ]
+            user_perms = Permission.objects.filter(codename__in=user_perm_codenames)
+            user_group.permissions.set(user_perms)
+
+            # 2. Ensure paperless_admin group exists
+            Group.objects.get_or_create(name="paperless_admin")
+            logger.info("paperless_auth_sync: Groups and permissions successfully configured.")
+        except Exception as e:
+            logger.warning(f"paperless_auth_sync: Error initializing groups: {e}")
+
+    def sync_user_roles(user):
+        from django.contrib.auth.models import Group
+        if not user or not user.pk:
+            return
+        if user.username in ["consumer", "AnonymousUser"]:
+            return
+        group_names = set(user.groups.values_list("name", flat=True))
+        is_admin = "paperless_admin" in group_names
+
+        updated = False
+        if is_admin and (not user.is_superuser or not user.is_staff):
+            user.is_superuser = True
+            user.is_staff = True
+            updated = True
+        elif not is_admin and (user.is_superuser or user.is_staff) and user.username != "admin":
+            user.is_superuser = False
+            user.is_staff = False
+            updated = True
+
+        if not is_admin and "paperless_user" not in group_names:
+            user_group = Group.objects.filter(name="paperless_user").first()
+            if user_group:
+                user.groups.add(user_group)
+
+        if updated:
+            user.save(update_fields=["is_superuser", "is_staff"])
+            logger.info(f"paperless_auth_sync: Updated roles for user {user.username} (superuser={user.is_superuser}, staff={user.is_staff})")
+
+    def on_groups_changed(sender, instance, action, **kwargs):
+        if action in ["post_add", "post_remove", "post_clear"]:
+            sync_user_roles(instance)
+
+    def on_user_saved(sender, instance, created, **kwargs):
+        sync_user_roles(instance)
+
+    class AuthSyncConfig(AppConfig):
+        name = "paperless_auth_sync"
+        verbose_name = "Auth Role & Group Sync"
+
+        def ready(self):
+            from django.contrib.auth.models import User
+            from allauth.account.signals import user_logged_in, user_signed_up
+            from allauth.socialaccount.signals import pre_social_login
+
+            setup_groups_and_permissions()
+
+            m2m_changed.connect(on_groups_changed, sender=User.groups.through)
+            post_save.connect(on_user_saved, sender=User)
+
+            def handle_auth_event(sender, request, user, **kwargs):
+                sync_user_roles(user)
+
+            def handle_pre_social_login(sender, request, sociallogin, **kwargs):
+                if sociallogin.is_existing:
+                    return
+                username = sociallogin.user.username
+                email = sociallogin.account.extra_data.get("email") or getattr(sociallogin.user, "email", None)
+                existing_user = None
+                if username:
+                    existing_user = User.objects.filter(username=username).first()
+                if not existing_user and email:
+                    existing_user = User.objects.filter(email__iexact=email).first()
+                if existing_user:
+                    sociallogin.connect(request, existing_user)
+
+            pre_social_login.connect(handle_pre_social_login)
+            user_logged_in.connect(handle_auth_event)
+            user_signed_up.connect(handle_auth_event)
+
+            try:
+                for u in User.objects.exclude(username__in=["consumer", "AnonymousUser", "admin"]):
+                    sync_user_roles(u)
+            except Exception:
+                pass
 
 ---
 
@@ -109,7 +199,7 @@ spec:
             - name: PAPERLESS_ADMIN_MAIL
               value: "{{ .Values.paperless.admin.mail }}"
             - name: PAPERLESS_APPS
-              value: "allauth.socialaccount.providers.openid_connect"
+              value: "allauth.socialaccount.providers.openid_connect,paperless_auth_sync"
             - name: PAPERLESS_SOCIALACCOUNT_PROVIDERS
               value: '{"openid_connect": {"APPS": [{"provider_id": "keycloak", "name": "Keycloak", "client_id": "paperless", "secret": "{{ .Values.paperless.oauth.clientSecret }}", "settings": {"server_url": "https://keycloak.hfischer.org/realms/home/.well-known/openid-configuration"}}]}}'
             - name: PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS
@@ -118,6 +208,10 @@ spec:
               value: "true"
             - name: PAPERLESS_ACCOUNT_ALLOW_SIGNUPS
               value: "true"
+            - name: PAPERLESS_SOCIAL_ACCOUNT_SYNC_GROUPS
+              value: "true"
+            - name: PAPERLESS_SOCIAL_ACCOUNT_SYNC_GROUPS_CLAIM
+              value: "groups"
             - name: PAPERLESS_REDIRECT_HEADER
               value: "HTTP_X_FORWARDED_PROTO"
             - name: PAPERLESS_TIME_ZONE
@@ -139,9 +233,8 @@ spec:
               mountPath: /usr/src/paperless/data
             - name: media
               mountPath: /usr/src/paperless/media
-            - name: custom-init
-              mountPath: /custom-cont-init.d/01-auto-superuser.sh
-              subPath: 01-auto-superuser.sh
+            - name: auth-sync
+              mountPath: /usr/src/paperless/src/paperless_auth_sync
       volumes:
         - name: data
           persistentVolumeClaim:
@@ -149,10 +242,9 @@ spec:
         - name: media
           persistentVolumeClaim:
             claimName: {{ .Values.paperless.app.mediaPvc }}
-        - name: custom-init
+        - name: auth-sync
           configMap:
-            name: {{ .Values.paperless.app.name }}-custom-init
-            defaultMode: 0755
+            name: {{ .Values.paperless.app.name }}-auth-sync
 
 ---
 
