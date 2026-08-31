@@ -123,6 +123,7 @@ data:
             def handle_pre_social_login(sender, request, sociallogin, **kwargs):
                 if sociallogin.is_existing:
                     return
+                from allauth.socialaccount.models import SocialAccount
                 username = sociallogin.user.username
                 email = sociallogin.account.extra_data.get("email") or getattr(sociallogin.user, "email", None)
                 existing_user = None
@@ -131,7 +132,14 @@ data:
                 if not existing_user and email:
                     existing_user = User.objects.filter(email__iexact=email).first()
                 if existing_user:
-                    sociallogin.connect(request, existing_user)
+                    old_sa = SocialAccount.objects.filter(user=existing_user, provider=sociallogin.account.provider).first()
+                    if old_sa:
+                        old_sa.uid = sociallogin.account.uid
+                        old_sa.extra_data = sociallogin.account.extra_data
+                        old_sa.save()
+                        sociallogin.account = old_sa
+                    else:
+                        sociallogin.connect(request, existing_user)
 
             pre_social_login.connect(handle_pre_social_login)
             user_logged_in.connect(handle_auth_event)
