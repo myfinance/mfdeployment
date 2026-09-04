@@ -2,7 +2,7 @@
 backup:
   enabled: true
   #schedule: "10 1 * * *"
-  schedule: "54 * * * *"
+  schedule: "25 * * * *"
   useSamba: true
   sambaServer: "192.168.100.81"
   sambaShare: "external-backup"
