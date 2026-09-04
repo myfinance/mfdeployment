@@ -44,8 +44,7 @@ backup:
       enabled: true
       namespace: paperless
       pvc: paperless-media-pvc
-      sourceSubPath: ""
+      sourceSubPath: "documents/archive"
       exclude:
-        - "documents/thumbnails/"
         - "lost+found/"
       targetDir: paperless

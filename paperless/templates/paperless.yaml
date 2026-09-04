@@ -226,6 +226,10 @@ spec:
               value: "Europe/Berlin"
             - name: PAPERLESS_WEBSERVER_WORKERS
               value: "2"
+            - name: PAPERLESS_FILENAME_FORMAT
+              value: {{ .Values.paperless.filenameFormat | quote }}
+            - name: PAPERLESS_FILENAME_FORMAT_REMOVE_NONE
+              value: {{ .Values.paperless.filenameFormatRemoveNone | quote }}
           ports:
             - containerPort: 8000
               name: httpport
