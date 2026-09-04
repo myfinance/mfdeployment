@@ -1,0 +1,12 @@
+minio:
+  enabled: true
+  persistence:
+    size: 600Gi
+    storageClassName: longhorn-ssd
+  service:
+    apiPort: 9000
+    consolePort: 9001
+  auth:
+    rootUser: "longhorn"
+    rootPassword: "longhornbackup123"
+  defaultBucket: "longhorn-backups"

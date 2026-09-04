@@ -1,0 +1,6 @@
+apiVersion: v2
+name: minio
+description: MinIO S3 Object Storage for Longhorn Backups
+type: application
+version: 1.0.0
+appVersion: RELEASE.2024-08-03T04-33-23Z

@@ -1,0 +1,3 @@
+minio:
+  image: quay.io/minio/minio:latest
+  mcImage: quay.io/minio/mc:latest

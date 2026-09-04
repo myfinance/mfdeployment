@@ -1,0 +1,11 @@
+master_ip: 192.168.100.85
+
+minio:
+  enabled: true
+  persistence:
+    size: 600Gi
+    storageClassName: longhorn-ssd
+  auth:
+    rootUser: "longhorn"
+    rootPassword: "longhornbackup123"
+  defaultBucket: "longhorn-backups"

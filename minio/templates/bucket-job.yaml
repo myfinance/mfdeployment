@@ -1,0 +1,38 @@
+{{- if .Values.minio.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: minio-make-bucket
+  labels:
+    app: minio
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "1"
+    helm.sh/hook-delete-policy: hook-succeeded
+spec:
+  backoffLimit: 10
+  template:
+    metadata:
+      labels:
+        app: minio-make-bucket
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: mc
+          image: {{ .Values.minio.mcImage }}
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: minio-creds
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Waiting for MinIO service..."
+              until /usr/bin/mc alias set local http://minio:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"; do
+                sleep 2
+              done
+              echo "Creating bucket {{ .Values.minio.defaultBucket }} if it does not exist..."
+              /usr/bin/mc mb --ignore-existing local/{{ .Values.minio.defaultBucket }}
+              echo "Bucket {{ .Values.minio.defaultBucket }} is ready."
+{{- end }}
