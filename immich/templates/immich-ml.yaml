@@ -5,7 +5,7 @@ metadata:
   labels:
     app: {{ .Values.immich.ml.name }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.immich.replicaCount | default 1 }}
   selector:
     matchLabels:
       app: {{ .Values.immich.ml.name }}

@@ -1,5 +1,6 @@
 master_ip: 192.168.100.85
 keycloak:
+  replicaCount: 0
   pw: vulkan
   port_ext: 30124
   storageClassName: longhorn-ssd

@@ -23,7 +23,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 1
+  replicas: {{ .Values.nextcloud.replicaCount | default 1 }}
   selector:
     matchLabels:
       app: {{ .Values.nextcloud.db.name }}
@@ -106,7 +106,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 1
+  replicas: {{ .Values.nextcloud.replicaCount | default 1 }}
   selector:
     matchLabels:
       app: {{ .Values.nextcloud.app.name }}
@@ -236,7 +236,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 1
+  replicas: {{ .Values.nextcloud.replicaCount | default 1 }}
   selector:
     matchLabels:
       app: collabora-code

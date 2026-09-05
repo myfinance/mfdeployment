@@ -23,7 +23,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 1
+  replicas: {{ .Values.paperless.replicaCount | default 1 }}
   selector:
     matchLabels:
       app: {{ .Values.paperless.db.name }}

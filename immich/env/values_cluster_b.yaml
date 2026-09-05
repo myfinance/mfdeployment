@@ -1,6 +1,7 @@
 master_ip: 192.168.100.85
 
 immich:
+  replicaCount: 0
   persistence:
     storageClassName: longhorn-ssd
     librarySize: 500Gi

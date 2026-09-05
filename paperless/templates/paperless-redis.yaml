@@ -5,7 +5,7 @@ metadata:
   labels:
     app: {{ .Values.paperless.redis.name }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.paperless.replicaCount | default 1 }}
   selector:
     matchLabels:
       app: {{ .Values.paperless.redis.name }}
