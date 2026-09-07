@@ -9,39 +9,13 @@ mfrabbitmq:
   storageClassName: longhorn-ssd
 
 mfshell:
-    # ┌───────────── minute (0 - 59)
-    # │ ┌───────────── hour (0 - 23)
-    # │ │ ┌───────────── day of month (1 - 31)
-    # │ │ │ ┌───────────── month (1 - 12)
-    # │ │ │ │ ┌───────────── day of week (0 - 6) (Sunday to Saturday;
-    # │ │ │ │ │                                       7 is also Sunday on some systems)
-    # │ │ │ │ │
-    # │ │ │ │ │
-  # * * * * *  command to execute
-  importtimeseriesweeklyschedule: "1 22 * * 1,2,3,4,5"
-  importsecuritymetricsschedule: "1 22 * * 6,0"
-  importprevcloseschedule: "1 10 * * *"
-  processtransactionschedule: "1 23 * * *"
+  enabled: false
 
 mfmongo:
   db_pw: vulkan
-  backupenabled: true
-  backuptarget: data/testclustera
+  backupenabled: false
   storageClassName: longhorn-ssd
-  backupStorageClassName: longhorn-ssd
-    # ┌───────────── minute (0 - 59)
-    # │ ┌───────────── hour (0 - 23)
-    # │ │ ┌───────────── day of month (1 - 31)
-    # │ │ │ ┌───────────── month (1 - 12)
-    # │ │ │ │ ┌───────────── day of week (0 - 6) (Sunday to Saturday;
-    # │ │ │ │ │                                       7 is also Sunday on some systems)
-    # │ │ │ │ │
-    # │ │ │ │ │
-  dumpschedule: "1 22 * * 0"
-  nextcloud:
-    url: "http://nextcloud.nextcloud.svc.cluster.local"
-    user: "admin"
-    password: "vulkan" 
+  backupStorageClassName: longhorn-ssd 
 mffrontend:
   config: |
     {

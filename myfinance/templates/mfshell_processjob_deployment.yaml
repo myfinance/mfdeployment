@@ -1,3 +1,4 @@
+{{- if and .Values.mfshell.enabled .Values.mfshell.processtransactionschedule }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -22,4 +23,5 @@ spec:
                   value: "processTransactions"
           restartPolicy: OnFailure
       backoffLimit: 4
+{{- end }}
 

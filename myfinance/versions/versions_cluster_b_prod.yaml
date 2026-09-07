@@ -1,0 +1,22 @@
+mfrabbitmq:
+  image: rabbitmq:4.0.7-management-alpine
+mfmongo:
+  image: mongo:7.0
+mfframework:
+  imageversion: 0.24.0-alpha-7c4cc08c6668b7bc447aa8b46751489b2c75a968
+mfinstruments:
+  imageversion: 0.24.0-alpha--c13b70fb6dc07a9cd9551c5a255cf4bb59f6a7f3
+mftransactions:
+  imageversion: 0.24.0-alpha--9ab2e660743b9415b39244dd1515caa13c5c227c
+mfvaluation:
+  imageversion: 0.24.0-alpha--d254687a645d79bc2f009c1a7400e7c1ae987082
+mfmarketdata:
+  imageversion: 0.24.0-alpha--28d2da8f2f3d91e8144424bbae1c810592636680
+mfshell:
+  imageversion: 0.24.0-alpha--8412ed8b95aacde7eab612cca33affda58016896
+mffrontend:
+  imageversion: 0.24.0-alpha-ac0e725357222f0ad4a7b8bcc99ea72780902de0
+mflogstream:
+  imageversion: 0.24.0-alpha--1f227a80e06323e2469fe273e6879f8828470a22
+mfsecuritymetrics:
+  imageversion: 0.24.0-alpha--679729c3b6235edf8b0678a82ba3658866f6ad82

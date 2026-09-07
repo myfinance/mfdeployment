@@ -83,3 +83,4 @@ mflogstream:
   mf_name: mflogstream
 mfshell:
   name: mfshell
+  enabled: false

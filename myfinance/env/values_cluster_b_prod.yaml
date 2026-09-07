@@ -1,7 +1,7 @@
 master_ip: 192.168.100.85
 image:
   repository: nexus.192.168.100.85.nip.io:31003/repository/mydockerrepo/
-stage: test
+stage: prod
 mfrabbitmq:
   user: user
   pw: vulkan
@@ -15,18 +15,19 @@ mfmongo:
   db_pw: vulkan
   backupenabled: false
   storageClassName: longhorn-ssd
-  backupStorageClassName: longhorn-ssd 
+  backupStorageClassName: longhorn-ssd
+
 mffrontend:
   config: |
     {
       "zones": [
         {
-          "name": "Test",
-          "identifier": "test",
-          "backendurl": "http://mfcompositetest.192.168.100.85.nip.io",
+          "name": "Prod",
+          "identifier": "prod",
+          "backendurl": "http://mfcompositeprod.192.168.100.85.nip.io",
           "openidurl": "http://keycloak.192.168.100.85.nip.io",
-          "logstreamurl": "ws://mflogstreamtest.192.168.100.85.nip.io/ws/logs"
+          "logstreamurl": "ws://mflogstreamprod.192.168.100.85.nip.io/ws/logs"
         }
       ],
-      "defaultZone": "test"
+      "defaultZone": "prod"
     }

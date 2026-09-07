@@ -1,3 +1,4 @@
+{{- if and .Values.mfshell.enabled .Values.mfshell.importtimeseriesweeklyschedule }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -23,3 +24,4 @@ spec:
                   value: "importTimeseriesWeekly"
           restartPolicy: OnFailure
       backoffLimit: 4
+{{- end }}

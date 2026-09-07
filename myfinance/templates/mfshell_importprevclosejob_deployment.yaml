@@ -1,3 +1,4 @@
+{{- if and .Values.mfshell.enabled .Values.mfshell.importprevcloseschedule }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -23,3 +24,4 @@ spec:
                   value: "importPrevClose"
           restartPolicy: OnFailure
       backoffLimit: 4
+{{- end }}
