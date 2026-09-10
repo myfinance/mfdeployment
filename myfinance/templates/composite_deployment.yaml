@@ -48,7 +48,7 @@ spec:
               value: "{{ .Values.mfsecuritymetrics.mf_http_port }}"
             # The issuer-uri must match the external URL because the client token's "iss" claim is issued with this hostname.
             - name: "spring.security.oauth2.resourceserver.jwt.issuer-uri"
-              value: "http://keycloak.{{ .Values.master_ip }}.nip.io/realms/myfinance"
+              value: "{{ if and .Values.keycloak .Values.keycloak.issuerUri }}{{ .Values.keycloak.issuerUri }}{{ else }}http://keycloak.{{ .Values.master_ip }}.nip.io/realms/myfinance{{ end }}"
             # The jwk-set-uri uses the internal cluster DNS name to avoid hairpin NAT issues and improve key-fetch speed.
             - name: "spring.security.oauth2.resourceserver.jwt.jwk-set-uri"
               value: "http://keycloak.keycloak:8080/realms/myfinance/protocol/openid-connect/certs"

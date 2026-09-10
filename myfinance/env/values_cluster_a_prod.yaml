@@ -26,6 +26,13 @@ mfmongo:
     url: "http://nextcloud.nextcloud.svc.cluster.local"
     user: "admin"
     password: "vulkan"
+keycloak:
+  issuerUri: "https://keycloak.hfischer.org/realms/myfinance"
+
+ingressRoute:
+  enabled: true
+  host: "myfinance.hfischer.org"
+
 mffrontend:
   config: |
     {
@@ -33,10 +40,11 @@ mffrontend:
         {
           "name": "Prod",
           "identifier": "prod",
-          "backendurl": "http://mfcompositeprod.192.168.100.81.nip.io",
-          "openidurl": "http://keycloak.192.168.100.81.nip.io",
-          "logstreamurl": "ws://mflogstreamprod.192.168.100.81.nip.io/ws/logs"
+          "backendurl": "https://myfinance.hfischer.org",
+          "openidurl": "https://keycloak.hfischer.org",
+          "logstreamurl": "wss://myfinance.hfischer.org/ws/logs"
         }
       ],
       "defaultZone": "prod"
     }
+

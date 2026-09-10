@@ -84,3 +84,10 @@ mflogstream:
 mfshell:
   name: mfshell
   enabled: false
+
+keycloak:
+  issuerUri: ""
+
+ingressRoute:
+  enabled: false
+  host: ""

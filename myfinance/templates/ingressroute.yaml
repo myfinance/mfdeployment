@@ -1,0 +1,29 @@
+{{- if and .Values.ingressRoute .Values.ingressRoute.enabled }}
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ .Values.mffrontend.mf_name }}-secure
+  labels:
+    app: {{ .Values.mffrontend.mf_name }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`{{ .Values.ingressRoute.host }}`) && PathPrefix(`/mf`)
+      kind: Rule
+      services:
+        - name: {{ .Values.mfcomposite.mf_name }}
+          port: {{ .Values.mfcomposite.mf_http_port }}
+    - match: Host(`{{ .Values.ingressRoute.host }}`) && PathPrefix(`/ws`)
+      kind: Rule
+      services:
+        - name: {{ .Values.mflogstream.mf_name }}
+          port: {{ .Values.mflogstream.mf_http_port }}
+    - match: Host(`{{ .Values.ingressRoute.host }}`) && PathPrefix(`/`)
+      kind: Rule
+      services:
+        - name: {{ .Values.mffrontend.mf_name }}
+          port: {{ .Values.mffrontend.mf_http_port }}
+  tls:
+    certResolver: default
+{{- end }}
