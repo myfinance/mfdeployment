@@ -14,6 +14,7 @@ mfrabbitmq:
   storageClassName: ""
 
 mfmongo:
+  createPvc: true
   db_name: mfmongo
   db_pw: vulkan
   db_port: 27017

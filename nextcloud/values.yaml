@@ -2,7 +2,9 @@
 # Declare variables to be passed into your templates.
 
 nextcloud:
+  replicaCount: 1
   persistence:
+    createPvc: true
     nextcloudSize: 10Gi
     dbSize: 5Gi
   db:

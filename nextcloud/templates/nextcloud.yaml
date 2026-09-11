@@ -1,3 +1,4 @@
+{{- if .Values.nextcloud.persistence.createPvc | default true }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -13,6 +14,7 @@ spec:
       storage: {{ .Values.nextcloud.persistence.dbSize }}
 
 ---
+{{- end }}
 
 apiVersion: apps/v1
 kind: Deployment
@@ -23,7 +25,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: {{ .Values.nextcloud.replicaCount | default 1 }}
+  replicas: {{ .Values.nextcloud.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Values.nextcloud.db.name }}
@@ -81,6 +83,7 @@ spec:
 
 ---
 
+{{- if .Values.nextcloud.persistence.createPvc | default true }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -96,6 +99,7 @@ spec:
       storage: {{ .Values.nextcloud.persistence.nextcloudSize }}
 
 ---
+{{- end }}
 
 apiVersion: apps/v1
 kind: Deployment
@@ -106,7 +110,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: {{ .Values.nextcloud.replicaCount | default 1 }}
+  replicas: {{ .Values.nextcloud.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Values.nextcloud.app.name }}
@@ -236,7 +240,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: {{ .Values.nextcloud.replicaCount | default 1 }}
+  replicas: {{ .Values.nextcloud.replicaCount }}
   selector:
     matchLabels:
       app: collabora-code

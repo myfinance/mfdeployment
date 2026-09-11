@@ -1,3 +1,4 @@
+{{- if .Values.paperless.persistence.createPvc | default true }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -29,6 +30,7 @@ spec:
       storage: {{ .Values.paperless.persistence.mediaSize }}
 
 ---
+{{- end }}
 
 apiVersion: v1
 kind: ConfigMap
@@ -162,7 +164,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: {{ .Values.paperless.replicaCount | default 1 }}
+  replicas: {{ .Values.paperless.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Values.paperless.app.name }}

@@ -2,6 +2,8 @@
 # Declare variables to be passed into your templates.
 
 keycloak:
+  replicaCount: 1
+  createPvc: true
   name: keycloak
   pvc: keycloakpvc
   port: 8080

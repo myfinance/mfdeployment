@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Values.keycloak.name }}
 spec:
-  replicas: {{ .Values.keycloak.replicaCount | default 1 }}
+  replicas: {{ .Values.keycloak.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Values.keycloak.name }}
