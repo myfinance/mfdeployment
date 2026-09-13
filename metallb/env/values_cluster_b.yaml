@@ -1,3 +1,4 @@
 master_ip: 192.168.100.85
 metallbConfig:
-  ipRange: 192.168.100.34-192.168.100.39
+  ingressIp: 192.168.100.34
+  generalIpRange: 192.168.100.35-192.168.100.38
