@@ -190,6 +190,7 @@ data:
                         old_sa.extra_data = sociallogin.account.extra_data
                         old_sa.save()
                         sociallogin.account = old_sa
+                        sociallogin.user = existing_user
                     else:
                         sociallogin.connect(request, existing_user)
 
