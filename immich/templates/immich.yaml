@@ -1,4 +1,26 @@
 {{- if .Values.immich.persistence.createPvc | default true }}
+{{- if .Values.immich.persistence.volumeName }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.immich.persistence.volumeName }}
+spec:
+  capacity:
+    storage: {{ .Values.immich.persistence.librarySize }}
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.immich.persistence.storageClassName }}
+  csi:
+    driver: driver.longhorn.io
+    fsType: ext4
+    volumeHandle: {{ .Values.immich.persistence.volumeName }}
+  claimRef:
+    namespace: {{ .Release.Namespace }}
+    name: {{ .Values.immich.app.pvc }}
+---
+{{- end }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -7,6 +29,9 @@ metadata:
     app: {{ .Values.immich.app.name }}
 spec:
   storageClassName: {{ .Values.immich.persistence.storageClassName }}
+  {{- if .Values.immich.persistence.volumeName }}
+  volumeName: {{ .Values.immich.persistence.volumeName }}
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:

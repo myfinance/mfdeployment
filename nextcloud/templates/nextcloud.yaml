@@ -1,4 +1,26 @@
 {{- if .Values.nextcloud.persistence.createPvc | default true }}
+{{- if .Values.nextcloud.persistence.dbVolumeName }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.nextcloud.persistence.dbVolumeName }}
+spec:
+  capacity:
+    storage: {{ .Values.nextcloud.persistence.dbSize }}
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.nextcloud.persistence.storageClassName }}
+  csi:
+    driver: driver.longhorn.io
+    fsType: ext4
+    volumeHandle: {{ .Values.nextcloud.persistence.dbVolumeName }}
+  claimRef:
+    namespace: {{ .Release.Namespace }}
+    name: {{ .Values.nextcloud.db.pvc }}
+---
+{{- end }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -7,6 +29,9 @@ metadata:
     app: {{ .Values.nextcloud.db.name }}
 spec:
   storageClassName: {{ .Values.nextcloud.persistence.storageClassName }}
+  {{- if .Values.nextcloud.persistence.dbVolumeName }}
+  volumeName: {{ .Values.nextcloud.persistence.dbVolumeName }}
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:
@@ -84,6 +109,28 @@ spec:
 ---
 
 {{- if .Values.nextcloud.persistence.createPvc | default true }}
+{{- if .Values.nextcloud.persistence.volumeName }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.nextcloud.persistence.volumeName }}
+spec:
+  capacity:
+    storage: {{ .Values.nextcloud.persistence.nextcloudSize }}
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.nextcloud.persistence.storageClassName }}
+  csi:
+    driver: driver.longhorn.io
+    fsType: ext4
+    volumeHandle: {{ .Values.nextcloud.persistence.volumeName }}
+  claimRef:
+    namespace: {{ .Release.Namespace }}
+    name: {{ .Values.nextcloud.app.pvc }}
+---
+{{- end }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -92,6 +139,9 @@ metadata:
     app: {{ .Values.nextcloud.app.name }}
 spec:
   storageClassName: {{ .Values.nextcloud.persistence.storageClassName }}
+  {{- if .Values.nextcloud.persistence.volumeName }}
+  volumeName: {{ .Values.nextcloud.persistence.volumeName }}
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:

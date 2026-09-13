@@ -12,6 +12,8 @@ spec:
       labels:
         app: {{ .Values.keycloak.name }}
     spec:
+      securityContext:
+        fsGroup: 1000
       containers:
         - name: {{ .Values.keycloak.name }}
           image: "{{ .Values.keycloak.image }}"
@@ -19,7 +21,7 @@ spec:
           args: ["start-dev"]
           volumeMounts:
             - name: keycloakdata
-              mountPath: /opt/keycloak/data/import
+              mountPath: /opt/keycloak/data/h2
           env:
             - name: KC_PROXY_HEADERS
               value: "xforwarded"

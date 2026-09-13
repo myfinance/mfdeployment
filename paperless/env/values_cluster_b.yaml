@@ -3,10 +3,13 @@ master_ip: 192.168.100.85
 paperless:
   replicaCount: 1
   persistence:
-    createPvc: false
+    createPvc: true
     storageClassName: longhorn-ssd
     dataSize: 5Gi
     mediaSize: 5Gi
     dbSize: 5Gi
+    dataVolumeName: dr-paperless-data-pvc
+    mediaVolumeName: dr-paperless-media-pvc
+    dbVolumeName: dr-paperless-db-pvc
   db:
     pw: vulkan

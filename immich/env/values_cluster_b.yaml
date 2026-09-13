@@ -3,8 +3,11 @@ master_ip: 192.168.100.85
 immich:
   replicaCount: 1
   persistence:
-    createPvc: false
+    createPvc: true
     storageClassName: longhorn-ssd
     librarySize: 500Gi
+    dbSize: 10Gi
+    volumeName: dr-immich-pvc
+    dbVolumeName: dr-immich-db-pvc
   db:
     pw: vulkan

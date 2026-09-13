@@ -1,10 +1,35 @@
 {{- if .Values.keycloak.createPvc | default true }}
+{{- if .Values.keycloak.volumeName }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.keycloak.volumeName }}
+spec:
+  capacity:
+    storage: {{ .Values.keycloak.keycloakstoragesize }}
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.keycloak.storageClassName }}
+  csi:
+    driver: driver.longhorn.io
+    fsType: ext4
+    volumeHandle: {{ .Values.keycloak.volumeName }}
+  claimRef:
+    namespace: {{ .Release.Namespace }}
+    name: {{ .Values.keycloak.pvc }}
+---
+{{- end }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ .Values.keycloak.pvc }}
 spec:
   storageClassName: {{ .Values.keycloak.storageClassName }}
+  {{- if .Values.keycloak.volumeName }}
+  volumeName: {{ .Values.keycloak.volumeName }}
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:

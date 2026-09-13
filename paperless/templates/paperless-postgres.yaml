@@ -1,4 +1,26 @@
 {{- if .Values.paperless.persistence.createPvc | default true }}
+{{- if .Values.paperless.persistence.dbVolumeName }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.paperless.persistence.dbVolumeName }}
+spec:
+  capacity:
+    storage: {{ .Values.paperless.persistence.dbSize }}
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.paperless.persistence.storageClassName }}
+  csi:
+    driver: driver.longhorn.io
+    fsType: ext4
+    volumeHandle: {{ .Values.paperless.persistence.dbVolumeName }}
+  claimRef:
+    namespace: {{ .Release.Namespace }}
+    name: {{ .Values.paperless.db.pvc }}
+---
+{{- end }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -7,6 +29,9 @@ metadata:
     app: {{ .Values.paperless.db.name }}
 spec:
   storageClassName: {{ .Values.paperless.persistence.storageClassName }}
+  {{- if .Values.paperless.persistence.dbVolumeName }}
+  volumeName: {{ .Values.paperless.persistence.dbVolumeName }}
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:

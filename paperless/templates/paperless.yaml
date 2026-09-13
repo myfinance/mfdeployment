@@ -1,4 +1,26 @@
 {{- if .Values.paperless.persistence.createPvc | default true }}
+{{- if .Values.paperless.persistence.dataVolumeName }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.paperless.persistence.dataVolumeName }}
+spec:
+  capacity:
+    storage: {{ .Values.paperless.persistence.dataSize }}
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.paperless.persistence.storageClassName }}
+  csi:
+    driver: driver.longhorn.io
+    fsType: ext4
+    volumeHandle: {{ .Values.paperless.persistence.dataVolumeName }}
+  claimRef:
+    namespace: {{ .Release.Namespace }}
+    name: {{ .Values.paperless.app.dataPvc }}
+---
+{{- end }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -7,6 +29,9 @@ metadata:
     app: {{ .Values.paperless.app.name }}
 spec:
   storageClassName: {{ .Values.paperless.persistence.storageClassName }}
+  {{- if .Values.paperless.persistence.dataVolumeName }}
+  volumeName: {{ .Values.paperless.persistence.dataVolumeName }}
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:
@@ -15,6 +40,28 @@ spec:
 
 ---
 
+{{- if .Values.paperless.persistence.mediaVolumeName }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.paperless.persistence.mediaVolumeName }}
+spec:
+  capacity:
+    storage: {{ .Values.paperless.persistence.mediaSize }}
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.paperless.persistence.storageClassName }}
+  csi:
+    driver: driver.longhorn.io
+    fsType: ext4
+    volumeHandle: {{ .Values.paperless.persistence.mediaVolumeName }}
+  claimRef:
+    namespace: {{ .Release.Namespace }}
+    name: {{ .Values.paperless.app.mediaPvc }}
+---
+{{- end }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -23,6 +70,9 @@ metadata:
     app: {{ .Values.paperless.app.name }}
 spec:
   storageClassName: {{ .Values.paperless.persistence.storageClassName }}
+  {{- if .Values.paperless.persistence.mediaVolumeName }}
+  volumeName: {{ .Values.paperless.persistence.mediaVolumeName }}
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:

@@ -1,7 +1,8 @@
 master_ip: 192.168.100.85
 keycloak:
   replicaCount: 1
-  createPvc: false
+  createPvc: true
+  volumeName: dr-keycloakpvc
   pw: vulkan
   port_ext: 30124
   storageClassName: longhorn-ssd

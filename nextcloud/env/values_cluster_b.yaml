@@ -3,8 +3,12 @@ master_ip: 192.168.100.85
 nextcloud:
   replicaCount: 1
   persistence:
-    createPvc: false
+    createPvc: true
     storageClassName: longhorn-ssd
+    nextcloudSize: 10Gi
+    dbSize: 5Gi
+    volumeName: dr-nextcloud-pvc
+    dbVolumeName: dr-nextcloud-db-pvc
   db:
     pw: vulkan
   app:
