@@ -1,7 +1,7 @@
 master_ip: 192.168.100.85
 
 paperless:
-  replicaCount: 1
+  replicaCount: 0
   persistence:
     createPvc: true
     storageClassName: longhorn-ssd

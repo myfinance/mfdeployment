@@ -2,7 +2,7 @@ master_ip: 192.168.100.85
 image:
   repository: nexus.192.168.100.85.nip.io:31003/repository/mydockerrepo/
 stage: prod
-replicaCount: 1
+replicaCount: 0
 mfrabbitmq:
   user: user
   pw: vulkan
