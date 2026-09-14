@@ -1,6 +1,6 @@
 master_ip: 192.168.100.85
 keycloak:
-  replicaCount: 1
+  replicaCount: 0
   createPvc: true
   volumeName: dr-keycloakpvc
   pw: vulkan
