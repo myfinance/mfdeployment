@@ -1,10 +1,35 @@
 {{- if .Values.mfmongo.createPvc | default true }}
+{{- if .Values.mfmongo.volumeName }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.mfmongo.volumeName }}
+spec:
+  capacity:
+    storage: {{ .Values.mfmongo.mongostoragesize }}
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.mfmongo.storageClassName | quote }}
+  csi:
+    driver: driver.longhorn.io
+    fsType: ext4
+    volumeHandle: {{ .Values.mfmongo.volumeName }}
+  claimRef:
+    namespace: {{ .Release.Namespace }}
+    name: {{ .Values.stage }}-{{ .Values.mfmongo.pvc }}
+---
+{{- end }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ .Values.stage }}-{{ .Values.mfmongo.pvc }}
 spec:
   storageClassName: {{ .Values.mfmongo.storageClassName | quote }}
+  {{- if .Values.mfmongo.volumeName }}
+  volumeName: {{ .Values.mfmongo.volumeName }}
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:
