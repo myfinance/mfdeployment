@@ -47,3 +47,67 @@ backup:
       exclude:
         - "lost+found/"
       targetDir: paperless
+
+# Kopia File-Level Incremental Snapshots (Category 2)
+kopia:
+  enabled: true
+  schedule: "0 */2 * * *"
+  image: kopia/kopia:0.18.2
+  master_ip: 192.168.100.81
+
+  server:
+    enabled: true
+    replicas: 1
+    ingress:
+      enabled: true
+      host: "kopia.192.168.100.81.nip.io"
+
+  repository:
+    endpoint: "http://minio.minio-system.svc.cluster.local:9000"
+    externalEndpoint: "http://minio.192.168.100.81.nip.io"
+    bucket: "kopia-backups"
+
+  auth:
+    rootUser: "kopia"
+    rootPassword: "kopiabackup123"
+    kopiaPassword: "kopiamasterkey123"
+
+  retention:
+    keepLatest: 24
+    keepHourly: 24
+    keepDaily: 7
+    keepWeekly: 4
+    keepMonthly: 6
+
+  targets:
+    nextcloud:
+      enabled: true
+      namespace: nextcloud
+      pvc: nextcloud-pvc
+      appLabel: nextcloud
+      sourceSubPath: "data"
+      ignore:
+        - "appdata_*"
+        - "*/cache/*"
+        - "*/files_trashbin/*"
+        - "*/files_versions/*"
+        - "*/uploads/*"
+        - "*.log"
+    immich:
+      enabled: true
+      namespace: immich
+      pvc: immich-pvc
+      appLabel: immich
+      sourceSubPath: "library"
+      ignore:
+        - "lost+found"
+        - "thumbs"
+        - "encoded-video"
+    paperless:
+      enabled: true
+      namespace: paperless
+      pvc: paperless-media-pvc
+      appLabel: paperless
+      sourceSubPath: "documents"
+      ignore:
+        - "lost+found"

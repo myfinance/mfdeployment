@@ -1,0 +1,95 @@
+{{- if .Values.kopia.enabled }}
+{{- range $key, $target := .Values.kopia.targets }}
+{{- if $target.enabled }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: kopia-backup-{{ $key }}
+  namespace: {{ $target.namespace }}
+  labels:
+    app: kopia-backup
+    target: {{ $key }}
+spec:
+  schedule: {{ $.Values.kopia.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          # podAffinity ensures the backup pod runs on the exact node holding the active application pod
+          # so the Longhorn ReadWriteOnce (RWO) PVC can be mounted simultaneously without multi-attach error.
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - {{ $target.appLabel | default $key }}
+                topologyKey: "kubernetes.io/hostname"
+          containers:
+          - name: kopia-snapshot
+            image: {{ $.Values.kopia.image }}
+            envFrom:
+            - secretRef:
+                name: kopia-credentials
+            env:
+            - name: KOPIA_CONFIG_PATH
+              value: /tmp/kopia-config/repository.config
+            - name: KOPIA_CACHE_DIRECTORY
+              value: /tmp/kopia-cache
+            command:
+            - sh
+            - -c
+            - |
+              echo "Connecting to Kopia repository on MinIO..."
+              kopia repository connect s3 \
+                --endpoint="{{ $.Values.kopia.repository.endpoint }}" \
+                --bucket="{{ $.Values.kopia.repository.bucket }}" \
+                --access-key="$AWS_ACCESS_KEY_ID" \
+                --secret-access-key="$AWS_SECRET_ACCESS_KEY" \
+                --disable-tls || \
+              kopia repository create s3 \
+                --endpoint="{{ $.Values.kopia.repository.endpoint }}" \
+                --bucket="{{ $.Values.kopia.repository.bucket }}" \
+                --access-key="$AWS_ACCESS_KEY_ID" \
+                --secret-access-key="$AWS_SECRET_ACCESS_KEY" \
+                --disable-tls
+
+              echo "Setting retention policy for /source/{{ $target.sourceSubPath }}..."
+              kopia policy set /source/{{ $target.sourceSubPath }} \
+                --keep-latest={{ $.Values.kopia.retention.keepLatest | default 24 }} \
+                --keep-hourly={{ $.Values.kopia.retention.keepHourly | default 24 }} \
+                --keep-daily={{ $.Values.kopia.retention.keepDaily | default 7 }} \
+                --keep-weekly={{ $.Values.kopia.retention.keepWeekly | default 4 }} \
+                --keep-monthly={{ $.Values.kopia.retention.keepMonthly | default 6 }}
+
+              {{- if $target.ignore }}
+              echo "Setting ignore rules for /source/{{ $target.sourceSubPath }}..."
+              kopia policy set /source/{{ $target.sourceSubPath }} {{ range $target.ignore }}--add-ignore={{ . | quote }} {{ end }}
+              {{- end }}
+
+              echo "Creating Kopia snapshot for {{ $key }} (/source/{{ $target.sourceSubPath }})..."
+              kopia snapshot create /source/{{ $target.sourceSubPath }}
+              echo "Kopia snapshot for {{ $key }} finished successfully."
+            volumeMounts:
+            - name: source-data
+              mountPath: /source
+              readOnly: true
+            - name: kopia-cache
+              mountPath: /tmp/kopia-cache
+            - name: kopia-config
+              mountPath: /tmp/kopia-config
+          volumes:
+          - name: source-data
+            persistentVolumeClaim:
+              claimName: {{ $target.pvc }}
+          - name: kopia-cache
+            emptyDir: {}
+          - name: kopia-config
+            emptyDir: {}
+          restartPolicy: OnFailure
+{{- end }}
+{{- end }}
+{{- end }}

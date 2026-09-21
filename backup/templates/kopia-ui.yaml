@@ -1,0 +1,107 @@
+{{- if and .Values.kopia.enabled .Values.kopia.server.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kopia-ui
+  namespace: default
+  labels:
+    app: kopia-ui
+spec:
+  replicas: {{ .Values.kopia.server.replicas | default 1 }}
+  selector:
+    matchLabels:
+      app: kopia-ui
+  template:
+    metadata:
+      labels:
+        app: kopia-ui
+    spec:
+      containers:
+      - name: kopia-ui
+        image: {{ .Values.kopia.image }}
+        envFrom:
+        - secretRef:
+            name: kopia-credentials
+        env:
+        - name: KOPIA_CONFIG_PATH
+          value: /tmp/kopia-config/repository.config
+        - name: KOPIA_CACHE_DIRECTORY
+          value: /tmp/kopia-cache
+        command:
+        - sh
+        - -c
+        - |
+          echo "Waiting for MinIO service and connecting to Kopia repository..."
+          until kopia repository connect s3 \
+            --endpoint="{{ .Values.kopia.repository.endpoint }}" \
+            --bucket="{{ .Values.kopia.repository.bucket }}" \
+            --access-key="$AWS_ACCESS_KEY_ID" \
+            --secret-access-key="$AWS_SECRET_ACCESS_KEY" \
+            --disable-tls; do
+            echo "Repository not initialized yet or MinIO not ready, attempting creation..."
+            kopia repository create s3 \
+              --endpoint="{{ .Values.kopia.repository.endpoint }}" \
+              --bucket="{{ .Values.kopia.repository.bucket }}" \
+              --access-key="$AWS_ACCESS_KEY_ID" \
+              --secret-access-key="$AWS_SECRET_ACCESS_KEY" \
+              --disable-tls && break || sleep 5
+          done
+          echo "Kopia repository connected. Starting Kopia Web Server on port 51515..."
+          exec kopia server start \
+            --insecure \
+            --address=0.0.0.0:51515 \
+            --without-password
+        ports:
+        - containerPort: 51515
+          name: http
+        volumeMounts:
+        - name: kopia-cache
+          mountPath: /tmp/kopia-cache
+        - name: kopia-config
+          mountPath: /tmp/kopia-config
+      volumes:
+      - name: kopia-cache
+        emptyDir: {}
+      - name: kopia-config
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kopia-ui
+  namespace: default
+  labels:
+    app: kopia-ui
+spec:
+  ports:
+  - port: 51515
+    targetPort: 51515
+    name: http
+  selector:
+    app: kopia-ui
+---
+{{- if .Values.kopia.server.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kopia-ui-ingress
+  namespace: default
+  labels:
+    app: kopia-ui
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: {{ .Values.kopia.server.ingress.host | quote }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: kopia-ui
+            port:
+              number: 51515
+{{- end }}
+{{- end }}

@@ -1,3 +1,6 @@
 backup:
   enabled: true
   nodeName: rasby1
+
+kopia:
+  enabled: true
