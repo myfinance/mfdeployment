@@ -63,8 +63,8 @@ kopia:
       host: "kopia.192.168.100.81.nip.io"
 
   repository:
-    endpoint: "http://minio.minio-system.svc.cluster.local:9000"
-    externalEndpoint: "http://minio.192.168.100.81.nip.io"
+    endpoint: "minio.minio-system.svc.cluster.local:9000"
+    externalEndpoint: "minio.192.168.100.81.nip.io"
     bucket: "kopia-backups"
 
   auth:
