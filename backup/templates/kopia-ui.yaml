@@ -37,20 +37,25 @@ spec:
             --bucket="{{ .Values.kopia.repository.bucket }}" \
             --access-key="$AWS_ACCESS_KEY_ID" \
             --secret-access-key="$AWS_SECRET_ACCESS_KEY" \
-            --disable-tls; do
+            --disable-tls \
+            --override-username=kopia \
+            --override-hostname=cluster-a; do
             echo "Repository not initialized yet or MinIO not ready, attempting creation..."
             kopia repository create s3 \
               --endpoint="{{ .Values.kopia.repository.endpoint }}" \
               --bucket="{{ .Values.kopia.repository.bucket }}" \
               --access-key="$AWS_ACCESS_KEY_ID" \
               --secret-access-key="$AWS_SECRET_ACCESS_KEY" \
-              --disable-tls && break || sleep 5
+              --disable-tls \
+              --override-username=kopia \
+              --override-hostname=cluster-a && break || sleep 5
           done
           echo "Kopia repository connected. Starting Kopia Web Server on port 51515..."
           exec kopia server start \
             --insecure \
             --address=0.0.0.0:51515 \
-            --without-password
+            --without-password \
+            --refresh-interval=5m
         ports:
         - containerPort: 51515
           name: http

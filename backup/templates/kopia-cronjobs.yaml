@@ -49,13 +49,17 @@ spec:
                 --bucket="{{ $.Values.kopia.repository.bucket }}" \
                 --access-key="$AWS_ACCESS_KEY_ID" \
                 --secret-access-key="$AWS_SECRET_ACCESS_KEY" \
-                --disable-tls || \
+                --disable-tls \
+                --override-username=kopia \
+                --override-hostname=cluster-a || \
               kopia repository create s3 \
                 --endpoint="{{ $.Values.kopia.repository.endpoint }}" \
                 --bucket="{{ $.Values.kopia.repository.bucket }}" \
                 --access-key="$AWS_ACCESS_KEY_ID" \
                 --secret-access-key="$AWS_SECRET_ACCESS_KEY" \
-                --disable-tls
+                --disable-tls \
+                --override-username=kopia \
+                --override-hostname=cluster-a
 
               echo "Setting retention policy for /source/{{ $target.sourceSubPath }}..."
               kopia policy set /source/{{ $target.sourceSubPath }} \
@@ -71,7 +75,7 @@ spec:
               {{- end }}
 
               echo "Creating Kopia snapshot for {{ $key }} (/source/{{ $target.sourceSubPath }})..."
-              kopia snapshot create /source/{{ $target.sourceSubPath }}
+              kopia snapshot create /source/{{ $target.sourceSubPath }} --description="{{ $key }}"
               echo "Kopia snapshot for {{ $key }} finished successfully."
             volumeMounts:
             - name: source-data
