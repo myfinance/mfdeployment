@@ -51,7 +51,8 @@ backup:
 # Kopia File-Level Incremental Snapshots (Category 2)
 kopia:
   enabled: true
-  schedule: "0 */2 * * *"
+  #schedule: "0 */2 * * *"
+  schedule: "44 * * * *"
   image: kopia/kopia:0.18.2
   master_ip: 192.168.100.81
 
