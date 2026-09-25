@@ -1,7 +1,8 @@
 # Centralized Backup Configuration for External USB Drive via Samba
 backup:
   enabled: true
-  schedule: "10 1 * * *"
+  #schedule: "10 1 * * *"
+  schedule: "25 * * * *"
   useSamba: true
   sambaServer: "192.168.100.81"
   sambaShare: "external-backup"
@@ -51,8 +52,7 @@ backup:
 # Kopia File-Level Incremental Snapshots (Category 2)
 kopia:
   enabled: true
-  #schedule: "0 */2 * * *"
-  schedule: "44 * * * *"
+  schedule: "0 */2 * * *"
   image: kopia/kopia:0.18.2
   master_ip: 192.168.100.81
 
