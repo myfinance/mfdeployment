@@ -24,3 +24,10 @@ immich:
   storageTemplate:
     enabled: true
     template: "{{y}}/{{MM}}/{{dd}}/{{filename}}"
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 8Gi
+    requests:
+      cpu: 200m
+      memory: 1Gi

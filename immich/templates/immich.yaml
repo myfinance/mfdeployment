@@ -91,12 +91,7 @@ spec:
             - containerPort: 2283
               name: httpport
           resources:
-            limits:
-              cpu: 2000m
-              memory: 2Gi
-            requests:
-              cpu: 200m
-              memory: 512Mi
+            {{- toYaml .Values.immich.resources | nindent 12 }}
           volumeMounts:
             - name: library
               mountPath: /data
