@@ -16,6 +16,8 @@ mfshell:
   processtransactionschedule: "1 23 * * *"
 
 mfmongo:
+  createPvc: true
+  volumeName: pvc-4b773b66-1bde-4e0d-9afa-2fd94d173fa7
   db_pw: vulkan
   backupenabled: true
   backuptarget: data/prodclustera

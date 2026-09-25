@@ -4,5 +4,8 @@ immich:
   persistence:
     storageClassName: longhorn-ssd
     librarySize: 500Gi
+    dbSize: 10Gi
+    volumeName: pvc-defffbf0-86af-42a1-903e-621b7765c7ec
+    dbVolumeName: pvc-d6403dd8-6f01-4e3d-9d9e-1d6bdbfaeb3c
   db:
     pw: vulkan

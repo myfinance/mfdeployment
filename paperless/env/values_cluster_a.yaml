@@ -6,5 +6,8 @@ paperless:
     dataSize: 5Gi
     mediaSize: 5Gi
     dbSize: 5Gi
+    dataVolumeName: pvc-967e288a-bc12-4d65-96ed-550019a3f39e
+    mediaVolumeName: pvc-6f330bd3-25b8-4120-b343-d2482d5668b4
+    dbVolumeName: pvc-195dee6f-4770-4b4d-a2a4-6015e974e89e
   db:
     pw: vulkan
