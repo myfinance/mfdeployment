@@ -1,0 +1,93 @@
+{{- if .Values.dbBackup.enabled }}
+{{- range $key, $target := .Values.dbBackup.targets }}
+{{- if $target.enabled }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: usb-db-backup-{{ $key }}
+  namespace: {{ $target.namespace }}
+  labels:
+    app: usb-db-backup
+    target: {{ $key }}
+spec:
+  schedule: {{ $target.schedule | default $.Values.dbBackup.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          affinity:
+            podAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                      - {{ $target.appLabel | default $key }}
+                  topologyKey: "kubernetes.io/hostname"
+          containers:
+          - name: db-dump
+            image: {{ $.Values.dbBackup.image }}
+            securityContext:
+              capabilities:
+                add:
+                - SYS_ADMIN
+                - DAC_READ_SEARCH
+            env:
+            - name: DB_PASSWORD
+              value: {{ $target.password | quote }}
+            - name: DB_HOST
+              value: {{ $target.host | quote }}
+            - name: DB_PORT
+              value: {{ $target.port | default 5432 | quote }}
+            - name: DB_USER
+              value: {{ $target.user | quote }}
+            - name: DB_NAME
+              value: {{ $target.database | quote }}
+            command:
+            - sh
+            - -c
+            - |
+              set -e
+              set -o pipefail
+              apk add --no-cache postgresql-client cifs-utils gzip findutils
+              mkdir -p /usb
+              echo "Mounting Samba share //{{ $.Values.dbBackup.sambaServer | default $.Values.backup.sambaServer }}/{{ $.Values.dbBackup.sambaShare | default $.Values.backup.sambaShare }} to /usb..."
+              mount -t cifs "//{{ $.Values.dbBackup.sambaServer | default $.Values.backup.sambaServer }}/{{ $.Values.dbBackup.sambaShare | default $.Values.backup.sambaShare }}" /usb -o guest,uid=0,gid=0,vers=3.0,iocharset=utf8
+              
+              TARGET_DIR="/usb/{{ $target.targetDir }}"
+              mkdir -p "${TARGET_DIR}"
+              
+              TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+              DUMP_FILE="${TARGET_DIR}/{{ $key }}_db_${TIMESTAMP}.sql.gz"
+              echo "Dumping PostgreSQL database ${DB_NAME} from ${DB_HOST}:${DB_PORT} to ${DUMP_FILE}..."
+              
+              PGPASSWORD="${DB_PASSWORD}" pg_dump -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d "${DB_NAME}" --clean --if-exists | gzip > "${DUMP_FILE}"
+              
+              if [ ! -s "${DUMP_FILE}" ]; then
+                echo "ERROR: Backup file ${DUMP_FILE} is empty or missing!"
+                umount /usb
+                exit 1
+              fi
+              
+              echo "Dump completed successfully. Size: $(ls -lh "${DUMP_FILE}" | awk '{print $5}')"
+              
+              KEEP={{ $target.keepDumps | default 14 }}
+              echo "Retaining the latest ${KEEP} backups in ${TARGET_DIR}..."
+              ls -1t "${TARGET_DIR}"/{{ $key }}_db_*.sql.gz 2>/dev/null | tail -n +$((KEEP + 1)) | while read -r old_file; do
+                if [ -n "${old_file}" ]; then
+                  echo "Removing expired backup: ${old_file}"
+                  rm -f "${old_file}"
+                fi
+              done
+              
+              echo "Unmounting /usb..."
+              umount /usb
+              echo "Database backup of {{ $key }} finished successfully."
+          restartPolicy: OnFailure
+{{- end }}
+{{- end }}
+{{- end }}

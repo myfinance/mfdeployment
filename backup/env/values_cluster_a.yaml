@@ -4,3 +4,6 @@ backup:
 
 kopia:
   enabled: true
+
+dbBackup:
+  enabled: true
