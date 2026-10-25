@@ -1,4 +1,4 @@
 nextcloud:
-  image: nextcloud:33
+  image: nextcloud:34
   pgimage: postgres:16
   collaboraImage: collabora/code:latest
