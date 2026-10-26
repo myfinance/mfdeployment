@@ -5,7 +5,7 @@ nextcloud:
   replicaCount: 1
   persistence:
     createPvc: true
-    nextcloudSize: 10Gi
+    nextcloudSize: 400Gi
     dbSize: 5Gi
   db:
     name: nextcloud-db

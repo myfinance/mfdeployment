@@ -5,7 +5,7 @@ nextcloud:
   persistence:
     createPvc: true
     storageClassName: longhorn-ssd
-    nextcloudSize: 10Gi
+    nextcloudSize: 400Gi
     dbSize: 5Gi
     volumeName: dr-nextcloud-pvc
     dbVolumeName: dr-nextcloud-db-pvc
