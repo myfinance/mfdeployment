@@ -38,13 +38,7 @@ data:
     echo "Activating richdocuments configuration..."
     php /var/www/html/occ richdocuments:activate-config || true
 
-    # 4. Install/enable keeweb app if not installed
-    if ! php /var/www/html/occ app:list | grep -q "keeweb:"; then
-      echo "Installing keeweb app..."
-      php /var/www/html/occ app:install keeweb
-    fi
-
-    # 5. Register OIDC provider if not registered, or update it
+    # 4. Register OIDC provider if not registered, or update it
     if ! php /var/www/html/occ user_oidc:provider | grep -q "keycloak"; then
       echo "Registering OIDC provider keycloak..."
       php /var/www/html/occ user_oidc:provider keycloak \
