@@ -3,6 +3,7 @@
 
 nextcloud:
   replicaCount: 1
+  imagePullPolicy: Always
   persistence:
     createPvc: true
     nextcloudSize: 400Gi
