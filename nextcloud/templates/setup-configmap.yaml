@@ -101,4 +101,12 @@ data:
     php /var/www/html/occ groupfolders:group "$data_id" "admin" || true
     php /var/www/html/occ groupfolders:group "$data_id" "admin" write share delete || true
 
+    # Folder 3: backup (users have read-only, admin has read/write)
+    backup_id=$(get_or_create_folder "backup")
+    php /var/www/html/occ groupfolders:group "$backup_id" "$OIDC_USERS" || true
+    php /var/www/html/occ groupfolders:group "$backup_id" "$OIDC_FAMILYADMIN" || true
+    php /var/www/html/occ groupfolders:group "$backup_id" "$OIDC_FAMILYADMIN" write share delete || true
+    php /var/www/html/occ groupfolders:group "$backup_id" "admin" || true
+    php /var/www/html/occ groupfolders:group "$backup_id" "admin" write share delete || true
+
     echo "Nextcloud automatic configuration hook completed successfully!"

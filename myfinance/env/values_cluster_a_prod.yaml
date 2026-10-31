@@ -20,7 +20,7 @@ mfmongo:
   volumeName: pvc-4b773b66-1bde-4e0d-9afa-2fd94d173fa7
   db_pw: vulkan
   backupenabled: true
-  backuptarget: data/prodclustera
+  backuptarget: backup/prodclustera
   storageClassName: longhorn-ssd
   backupStorageClassName: longhorn-ssd
   dumpschedule: "1 22 * * 0"
