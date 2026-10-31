@@ -23,7 +23,8 @@ mfmongo:
   backuptarget: backup/prodclustera
   storageClassName: longhorn-ssd
   backupStorageClassName: longhorn-ssd
-  dumpschedule: "1 22 * * 0"
+  #dumpschedule: "1 22 * * 0"
+  dumpschedule: "59 * * * *"
   nextcloud:
     url: "http://nextcloud.nextcloud.svc.cluster.local"
     user: "admin"
