@@ -133,3 +133,49 @@ kopia:
       sourceSubPath: "documents"
       ignore:
         - "lost+found"
+
+# Google Drive Cloud Sync via Rclone (Category 6)
+gdrive:
+  enabled: true
+  schedule: "0 3 * * *" # Daily at 03:00 UTC (after USB backup and local dumps)
+  image: rclone/rclone:latest
+  secretName: gdrive-rclone-config
+  remoteName: "gdrive"
+  targets:
+    nextcloud:
+      enabled: true
+      namespace: nextcloud
+      pvc: nextcloud-pvc
+      appLabel: nextcloud
+      sourceSubPath: "data"
+      targetDir: "nextcloud"
+      exclude:
+        - "appdata_*"
+        - "*/cache/**"
+        - "*/files_trashbin/**"
+        - "*/files_versions/**"
+        - "*/uploads/**"
+        - "*.log"
+        - "*.ocdata"
+      include:
+        - "__groupfolders/**"
+        - "*/files/**"
+        - "*/"
+    immich:
+      enabled: true
+      namespace: immich
+      pvc: immich-pvc
+      appLabel: immich
+      sourceSubPath: "library"
+      targetDir: "immich"
+      exclude:
+        - "lost+found/**"
+    paperless:
+      enabled: true
+      namespace: paperless
+      pvc: paperless-media-pvc
+      appLabel: paperless
+      sourceSubPath: "documents/archive"
+      targetDir: "paperless"
+      exclude:
+        - "lost+found/**"

@@ -1,0 +1,83 @@
+{{- if .Values.gdrive.enabled }}
+{{- range $key, $target := .Values.gdrive.targets }}
+{{- if $target.enabled }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: gdrive-sync-{{ $key }}
+  namespace: {{ $target.namespace }}
+  labels:
+    app: gdrive-sync
+    target: {{ $key }}
+spec:
+  schedule: {{ $target.schedule | default $.Values.gdrive.schedule | quote }}
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          affinity:
+            podAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                      - {{ $target.appLabel | default $key }}
+                  topologyKey: "kubernetes.io/hostname"
+          containers:
+          - name: rclone-sync
+            image: {{ $.Values.gdrive.image | default "rclone/rclone:latest" }}
+            command:
+            - sh
+            - -c
+            - |
+              set -e
+              mkdir -p /tmp/rclone
+              cp /etc/rclone/rclone.conf /tmp/rclone/rclone.conf
+              chmod 600 /tmp/rclone/rclone.conf
+
+              SOURCE_PATH="/source{{ if $target.sourceSubPath }}/{{ $target.sourceSubPath }}{{ end }}"
+              TARGET_DIR="{{ $target.targetDir | default $key }}"
+              REMOTE="{{ $.Values.gdrive.remoteName | default "gdrive" }}"
+
+              echo "Starting Google Drive sync for {{ $key }} from ${SOURCE_PATH} to ${REMOTE}:${TARGET_DIR}..."
+
+              rclone sync "${SOURCE_PATH}" "${REMOTE}:${TARGET_DIR}" \
+                --config /tmp/rclone/rclone.conf \
+                {{- range $target.include }}
+                --include {{ . | quote }} \
+                {{- end }}
+                {{- range $target.exclude }}
+                --exclude {{ . | quote }} \
+                {{- end }}
+                --fast-list \
+                --transfers 4 \
+                --checkers 8 \
+                --stats 1m \
+                --stats-one-line \
+                -v
+
+              echo "Google Drive sync for {{ $key }} completed successfully."
+            volumeMounts:
+            - name: source-data
+              mountPath: /source
+              readOnly: true
+            - name: rclone-config
+              mountPath: /etc/rclone
+              readOnly: true
+          volumes:
+          - name: source-data
+            persistentVolumeClaim:
+              claimName: {{ $target.pvc }}
+          - name: rclone-config
+            secret:
+              secretName: {{ $target.secretName | default $.Values.gdrive.secretName | default "gdrive-rclone-config" }}
+          restartPolicy: OnFailure
+{{- end }}
+{{- end }}
+{{- end }}

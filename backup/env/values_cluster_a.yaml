@@ -7,3 +7,6 @@ kopia:
 
 dbBackup:
   enabled: true
+
+gdrive:
+  enabled: true
