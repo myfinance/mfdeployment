@@ -263,6 +263,21 @@ spec:
 ---
 
 apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ .Values.nextcloud.app.name }}-headers
+  labels:
+    app: {{ .Values.nextcloud.app.name }}
+spec:
+  headers:
+    stsSeconds: 15552000
+    stsIncludeSubdomains: true
+    stsPreload: true
+    forceSTSHeader: true
+
+---
+
+apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: {{ .Values.nextcloud.app.name }}-secure
@@ -274,6 +289,8 @@ spec:
   routes:
     - match: Host(`nextcloud.hfischer.org`) && PathPrefix(`/`)
       kind: Rule
+      middlewares:
+        - name: {{ .Values.nextcloud.app.name }}-headers
       services:
         - name: {{ .Values.nextcloud.app.name }}
           port: 80

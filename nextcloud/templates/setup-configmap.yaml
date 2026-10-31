@@ -12,6 +12,9 @@ data:
     # Allow Nextcloud to make backend requests to local network hosts (e.g. keycloak.hfischer.org)
     php /var/www/html/occ config:system:set allow_local_remote_servers --value=true --type=boolean
 
+    # Set maintenance window start time to 01:00 UTC (02:00 CET)
+    php /var/www/html/occ config:system:set maintenance_window_start --value=1 --type=integer
+
     # 1. Install/enable user_oidc app if not installed
     if ! php /var/www/html/occ app:list | grep -q "user_oidc:"; then
       echo "Installing user_oidc app..."
@@ -108,5 +111,8 @@ data:
     php /var/www/html/occ groupfolders:group "$backup_id" "$OIDC_FAMILYADMIN" write share delete || true
     php /var/www/html/occ groupfolders:group "$backup_id" "admin" || true
     php /var/www/html/occ groupfolders:group "$backup_id" "admin" write share delete || true
+
+    # Add any missing database indices
+    php /var/www/html/occ db:add-missing-indices || true
 
     echo "Nextcloud automatic configuration hook completed successfully!"
