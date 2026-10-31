@@ -78,7 +78,7 @@ spec:
               rm -f "${DUMP_FILE}"
               echo "Upload to Nextcloud completed."
 
-              KEEP={{ $target.keepDumps | default 14 }}
+              KEEP={{ $target.keepDumps | default 5 }}
               echo "Retaining the latest ${KEEP} backups in Nextcloud ${TARGET_DIR}..."
 
               REMOTE_FILES=$(curl -s -k -u "${NC_USER}:${NC_PASSWORD}" -X PROPFIND -H "Depth: 1" "${NC_URL}/remote.php/dav/files/${NC_USER}/${TARGET_DIR}/" | \

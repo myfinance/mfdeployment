@@ -68,7 +68,7 @@ dbBackup:
       user: postgres
       password: vulkan
       targetDir: backup/immich
-      keepDumps: 14
+      keepDumps: 5
 
 # Kopia File-Level Incremental Snapshots (Category 2)
 kopia:
