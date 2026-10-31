@@ -48,13 +48,15 @@ backup:
         - "lost+found/"
       targetDir: paperless
 
-# Database Logical Dumps to External USB Drive via Samba (Category 5)
+# Database Logical Dumps to Nextcloud (Category 5)
 dbBackup:
   enabled: true
   schedule: "30 0 * * *" # Daily at 00:30 UTC, prior to file rsync at 01:10 UTC
   image: alpine:latest
-  sambaServer: "192.168.100.81"
-  sambaShare: "external-backup"
+  nextcloud:
+    url: "http://nextcloud.nextcloud.svc.cluster.local"
+    user: "admin"
+    password: "vulkan"
   targets:
     immich:
       enabled: true
@@ -65,7 +67,7 @@ dbBackup:
       database: immich
       user: postgres
       password: vulkan
-      targetDir: database-backups/immich
+      targetDir: backup/immich
       keepDumps: 14
 
 # Kopia File-Level Incremental Snapshots (Category 2)

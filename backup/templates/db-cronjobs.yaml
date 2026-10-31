@@ -5,10 +5,10 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: usb-db-backup-{{ $key }}
+  name: db-backup-{{ $key }}
   namespace: {{ $target.namespace }}
   labels:
-    app: usb-db-backup
+    app: db-backup
     target: {{ $key }}
 spec:
   schedule: {{ $target.schedule | default $.Values.dbBackup.schedule | quote }}
@@ -31,11 +31,6 @@ spec:
           containers:
           - name: db-dump
             image: {{ $.Values.dbBackup.image }}
-            securityContext:
-              capabilities:
-                add:
-                - SYS_ADMIN
-                - DAC_READ_SEARCH
             env:
             - name: DB_PASSWORD
               value: {{ $target.password | quote }}
@@ -47,46 +42,63 @@ spec:
               value: {{ $target.user | quote }}
             - name: DB_NAME
               value: {{ $target.database | quote }}
+            - name: NC_URL
+              value: {{ $.Values.dbBackup.nextcloud.url | default "http://nextcloud.nextcloud.svc.cluster.local" | quote }}
+            - name: NC_USER
+              value: {{ $.Values.dbBackup.nextcloud.user | default "admin" | quote }}
+            - name: NC_PASSWORD
+              value: {{ $.Values.dbBackup.nextcloud.password | quote }}
             command:
             - sh
             - -c
             - |
               set -e
               set -o pipefail
-              apk add --no-cache postgresql-client cifs-utils gzip findutils
-              mkdir -p /usb
-              echo "Mounting Samba share //{{ $.Values.dbBackup.sambaServer | default $.Values.backup.sambaServer }}/{{ $.Values.dbBackup.sambaShare | default $.Values.backup.sambaShare }} to /usb..."
-              mount -t cifs "//{{ $.Values.dbBackup.sambaServer | default $.Values.backup.sambaServer }}/{{ $.Values.dbBackup.sambaShare | default $.Values.backup.sambaShare }}" /usb -o guest,uid=0,gid=0,vers=3.0,iocharset=utf8
-              
-              TARGET_DIR="/usb/{{ $target.targetDir }}"
-              mkdir -p "${TARGET_DIR}"
-              
+              apk add --no-cache postgresql-client curl gzip
+
+              TARGET_DIR="{{ $target.targetDir | default "backup/immich" }}"
               TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-              DUMP_FILE="${TARGET_DIR}/{{ $key }}_db_${TIMESTAMP}.sql.gz"
+              DUMP_FILE="/tmp/{{ $key }}_db_${TIMESTAMP}.sql.gz"
+              
               echo "Dumping PostgreSQL database ${DB_NAME} from ${DB_HOST}:${DB_PORT} to ${DUMP_FILE}..."
-              
               PGPASSWORD="${DB_PASSWORD}" pg_dump -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d "${DB_NAME}" --clean --if-exists | gzip > "${DUMP_FILE}"
-              
+
               if [ ! -s "${DUMP_FILE}" ]; then
                 echo "ERROR: Backup file ${DUMP_FILE} is empty or missing!"
-                umount /usb
                 exit 1
               fi
-              
+
               echo "Dump completed successfully. Size: $(ls -lh "${DUMP_FILE}" | awk '{print $5}')"
-              
+
+              echo "Ensuring Nextcloud target directory ${TARGET_DIR} exists..."
+              curl -s -k -u "${NC_USER}:${NC_PASSWORD}" -X MKCOL "${NC_URL}/remote.php/dav/files/${NC_USER}/${TARGET_DIR}" || true
+
+              echo "Uploading ${DUMP_FILE} to Nextcloud..."
+              curl -s -f -k -u "${NC_USER}:${NC_PASSWORD}" -T "${DUMP_FILE}" "${NC_URL}/remote.php/dav/files/${NC_USER}/${TARGET_DIR}/{{ $key }}_db_${TIMESTAMP}.sql.gz"
+              rm -f "${DUMP_FILE}"
+              echo "Upload to Nextcloud completed."
+
               KEEP={{ $target.keepDumps | default 14 }}
-              echo "Retaining the latest ${KEEP} backups in ${TARGET_DIR}..."
-              ls -1t "${TARGET_DIR}"/{{ $key }}_db_*.sql.gz 2>/dev/null | tail -n +$((KEEP + 1)) | while read -r old_file; do
-                if [ -n "${old_file}" ]; then
-                  echo "Removing expired backup: ${old_file}"
-                  rm -f "${old_file}"
-                fi
-              done
-              
-              echo "Unmounting /usb..."
-              umount /usb
-              echo "Database backup of {{ $key }} finished successfully."
+              echo "Retaining the latest ${KEEP} backups in Nextcloud ${TARGET_DIR}..."
+
+              REMOTE_FILES=$(curl -s -k -u "${NC_USER}:${NC_PASSWORD}" -X PROPFIND -H "Depth: 1" "${NC_URL}/remote.php/dav/files/${NC_USER}/${TARGET_DIR}/" | \
+                grep -o '<d:href>[^<]*</d:href>' | sed 's/<[^>]*>//g' | grep '{{ $key }}_db_.*\.sql\.gz' | sort)
+
+              TOTAL_COUNT=$(echo "${REMOTE_FILES}" | grep -c '{{ $key }}_db_' || true)
+              if [ "${TOTAL_COUNT}" -gt "${KEEP}" ]; then
+                DELETE_COUNT=$((TOTAL_COUNT - KEEP))
+                echo "Found ${TOTAL_COUNT} backups, removing oldest ${DELETE_COUNT}..."
+                echo "${REMOTE_FILES}" | head -n "${DELETE_COUNT}" | while read -r old_file; do
+                  if [ -n "${old_file}" ]; then
+                    echo "Deleting expired backup: ${old_file}"
+                    curl -s -k -u "${NC_USER}:${NC_PASSWORD}" -X DELETE "${NC_URL}${old_file}"
+                  fi
+                done
+              else
+                echo "Current backup count (${TOTAL_COUNT}) does not exceed retention limit (${KEEP})."
+              fi
+
+              echo "Database backup of {{ $key }} to Nextcloud finished successfully."
           restartPolicy: OnFailure
 {{- end }}
 {{- end }}
