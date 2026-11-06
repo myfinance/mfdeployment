@@ -10,12 +10,16 @@ data:
     ui = true
     disable_mlock = true
 
-    storage "file" {
-      path = "/openbao/data"
+    storage "raft" {
+      path    = "/openbao/file"
+      node_id = "openbao-0"
     }
 
     listener "tcp" {
       address     = "0.0.0.0:8200"
       tls_disable = 1
     }
+
+    api_addr     = "http://openbao.openbao.svc.cluster.local:8200"
+    cluster_addr = "http://127.0.0.1:8201"
 {{- end }}

@@ -21,10 +21,8 @@ spec:
         - name: openbao
           image: "{{ .Values.openbao.image | default "quay.io/openbao/openbao:2.7.2" }}"
           imagePullPolicy: IfNotPresent
-          command:
-            - openbao
+          args:
             - server
-            - -config=/openbao/config/openbao.hcl
           securityContext:
             capabilities:
               add:
@@ -33,13 +31,16 @@ spec:
             - name: http
               containerPort: 8200
               protocol: TCP
+            - name: cluster
+              containerPort: 8201
+              protocol: TCP
           resources:
             {{- toYaml .Values.openbao.resources | nindent 12 }}
           volumeMounts:
             - name: config
               mountPath: /openbao/config
             - name: data
-              mountPath: /openbao/data
+              mountPath: /openbao/file
           livenessProbe:
             httpGet:
               path: /v1/sys/health?standbyok=true&sealedcode=200&uninitcode=200
