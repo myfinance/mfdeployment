@@ -17,6 +17,7 @@ spec:
       labels:
         app: openbao
     spec:
+      serviceAccountName: openbao
       securityContext:
         fsGroup: 1000
       containers:
