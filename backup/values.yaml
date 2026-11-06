@@ -94,6 +94,11 @@ kopia:
     rootPassword: "kopiabackup123"
     kopiaPassword: "kopiamasterkey123"
 
+  externalSecret:
+    enabled: true
+    secretStoreName: openbao-backend
+    vaultKey: "backup/kopia"
+
   retention:
     keepLatest: 24
     keepHourly: 24
@@ -141,6 +146,10 @@ gdrive:
   image: rclone/rclone:latest
   secretName: gdrive-rclone-config
   remoteName: "gdrive"
+  externalSecret:
+    enabled: true
+    secretStoreName: openbao-backend
+    vaultKey: "backup/gdrive"
   targets:
     nextcloud:
       enabled: true
