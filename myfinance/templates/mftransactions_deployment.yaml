@@ -22,6 +22,15 @@ spec:
               value: "{{ .Values.mfmongo.db_name }}"
             - name: "spring.data.mongodb.port"
               value: "{{ .Values.mfmongo.db_port }}"
+            - name: "spring.data.mongodb.password"
+              {{- if and .Values.mfmongo.externalSecret .Values.mfmongo.externalSecret.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: myfinance-secrets
+                  key: MONGO_INITDB_ROOT_PASSWORD
+              {{- else }}
+              value: "{{ .Values.mfmongo.db_pw }}"
+              {{- end }}
             - name: "api.common.version"
               value: "{{ .Values.mftransactions.imageversion }}"
             - name: "spring.rabbitmq.host"
