@@ -110,8 +110,13 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Values.immich.app.pvc }}
         - name: config
+          {{- if and .Values.immich.externalSecret .Values.immich.externalSecret.enabled }}
+          secret:
+            secretName: {{ .Values.immich.app.name }}-config
+          {{- else }}
           configMap:
             name: {{ .Values.immich.app.name }}-config
+          {{- end }}
 
 ---
 

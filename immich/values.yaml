@@ -23,8 +23,7 @@ immich:
     enabled: true
     secretStoreName: openbao-backend
     vaultKey: "apps/immich"
-  oauth:
-    clientSecret: vulkan
+
   storageTemplate:
     enabled: true
     template: "{{y}}/{{MM}}/{{dd}}/{{filename}}"

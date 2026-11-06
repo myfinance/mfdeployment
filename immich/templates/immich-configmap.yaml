@@ -1,3 +1,4 @@
+{{- if not (and .Values.immich.externalSecret .Values.immich.externalSecret.enabled) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -20,3 +21,4 @@ data:
         "buttonText": "Login with Keycloak"
       }
     }
+{{- end }}
