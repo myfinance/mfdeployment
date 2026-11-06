@@ -33,5 +33,5 @@ clusterSecretStore:
   vaultServer: "http://openbao.openbao.svc.cluster.local:8200"
   vaultPath: "secret"
   vaultVersion: "v2"
-  authType: "token" # 'token' or 'kubernetes'
+  authType: "kubernetes" # 'token' or 'kubernetes'
   tokenSecretName: "openbao-eso-token"
