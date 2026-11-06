@@ -17,12 +17,17 @@ spec:
       labels:
         app: openbao
     spec:
+      securityContext:
+        fsGroup: 1000
       containers:
         - name: openbao
           image: "{{ .Values.openbao.image | default "quay.io/openbao/openbao:2.7.2" }}"
           imagePullPolicy: IfNotPresent
           args:
             - server
+          env:
+            - name: SKIP_CHOWN
+              value: "true"
           securityContext:
             capabilities:
               add:
