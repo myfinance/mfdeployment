@@ -9,5 +9,4 @@ immich:
     dbSize: 10Gi
     volumeName: dr-immich-pvc
     dbVolumeName: dr-immich-db-pvc
-  db:
-    pw: vulkan
+

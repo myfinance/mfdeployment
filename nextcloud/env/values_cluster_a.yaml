@@ -7,7 +7,3 @@ nextcloud:
     dbSize: 5Gi
     volumeName: pvc-5ae96b00-af47-4e07-822b-5450b24918c1
     dbVolumeName: pvc-cbb59dc5-e423-4b1c-9bdd-a5f528e86850
-  db:
-    pw: vulkan
-  app:
-    adminPw: vulkan

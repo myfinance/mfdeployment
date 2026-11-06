@@ -1,6 +1,10 @@
 # Default values for paperless chart.
 paperless:
   replicaCount: 1
+  externalSecret:
+    enabled: true
+    secretStoreName: openbao-backend
+    vaultKey: "apps/paperless"
   secretKey: "paperless_secure_secret_key_homelab_cluster"
   filenameFormat: "{{ document_type }}/{{ created_year }}/{{ correspondent }}/{{ created }} - {{ title }}"
   filenameFormatRemoveNone: true

@@ -3,6 +3,5 @@ keycloak:
   replicaCount: 0
   createPvc: true
   volumeName: dr-keycloakpvc
-  pw: vulkan
   port_ext: 30124
   storageClassName: longhorn-ssd

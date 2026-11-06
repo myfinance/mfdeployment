@@ -28,7 +28,14 @@ spec:
             - name: KEYCLOAK_ADMIN
               value: admin
             - name: KEYCLOAK_ADMIN_PASSWORD
+              {{- if and .Values.keycloak.externalSecret .Values.keycloak.externalSecret.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-secrets
+                  key: KEYCLOAK_ADMIN_PASSWORD
+              {{- else }}
               value: "{{ .Values.keycloak.pw }}"
+              {{- end }}
       volumes:
         - name: keycloakdata
           persistentVolumeClaim:

@@ -9,7 +9,4 @@ nextcloud:
     dbSize: 5Gi
     volumeName: dr-nextcloud-pvc
     dbVolumeName: dr-nextcloud-db-pvc
-  db:
-    pw: vulkan
-  app:
-    adminPw: vulkan
+

@@ -30,6 +30,10 @@ mfmongo:
     url: "http://nextcloud.nextcloud.svc.cluster.local"
     user: "admin"
     password: "adminpassword"
+  externalSecret:
+    enabled: true
+    secretStoreName: openbao-backend
+    vaultKey: "apps/myfinance"
 
 mfinstruments:
   mf_http_port: 7001

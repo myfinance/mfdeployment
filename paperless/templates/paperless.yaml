@@ -230,7 +230,14 @@ spec:
           image: {{ .Values.paperless.image }}
           env:
             - name: PAPERLESS_SECRET_KEY
+              {{- if and .Values.paperless.externalSecret .Values.paperless.externalSecret.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-secrets
+                  key: PAPERLESS_SECRET_KEY
+              {{- else }}
               value: "{{ .Values.paperless.secretKey }}"
+              {{- end }}
             - name: PAPERLESS_REDIS
               value: "redis://{{ .Values.paperless.redis.name }}:6379"
             - name: PAPERLESS_DBENGINE
@@ -244,7 +251,14 @@ spec:
             - name: PAPERLESS_DBUSER
               value: "{{ .Values.paperless.db.user }}"
             - name: PAPERLESS_DBPASS
+              {{- if and .Values.paperless.externalSecret .Values.paperless.externalSecret.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-secrets
+                  key: PAPERLESS_DBPASS
+              {{- else }}
               value: "{{ .Values.paperless.db.pw }}"
+              {{- end }}
             - name: PAPERLESS_URL
               value: "https://dms.hfischer.org"
             - name: PAPERLESS_ALLOWED_HOSTS
@@ -256,7 +270,14 @@ spec:
             - name: PAPERLESS_ADMIN_USER
               value: "{{ .Values.paperless.admin.user }}"
             - name: PAPERLESS_ADMIN_PASSWORD
+              {{- if and .Values.paperless.externalSecret .Values.paperless.externalSecret.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-secrets
+                  key: PAPERLESS_ADMIN_PASSWORD
+              {{- else }}
               value: "{{ .Values.paperless.admin.pw }}"
+              {{- end }}
             - name: PAPERLESS_ADMIN_MAIL
               value: "{{ .Values.paperless.admin.mail }}"
             - name: PAPERLESS_APPS

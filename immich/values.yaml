@@ -19,6 +19,10 @@ immich:
   app:
     name: immich
     pvc: immich-pvc
+  externalSecret:
+    enabled: true
+    secretStoreName: openbao-backend
+    vaultKey: "apps/immich"
   oauth:
     clientSecret: vulkan
   storageTemplate:

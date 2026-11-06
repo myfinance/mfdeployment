@@ -70,7 +70,14 @@ spec:
             - name: POSTGRES_USER
               value: "{{ .Values.paperless.db.user }}"
             - name: POSTGRES_PASSWORD
+              {{- if and .Values.paperless.externalSecret .Values.paperless.externalSecret.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-secrets
+                  key: POSTGRES_PASSWORD
+              {{- else }}
               value: "{{ .Values.paperless.db.pw }}"
+              {{- end }}
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
           ports:

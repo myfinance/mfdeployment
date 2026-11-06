@@ -70,7 +70,14 @@ spec:
             - name: POSTGRES_USER
               value: "{{ .Values.immich.db.user }}"
             - name: POSTGRES_PASSWORD
+              {{- if and .Values.immich.externalSecret .Values.immich.externalSecret.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: immich-secrets
+                  key: POSTGRES_PASSWORD
+              {{- else }}
               value: "{{ .Values.immich.db.pw }}"
+              {{- end }}
             - name: POSTGRES_INITDB_ARGS
               value: "--data-checksums"
             - name: PGDATA

@@ -8,5 +8,9 @@ keycloak:
   pvc: keycloakpvc
   port: 8080
   keycloakstoragesize: 1Gi
+  externalSecret:
+    enabled: true
+    secretStoreName: openbao-backend
+    vaultKey: "apps/keycloak"
 
 

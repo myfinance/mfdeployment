@@ -9,4 +9,8 @@ minio:
   auth:
     rootUser: "longhorn"
     rootPassword: "longhornbackup123"
+  externalSecret:
+    enabled: true
+    secretStoreName: openbao-backend
+    vaultKey: "storage/minio"
   defaultBucket: "longhorn-backups"

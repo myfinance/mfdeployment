@@ -57,6 +57,8 @@ dbBackup:
     url: "http://nextcloud.nextcloud.svc.cluster.local"
     user: "admin"
     password: "vulkan"
+  externalSecret:
+    enabled: true
   targets:
     immich:
       enabled: true

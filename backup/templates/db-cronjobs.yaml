@@ -33,7 +33,14 @@ spec:
             image: {{ $.Values.dbBackup.image }}
             env:
             - name: DB_PASSWORD
+              {{- if and $.Values.dbBackup.externalSecret $.Values.dbBackup.externalSecret.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $target.secretName | default (printf "%s-secrets" $key) }}
+                  key: DB_PASSWORD
+              {{- else }}
               value: {{ $target.password | quote }}
+              {{- end }}
             - name: DB_HOST
               value: {{ $target.host | quote }}
             - name: DB_PORT
@@ -47,7 +54,14 @@ spec:
             - name: NC_USER
               value: {{ $.Values.dbBackup.nextcloud.user | default "admin" | quote }}
             - name: NC_PASSWORD
+              {{- if and $.Values.dbBackup.externalSecret $.Values.dbBackup.externalSecret.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $target.secretName | default (printf "%s-secrets" $key) }}
+                  key: NC_PASSWORD
+              {{- else }}
               value: {{ $.Values.dbBackup.nextcloud.password | quote }}
+              {{- end }}
             command:
             - sh
             - -c

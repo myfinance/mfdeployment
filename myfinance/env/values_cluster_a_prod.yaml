@@ -18,7 +18,6 @@ mfshell:
 mfmongo:
   createPvc: true
   volumeName: pvc-4b773b66-1bde-4e0d-9afa-2fd94d173fa7
-  db_pw: vulkan
   backupenabled: true
   backuptarget: backup/prodclustera
   storageClassName: longhorn-ssd
@@ -27,7 +26,6 @@ mfmongo:
   nextcloud:
     url: "http://nextcloud.nextcloud.svc.cluster.local"
     user: "admin"
-    password: "vulkan"
 keycloak:
   issuerUri: "https://keycloak.hfischer.org/realms/myfinance"
 

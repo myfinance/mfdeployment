@@ -15,7 +15,6 @@ mfshell:
 mfmongo:
   createPvc: true
   volumeName: dr-prod-mfmongopvc
-  db_pw: vulkan
   backupenabled: false
   storageClassName: longhorn-ssd
   backupStorageClassName: longhorn-ssd

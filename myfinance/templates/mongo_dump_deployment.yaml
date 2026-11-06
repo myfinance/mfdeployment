@@ -14,20 +14,39 @@ spec:
           containers:
             - name: {{ .Values.mfmongo.db_name }}-dump
               image: "{{ .Values.mfmongo.image }}"
+              env:
+                - name: MONGO_PW
+                  {{- if and .Values.mfmongo.externalSecret .Values.mfmongo.externalSecret.enabled }}
+                  valueFrom:
+                    secretKeyRef:
+                      name: myfinance-secrets
+                      key: MONGO_INITDB_ROOT_PASSWORD
+                  {{- else }}
+                  value: "{{ .Values.mfmongo.db_pw }}"
+                  {{- end }}
+                - name: NEXTCLOUD_PW
+                  {{- if and .Values.mfmongo.externalSecret .Values.mfmongo.externalSecret.enabled }}
+                  valueFrom:
+                    secretKeyRef:
+                      name: myfinance-secrets
+                      key: NEXTCLOUD_PASSWORD
+                  {{- else }}
+                  value: "{{ .Values.mfmongo.nextcloud.password }}"
+                  {{- end }}
               command:
                 - "/bin/sh"
                 - "-c"
                 - >
                   which curl >/dev/null || (apt-get update && apt-get install -y curl);
                   {{- if .Values.mfmongo.backuptarget }}
-                  curl -k -u "{{ .Values.mfmongo.nextcloud.user }}:{{ .Values.mfmongo.nextcloud.password }}" -X MKCOL "{{ .Values.mfmongo.nextcloud.url }}/remote.php/dav/files/{{ .Values.mfmongo.nextcloud.user }}/{{ .Values.mfmongo.backuptarget }}" || true;
+                  curl -k -u "{{ .Values.mfmongo.nextcloud.user }}:$NEXTCLOUD_PW" -X MKCOL "{{ .Values.mfmongo.nextcloud.url }}/remote.php/dav/files/{{ .Values.mfmongo.nextcloud.user }}/{{ .Values.mfmongo.backuptarget }}" || true;
                   TARGET_PATH="{{ .Values.mfmongo.backuptarget }}/";
                   {{- else }}
                   TARGET_PATH="";
                   {{- end }}
                   TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S);
-                  mongodump --uri mongodb://root:{{ .Values.mfmongo.db_pw }}@{{ .Values.mfmongo.db_name }}:{{ .Values.mfmongo.db_port }} --gzip --archive=/tmp/mfbackup_$TIMESTAMP.gz --username=root --password={{ .Values.mfmongo.db_pw }} --authenticationDatabase=admin &&
-                  curl -k -u "{{ .Values.mfmongo.nextcloud.user }}:{{ .Values.mfmongo.nextcloud.password }}" -T /tmp/mfbackup_$TIMESTAMP.gz "{{ .Values.mfmongo.nextcloud.url }}/remote.php/dav/files/{{ .Values.mfmongo.nextcloud.user }}/${TARGET_PATH}mfbackup_$TIMESTAMP.gz";
+                  mongodump --uri mongodb://root:$MONGO_PW@{{ .Values.mfmongo.db_name }}:{{ .Values.mfmongo.db_port }} --gzip --archive=/tmp/mfbackup_$TIMESTAMP.gz --username=root --password=$MONGO_PW --authenticationDatabase=admin &&
+                  curl -k -u "{{ .Values.mfmongo.nextcloud.user }}:$NEXTCLOUD_PW" -T /tmp/mfbackup_$TIMESTAMP.gz "{{ .Values.mfmongo.nextcloud.url }}/remote.php/dav/files/{{ .Values.mfmongo.nextcloud.user }}/${TARGET_PATH}mfbackup_$TIMESTAMP.gz";
           restartPolicy: OnFailure
       backoffLimit: 4
 {{ end }}
