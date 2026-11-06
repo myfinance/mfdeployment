@@ -179,3 +179,50 @@ gdrive:
       targetDir: "paperless"
       exclude:
         - "lost+found/**"
+
+# Synology NAS Sync via Rclone (Category 7)
+synology:
+  enabled: true
+  schedule: "0 4 * * *" # Daily at 04:00 UTC (staggered from Google Drive at 03:00)
+  image: rclone/rclone:latest
+  secretName: synology-rclone-config
+  remoteName: "synology"
+  targets:
+    nextcloud:
+      enabled: true
+      namespace: nextcloud
+      pvc: nextcloud-pvc
+      appLabel: nextcloud
+      sourceSubPath: "data"
+      targetDir: "data/backups/nextcloud"
+      exclude:
+        - "appdata_*"
+        - "*/cache/**"
+        - "*/files_trashbin/**"
+        - "*/files_versions/**"
+        - "*/uploads/**"
+        - "*.log"
+        - "*.ocdata"
+      include:
+        - "__groupfolders/**"
+        - "*/files/**"
+        - "*/"
+    immich:
+      enabled: true
+      namespace: immich
+      pvc: immich-pvc
+      appLabel: immich
+      sourceSubPath: "library"
+      targetDir: "data/backups/immich"
+      exclude:
+        - "lost+found/**"
+    paperless:
+      enabled: true
+      namespace: paperless
+      pvc: paperless-media-pvc
+      appLabel: paperless
+      sourceSubPath: "documents/archive"
+      targetDir: "data/backups/paperless"
+      exclude:
+        - "lost+found/**"
+

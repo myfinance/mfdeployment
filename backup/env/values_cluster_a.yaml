@@ -10,3 +10,7 @@ dbBackup:
 
 gdrive:
   enabled: true
+
+synology:
+  enabled: true
+
