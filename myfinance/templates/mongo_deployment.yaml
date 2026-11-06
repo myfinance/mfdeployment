@@ -4,6 +4,8 @@ metadata:
   name: {{ .Values.mfmongo.db_name }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: {{ .Values.mfmongo.db_name }}
