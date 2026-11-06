@@ -1,0 +1,6 @@
+apiVersion: v2
+name: openbao
+description: A Helm chart for OpenBao Secret Management
+type: application
+version: 1.0.0
+appVersion: 2.7.2

@@ -1,0 +1,42 @@
+{{- if .Values.openbao.enabled }}
+{{- if .Values.openbao.persistence.createPvc | default true }}
+{{- if .Values.openbao.persistence.volumeName }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.openbao.persistence.volumeName }}
+spec:
+  capacity:
+    storage: {{ .Values.openbao.persistence.size }}
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.openbao.persistence.storageClassName }}
+  csi:
+    driver: driver.longhorn.io
+    fsType: ext4
+    volumeHandle: {{ .Values.openbao.persistence.volumeName }}
+  claimRef:
+    namespace: {{ .Release.Namespace }}
+    name: openbao-pvc
+---
+{{- end }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: openbao-pvc
+  labels:
+    app: openbao
+spec:
+  storageClassName: {{ .Values.openbao.persistence.storageClassName }}
+  {{- if .Values.openbao.persistence.volumeName }}
+  volumeName: {{ .Values.openbao.persistence.volumeName }}
+  {{- end }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.openbao.persistence.size }}
+{{- end }}
+{{- end }}

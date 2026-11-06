@@ -1,0 +1,10 @@
+master_ip: 192.168.100.85
+
+openbao:
+  enabled: true
+  replicaCount: 0
+  persistence:
+    createPvc: true
+    storageClassName: longhorn-ssd
+    size: 1Gi
+    volumeName: dr-openbao-pvc

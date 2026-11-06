@@ -1,0 +1,16 @@
+{{- if .Values.openbao.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: openbao
+  labels:
+    app: openbao
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: {{ .Values.openbao.service.port }}
+      targetPort: 8200
+  selector:
+    app: openbao
+{{- end }}

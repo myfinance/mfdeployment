@@ -1,0 +1,2 @@
+openbao:
+  image: quay.io/openbao/openbao:2.7.2

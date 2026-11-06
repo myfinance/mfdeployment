@@ -1,0 +1,37 @@
+external-secrets:
+  installCRDs: true
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 20m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  webhook:
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
+  certController:
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
+
+clusterSecretStore:
+  enabled: true
+  name: openbao-backend
+  vaultServer: "http://openbao.openbao.svc.cluster.local:8200"
+  vaultPath: "secret"
+  vaultVersion: "v2"
+  authType: "token" # 'token' or 'kubernetes'
+  tokenSecretName: "openbao-eso-token"

@@ -187,6 +187,10 @@ synology:
   image: rclone/rclone:latest
   secretName: synology-rclone-config
   remoteName: "synology"
+  externalSecret:
+    enabled: true
+    secretStoreName: openbao-backend
+    vaultKey: "backup/synology"
   targets:
     nextcloud:
       enabled: true

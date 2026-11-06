@@ -1,0 +1,62 @@
+{{- if .Values.openbao.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openbao
+  labels:
+    app: openbao
+spec:
+  replicas: {{ .Values.openbao.replicaCount }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: openbao
+  template:
+    metadata:
+      labels:
+        app: openbao
+    spec:
+      containers:
+        - name: openbao
+          image: "{{ .Values.openbao.image | default "quay.io/openbao/openbao:2.7.2" }}"
+          imagePullPolicy: IfNotPresent
+          command:
+            - openbao
+            - server
+            - -config=/openbao/config/openbao.hcl
+          securityContext:
+            capabilities:
+              add:
+                - IPC_LOCK
+          ports:
+            - name: http
+              containerPort: 8200
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.openbao.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /openbao/config
+            - name: data
+              mountPath: /openbao/data
+          livenessProbe:
+            httpGet:
+              path: /v1/sys/health?standbyok=true&sealedcode=200&uninitcode=200
+              port: 8200
+            initialDelaySeconds: 15
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /v1/sys/health?standbyok=true&sealedcode=200&uninitcode=200
+              port: 8200
+            initialDelaySeconds: 10
+            periodSeconds: 10
+      volumes:
+        - name: config
+          configMap:
+            name: openbao-config
+        - name: data
+          persistentVolumeClaim:
+            claimName: openbao-pvc
+{{- end }}

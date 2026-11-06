@@ -1,0 +1,9 @@
+master_ip: 192.168.100.81
+
+openbao:
+  enabled: true
+  replicaCount: 1
+  persistence:
+    createPvc: true
+    storageClassName: longhorn-ssd
+    size: 1Gi
