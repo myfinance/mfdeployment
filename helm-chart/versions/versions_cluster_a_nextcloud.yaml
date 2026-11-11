@@ -1,3 +1,0 @@
-nextcloud:
-  image: nextcloud:29
-  pgimage: postgres:16

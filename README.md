@@ -1,5 +1,20 @@
 # mfdeployment
 
+## Deployed Applications
+
+- **myfinance**: A suite of microservices for financial data management, including market data, transactions, valuations, etc.
+- **keycloak**: Identity and access management, providing authentication and authorization for all local services.
+- **nextcloud**: Personal cloud storage and file sharing platform.
+- **immich**: Photo and video backup service.
+- **paperless**: Document management and OCR processing.
+- **minio**: Object storage used by various services.
+- **backup**: Automated backup jobs for MongoDB and other data.
+- **metallb**: Load‑balancer implementation providing external IPs for services.
+- **openbao**: Secret store backend used by External Secrets for techn. passowords and tokens.
+- **external‑secrets**: Operator that syncs secrets from OpenBao into Kubernetes.
+- **monitoring**: Prometheus‑based stack (Prometheus, Grafana, Node Exporter) for cluster health and metrics.
+
+
 ## value files
 
 - the values_base.yaml contains  properties which are allways the same no matter the version or the environment
