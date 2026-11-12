@@ -45,7 +45,7 @@ spec:
                   TARGET_PATH="";
                   {{- end }}
                   TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S);
-                  mongodump --uri mongodb://root:$MONGO_PW@{{ .Values.mfmongo.db_name }}:{{ .Values.mfmongo.db_port }} --gzip --archive=/tmp/mfbackup_$TIMESTAMP.gz --username=root --password=$MONGO_PW --authenticationDatabase=admin &&
+                  mongodump --host={{ .Values.mfmongo.db_name }} --port={{ .Values.mfmongo.db_port }} --gzip --archive=/tmp/mfbackup_$TIMESTAMP.gz --username=root --password="$MONGO_PW" --authenticationDatabase=admin &&
                   curl -k -u "{{ .Values.mfmongo.nextcloud.user }}:$NEXTCLOUD_PW" -T /tmp/mfbackup_$TIMESTAMP.gz "{{ .Values.mfmongo.nextcloud.url }}/remote.php/dav/files/{{ .Values.mfmongo.nextcloud.user }}/${TARGET_PATH}mfbackup_$TIMESTAMP.gz";
           restartPolicy: OnFailure
       backoffLimit: 4
