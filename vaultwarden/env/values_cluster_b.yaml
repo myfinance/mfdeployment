@@ -1,0 +1,10 @@
+master_ip: 192.168.100.85
+
+vaultwarden:
+  replicaCount: 0
+  backup:
+    enabled: false
+  persistence:
+    createPvc: true
+    storageClassName: longhorn-ssd
+    size: 5Gi

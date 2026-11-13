@@ -1,0 +1,37 @@
+# Default values for vaultwarden chart.
+vaultwarden:
+  replicaCount: 1
+  app:
+    name: vaultwarden
+    dataPvc: vaultwarden-data-pvc
+  externalSecret:
+    enabled: true
+    secretStoreName: openbao-backend
+    vaultKey: "apps/vaultwarden"
+  persistence:
+    createPvc: true
+    storageClassName: longhorn-ssd
+    size: 5Gi
+  ingress:
+    enabled: true
+    host: pass.hfischer.org
+  backup:
+    enabled: true
+    schedule: "0 3 * * *"
+    nextcloudUrl: "http://nextcloud.nextcloud.svc.cluster.local"
+    nextcloudUser: "admin"
+    retentionCount: 14
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 50m
+      memory: 128Mi
+  env:
+    signupsAllowed: "false"
+    invitationsAllowed: "true"
+    showPasswordHint: "false"
+    domain: "https://pass.hfischer.org"
+    websocketEnabled: "true"
+    ipHeader: "X-Forwarded-For"

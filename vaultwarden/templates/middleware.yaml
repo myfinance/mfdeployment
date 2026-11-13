@@ -1,0 +1,14 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: internal-only-allowlist
+  labels:
+    app: {{ .Values.vaultwarden.app.name }}
+spec:
+  ipAllowList:
+    sourceRange:
+      - "192.168.0.0/16"
+      - "10.10.0.0/24"
+      - "10.42.0.0/16"
+      - "10.43.0.0/16"
+      - "127.0.0.1/32"

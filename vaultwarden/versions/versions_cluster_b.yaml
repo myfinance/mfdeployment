@@ -1,0 +1,2 @@
+vaultwarden:
+  image: docker.io/vaultwarden/server:1.37.5

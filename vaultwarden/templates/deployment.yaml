@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.vaultwarden.app.name }}
+  labels:
+    app: {{ .Values.vaultwarden.app.name }}
+spec:
+  replicas: {{ .Values.vaultwarden.replicaCount }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: {{ .Values.vaultwarden.app.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.vaultwarden.app.name }}
+    spec:
+      containers:
+        - name: {{ .Values.vaultwarden.app.name }}
+          image: {{ .Values.vaultwarden.image | default "docker.io/vaultwarden/server:1.37.5" }}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: ROCKET_PORT
+              value: "80"
+            - name: DOMAIN
+              value: {{ .Values.vaultwarden.env.domain | default "https://pass.hfischer.org" | quote }}
+            - name: SIGNUPS_ALLOWED
+              value: {{ .Values.vaultwarden.env.signupsAllowed | default "false" | quote }}
+            - name: INVITATIONS_ALLOWED
+              value: {{ .Values.vaultwarden.env.invitationsAllowed | default "true" | quote }}
+            - name: SHOW_PASSWORD_HINT
+              value: {{ .Values.vaultwarden.env.showPasswordHint | default "false" | quote }}
+            - name: WEBSOCKET_ENABLED
+              value: {{ .Values.vaultwarden.env.websocketEnabled | default "true" | quote }}
+            - name: IP_HEADER
+              value: {{ .Values.vaultwarden.env.ipHeader | default "X-Forwarded-For" | quote }}
+            {{- if .Values.vaultwarden.externalSecret.enabled }}
+            - name: ADMIN_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: vaultwarden-secrets
+                  key: ADMIN_TOKEN
+                  optional: true
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.vaultwarden.resources | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          livenessProbe:
+            httpGet:
+              path: /alive
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /alive
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.vaultwarden.app.dataPvc | default "vaultwarden-data-pvc" }}

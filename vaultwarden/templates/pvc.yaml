@@ -1,0 +1,40 @@
+{{- if .Values.vaultwarden.persistence.createPvc | default true }}
+{{- if .Values.vaultwarden.persistence.volumeName }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.vaultwarden.persistence.volumeName }}
+spec:
+  capacity:
+    storage: {{ .Values.vaultwarden.persistence.size }}
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.vaultwarden.persistence.storageClassName }}
+  csi:
+    driver: driver.longhorn.io
+    fsType: ext4
+    volumeHandle: {{ .Values.vaultwarden.persistence.volumeName }}
+  claimRef:
+    namespace: {{ .Release.Namespace }}
+    name: {{ .Values.vaultwarden.app.dataPvc | default "vaultwarden-data-pvc" }}
+---
+{{- end }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.vaultwarden.app.dataPvc | default "vaultwarden-data-pvc" }}
+  labels:
+    app: {{ .Values.vaultwarden.app.name }}
+spec:
+  storageClassName: {{ .Values.vaultwarden.persistence.storageClassName }}
+  {{- if .Values.vaultwarden.persistence.volumeName }}
+  volumeName: {{ .Values.vaultwarden.persistence.volumeName }}
+  {{- end }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.vaultwarden.persistence.size }}
+{{- end }}
