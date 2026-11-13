@@ -7,8 +7,8 @@ metadata:
 spec:
   ipAllowList:
     sourceRange:
-      - "192.168.0.0/16"
-      - "10.10.0.0/24"
-      - "10.42.0.0/16"
-      - "10.43.0.0/16"
-      - "127.0.0.1/32"
+      - "192.168.0.0/16"     # Local home network (MacBook, PCs, Pis, Wi-Fi clients on 192.168.100.x)
+      - "10.10.0.0/24"       # WireGuard VPN subnet for iPhones/MacBooks outside home (Phase 3)
+      - "10.42.0.0/16"       # Internal Kubernetes Pod network (k3s CNI pod-to-pod communication)
+      - "10.43.0.0/16"       # Internal Kubernetes ClusterIP Service network
+      - "127.0.0.1/32"       # Localhost loopback
