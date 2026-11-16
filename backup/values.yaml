@@ -35,10 +35,11 @@ backup:
       enabled: true
       namespace: immich
       pvc: immich-pvc
-      sourceSubPath: "library"
-      exclude:
-        - "lost+found/"
       targetDir: immich
+      exclude:
+        - "lost+found/**"
+        - "upload/**"
+        - "backups/**"
     paperless:
       enabled: true
       namespace: paperless
@@ -177,10 +178,11 @@ gdrive:
       namespace: immich
       pvc: immich-pvc
       appLabel: immich
-      sourceSubPath: "library"
       targetDir: "immich"
       exclude:
         - "lost+found/**"
+        - "upload/**"
+        - "backups/**"
     paperless:
       enabled: true
       namespace: paperless
@@ -227,10 +229,11 @@ synology:
       namespace: immich
       pvc: immich-pvc
       appLabel: immich
-      sourceSubPath: "library"
       targetDir: "data/backups/immich"
       exclude:
         - "lost+found/**"
+        - "upload/**"
+        - "backups/**"
     paperless:
       enabled: true
       namespace: paperless
