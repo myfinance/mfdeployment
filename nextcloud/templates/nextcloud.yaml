@@ -222,11 +222,11 @@ spec:
               name: http
           resources:
             limits:
-              cpu: 500m
-              memory: 1Gi
+              cpu: 1000m
+              memory: 2Gi
             requests:
               cpu: 100m
-              memory: 256Mi
+              memory: 512Mi
           volumeMounts:
             - name: nextcloud-data
               mountPath: /var/www/html
